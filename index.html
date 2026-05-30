@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 <title>Produk Premium | Farid Store</title>
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
 
 <style>
@@ -15,27 +13,21 @@
     --primary:#7c5cff;
     --primary2:#9f89ff;
     --accent:#6d4aff;
-
     --bg:#f4f6fb;
     --bg2:#ffffff;
     --card:#ffffff;
     --border:#e7eaf3;
-
     --text:#111827;
     --muted:#6b7280;
-
     --success:#16a34a;
     --danger:#ef4444;
     --warning:#f59e0b;
-
     --shadow-sm:0 8px 25px rgba(15,23,42,.05);
     --shadow-md:0 15px 35px rgba(15,23,42,.08);
     --shadow-lg:0 25px 60px rgba(15,23,42,.12);
-
     --radius-xl:30px;
     --radius-lg:22px;
     --radius-md:18px;
-
     --glass:rgba(255,255,255,.72);
 }
 
@@ -44,12 +36,9 @@
     --bg2:#111827;
     --card:#161f30;
     --border:#243146;
-
     --text:#f8fafc;
     --muted:#94a3b8;
-
     --glass:rgba(17,24,39,.75);
-
     --shadow-sm:0 10px 30px rgba(0,0,0,.20);
     --shadow-md:0 20px 40px rgba(0,0,0,.25);
     --shadow-lg:0 35px 70px rgba(0,0,0,.35);
@@ -75,10 +64,7 @@ body{
     transition:.3s ease;
 }
 
-/* =========================
-HEADER PREMIUM
-========================= */
-
+/* HEADER */
 header{
     position:sticky;
     top:0;
@@ -87,10 +73,7 @@ header{
     background:rgba(255,255,255,.75);
     border-bottom:1px solid rgba(255,255,255,.2);
 }
-
-[data-theme="dark"] header{
-    background:rgba(11,18,32,.75);
-}
+[data-theme="dark"] header{ background:rgba(11,18,32,.75); }
 
 .nav-wrap{
     max-width:1350px;
@@ -100,516 +83,162 @@ header{
     justify-content:space-between;
     align-items:center;
 }
-
-.brand{
-    display:flex;
-    gap:16px;
-    align-items:center;
-}
-
+.brand{ display:flex; gap:16px; align-items:center; }
 .brand-icon{
-    width:58px;
-    height:58px;
-    border-radius:20px;
+    width:58px; height:58px; border-radius:20px;
     background:linear-gradient(135deg,var(--primary),var(--primary2));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-size:22px;
-    box-shadow:var(--shadow-md);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:22px; box-shadow:var(--shadow-md);
 }
-
-.brand h2{
-    font-size:1.25rem;
-    font-weight:800;
-}
-
-.brand p{
-    color:var(--muted);
-    font-size:.92rem;
-    margin-top:4px;
-}
-
-.header-actions{
-    display:flex;
-    gap:12px;
-    align-items:center;
-}
-
-/* Toggle Theme */
-
+.brand h2{ font-size:1.25rem; font-weight:800; }
+.brand p{ color:var(--muted); font-size:.92rem; margin-top:4px; }
+.header-actions{ display:flex; gap:12px; align-items:center; }
 .theme-toggle{
-    border:none;
-    background:var(--card);
-    border:1px solid var(--border);
-    height:54px;
-    padding:0 18px;
-    border-radius:999px;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    color:var(--text);
-    font-weight:700;
-    box-shadow:var(--shadow-sm);
-    transition:.25s ease;
+    border:none; background:var(--card); border:1px solid var(--border);
+    height:54px; padding:0 18px; border-radius:999px; cursor:pointer;
+    display:flex; align-items:center; gap:12px; color:var(--text);
+    font-weight:700; box-shadow:var(--shadow-sm); transition:.25s ease;
 }
-
-.theme-toggle:hover{
-    transform:translateY(-2px);
-}
-
+.theme-toggle:hover{ transform:translateY(-2px); }
 .toggle-icon{
-    width:34px;
-    height:34px;
-    border-radius:50%;
+    width:34px; height:34px; border-radius:50%;
     background:linear-gradient(135deg,var(--primary),var(--primary2));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
+    display:flex; align-items:center; justify-content:center; color:white;
 }
 
-/* =========================
-HERO
-========================= */
-
-.hero{
-    max-width:1350px;
-    margin:35px auto 20px;
-    padding:0 22px;
-}
-
+/* HERO */
+.hero{ max-width:1350px; margin:35px auto 20px; padding:0 22px; }
 .hero-box{
-    position:relative;
-    overflow:hidden;
-    border-radius:36px;
-    padding:40px;
-    background:
-        linear-gradient(135deg,
-        rgba(124,92,255,.95),
-        rgba(82,56,192,.92));
-    color:white;
-    box-shadow:var(--shadow-lg);
+    position:relative; overflow:hidden; border-radius:36px; padding:40px;
+    background:linear-gradient(135deg, rgba(124,92,255,.95), rgba(82,56,192,.92));
+    color:white; box-shadow:var(--shadow-lg);
 }
-
 .hero-box::after{
-    content:"";
-    position:absolute;
-    right:-100px;
-    top:-100px;
-    width:300px;
-    height:300px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
+    content:""; position:absolute; right:-100px; top:-100px;
+    width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,.08);
 }
+.hero h1{ font-size:clamp(1.8rem,4vw,3rem); font-weight:900; margin-bottom:10px; }
+.hero p{ opacity:.9; max-width:700px; line-height:1.7; }
 
-.hero h1{
-    font-size:clamp(1.8rem,4vw,3rem);
-    font-weight:900;
-    margin-bottom:10px;
-}
-
-.hero p{
-    opacity:.9;
-    max-width:700px;
-    line-height:1.7;
-}
-
-/* =========================
-CONTAINER
-========================= */
-
-.container{
-    max-width:1350px;
-    margin:auto;
-    padding:0 22px 80px;
-}
-
-/* Search */
-
+/* CONTAINER & SEARCH */
+.container{ max-width:1350px; margin:auto; padding:0 22px 80px; }
 .search-card{
-    background:var(--glass);
-    backdrop-filter:blur(18px);
-    border:1px solid var(--border);
-    border-radius:30px;
-    padding:16px;
-    margin-bottom:35px;
-    box-shadow:var(--shadow-sm);
+    background:var(--glass); backdrop-filter:blur(18px);
+    border:1px solid var(--border); border-radius:30px; padding:16px;
+    margin-bottom:35px; box-shadow:var(--shadow-sm);
 }
-
-.search-wrapper{
-    position:relative;
-}
-
+.search-wrapper{ position:relative; }
 .search-wrapper i{
-    position:absolute;
-    left:22px;
-    top:50%;
-    transform:translateY(-50%);
-    color:var(--muted);
+    position:absolute; left:22px; top:50%; transform:translateY(-50%); color:var(--muted);
 }
-
 .search-input{
-    width:100%;
-    height:62px;
-    border:none;
-    outline:none;
-    border-radius:20px;
-    background:var(--bg2);
-    color:var(--text);
-    padding:0 22px 0 56px;
-    font-size:1rem;
-    box-shadow:inset 0 0 0 1px var(--border);
+    width:100%; height:62px; border:none; outline:none; border-radius:20px;
+    background:var(--bg2); color:var(--text); padding:0 22px 0 56px;
+    font-size:1rem; box-shadow:inset 0 0 0 1px var(--border);
 }
 
-/* =========================
-GRID PRODUK
-========================= */
-
-.grid{
-    display:grid;
-    grid-template-columns:
-        repeat(auto-fill,minmax(220px,1fr));
-    gap:22px;
-}
-
+/* GRID PRODUK */
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:22px; }
 .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:28px;
-    overflow:hidden;
-    cursor:pointer;
-    transition:.28s ease;
-    box-shadow:var(--shadow-sm);
+    background:var(--card); border:1px solid var(--border); border-radius:28px;
+    overflow:hidden; cursor:pointer; transition:.28s ease; box-shadow:var(--shadow-sm);
 }
-
-.card:hover{
-    transform:translateY(-8px);
-    box-shadow:var(--shadow-md);
-}
-
-.card-image{
-    position:relative;
-    padding:18px;
-}
-
-.card img{
-    width:100%;
-    aspect-ratio:1/1;
-    border-radius:22px;
-    object-fit:cover;
-    background:#fff;
-}
-
+.card:hover{ transform:translateY(-8px); box-shadow:var(--shadow-md); }
+.card-image{ position:relative; padding:18px; }
+.card img{ width:100%; aspect-ratio:1/1; border-radius:22px; object-fit:cover; background:#fff; }
 .status{
-    position:absolute;
-    top:28px;
-    right:28px;
-    padding:8px 14px;
-    border-radius:999px;
-    font-size:.78rem;
-    font-weight:700;
+    position:absolute; top:28px; right:28px; padding:8px 14px;
+    border-radius:999px; font-size:.78rem; font-weight:700;
 }
+.ready{ background:#eafbf0; color:#16a34a; }
+.pending{ background:#fff8e8; color:#f59e0b; }
+.card-body{ padding:0 20px 22px; }
+.card h4{ font-size:1rem; font-weight:800; line-height:1.5; min-height:48px; }
+.price-tag{ margin-top:12px; font-size:1.15rem; font-weight:900; color:var(--primary); }
 
-.ready{
-    background:#eafbf0;
-    color:#16a34a;
-}
-
-.pending{
-    background:#fff8e8;
-    color:#f59e0b;
-}
-
-.card-body{
-    padding:0 20px 22px;
-}
-
-.card h4{
-    font-size:1rem;
-    font-weight:800;
-    line-height:1.5;
-    min-height:48px;
-}
-
-.price-tag{
-    margin-top:12px;
-    font-size:1.15rem;
-    font-weight:900;
-    color:var(--primary);
-}
-
-/* =========================
-MODAL PREMIUM
-========================= */
-
+/* MODAL */
 .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(10px);
-    z-index:999;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.55);
+    backdrop-filter:blur(10px); z-index:999; justify-content:center;
+    align-items:center; padding:20px;
 }
-
-.modal.show{
-    display:flex;
-}
-
+.modal.show{ display:flex; }
 .modal-content{
-    width:100%;
-    max-width:1200px;
-    background:var(--card);
-    border-radius:36px;
-    border:1px solid var(--border);
-    overflow:hidden;
-    box-shadow:var(--shadow-lg);
-    max-height:92vh;
-    overflow-y:auto;
+    width:100%; max-width:1200px; background:var(--card); border-radius:36px;
+    border:1px solid var(--border); box-shadow:var(--shadow-lg);
+    max-height:92vh; overflow-y:auto;
 }
-
-.modal-grid{
-    display:grid;
-    grid-template-columns:380px 1fr;
+.modal-grid{ display:grid; grid-template-columns:380px 1fr; }
+.modal-left{ padding:35px; background:linear-gradient(180deg, rgba(124,92,255,.08), transparent); }
+.prod-img{ width:100%; border-radius:30px; background:white; }
+.qris-box, .payment-account{
+    margin-top:20px; border-radius:28px; background:var(--bg2); border:1px solid var(--border); padding:24px; text-align:center;
 }
+.modal-right{ padding:40px; }
+.modal-details h3{ font-size:2rem; font-weight:900; }
+.modal-price{ color:var(--primary); font-size:1.8rem; font-weight:900; margin-top:10px; }
 
-.modal-left{
-    padding:35px;
-    background:
-    linear-gradient(180deg,
-    rgba(124,92,255,.08),
-    transparent);
+/* FORM & INPUT */
+.input-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px; }
+label{ display:block; margin:18px 0 10px; font-weight:700; }
+input, select{
+    width:100%; height:58px; border-radius:18px; border:1px solid var(--border);
+    background:var(--bg2); color:var(--text); padding:0 18px; outline:none;
 }
-
-.prod-img{
-    width:100%;
-    border-radius:30px;
-    background:white;
-}
-
-.qris-box,
-.payment-account{
-    margin-top:20px;
-    border-radius:28px;
-    background:var(--bg2);
-    border:1px solid var(--border);
-    padding:24px;
-}
-
-.modal-right{
-    padding:40px;
-}
-
-.modal-details h3{
-    font-size:2rem;
-    font-weight:900;
-}
-
-.modal-price{
-    color:var(--primary);
-    font-size:1.8rem;
-    font-weight:900;
-    margin-top:10px;
-}
-
-/* Form */
-
-.input-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
-
-label{
-    display:block;
-    margin:18px 0 10px;
-    font-weight:700;
-}
-
-input,
-select{
-    width:100%;
-    height:58px;
-    border-radius:18px;
-    border:1px solid var(--border);
-    background:var(--bg2);
-    color:var(--text);
-    padding:0 18px;
-    outline:none;
-}
-
-.payment-selector{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-}
-
+.payment-selector{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 .payment-card{
-    border:1px solid var(--border);
-    border-radius:24px;
-    padding:22px;
-    cursor:pointer;
-    text-align:center;
-    background:var(--bg2);
-    transition:.25s;
+    border:1px solid var(--border); border-radius:24px; padding:22px;
+    cursor:pointer; text-align:center; background:var(--bg2); transition:.25s;
 }
-
 .payment-card.active{
-    border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(124,92,255,.15);
+    border-color:var(--primary); box-shadow:0 0 0 3px rgba(124,92,255,.15);
 }
-
-.manual-list{
-    margin-top:18px;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-}
-
+.manual-list{ margin-top:18px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 .manual-item{
-    border:1px solid var(--border);
-    border-radius:20px;
-    text-align:center;
-    padding:16px;
-    cursor:pointer;
+    border:1px solid var(--border); border-radius:20px; text-align:center;
+    padding:16px; cursor:pointer;
 }
-
-.manual-item.active{
-    border-color:var(--primary);
-}
-
+.manual-item.active{ border-color:var(--primary); }
 .total-calc{
-    margin-top:24px;
-    border-radius:24px;
-    padding:24px;
-    text-align:center;
-    background:
-    linear-gradient(135deg,
-    rgba(124,92,255,.12),
-    rgba(124,92,255,.04));
-    font-weight:900;
-    font-size:1.25rem;
+    margin-top:24px; border-radius:24px; padding:24px; text-align:center;
+    background:linear-gradient(135deg, rgba(124,92,255,.12), rgba(124,92,255,.04));
+    font-weight:900; font-size:1.25rem;
 }
-
 .btn-submit{
-    width:100%;
-    height:64px;
-    border:none;
-    border-radius:24px;
-    margin-top:18px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:800;
-    color:white;
-    background:
-    linear-gradient(135deg,
-    var(--primary),
-    var(--primary2));
+    width:100%; height:64px; border:none; border-radius:24px; margin-top:18px;
+    cursor:pointer; font-size:1rem; font-weight:800; color:white;
+    background:linear-gradient(135deg, var(--primary), var(--primary2));
 }
 
-/* Toast */
-
+/* TOAST */
 .toast{
-    position:fixed;
-    top:30px;
-    right:30px;
-    background:var(--card);
-    border:1px solid var(--border);
-    padding:18px 22px;
-    border-radius:24px;
-    box-shadow:var(--shadow-md);
-    transform:translateX(140%);
-    transition:.4s;
-    z-index:99999;
+    position:fixed; top:30px; right:30px; background:var(--card);
+    border:1px solid var(--border); padding:18px 22px; border-radius:24px;
+    box-shadow:var(--shadow-md); transform:translateX(140%); transition:.4s; z-index:99999;
 }
+.toast.show{ transform:translateX(0); }
 
-.toast.show{
-    transform:translateX(0);
-}
-
-/* Mobile */
-
+/* MOBILE RESPONSIVE */
 @media(max-width:991px){
-
-    .modal-grid{
-        grid-template-columns:1fr;
-    }
-
-    .modal-right{
-        padding:25px;
-    }
-
-    .modal-left{
-        padding:25px;
-    }
-
-    .manual-list{
-        grid-template-columns:repeat(2,1fr);
-    }
+    .modal-grid{ grid-template-columns:1fr; }
+    .modal-right, .modal-left{ padding:25px; }
+    .manual-list{ grid-template-columns:repeat(2,1fr); }
 }
-
 @media(max-width:768px){
-
-    .hero-box{
-        padding:30px;
-    }
-
-    .input-row{
-        grid-template-columns:1fr;
-    }
-
-    .payment-selector{
-        grid-template-columns:1fr;
-    }
-
-    .grid{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
-    }
-
-    .theme-toggle span{
-        display:none;
-    }
-
-    .nav-wrap{
-        padding:16px;
-    }
-
-    .brand h2{
-        font-size:1rem;
-    }
-
-    .brand p{
-        font-size:.8rem;
-    }
-
-    .modal-content{
-        border-radius:28px;
-    }
+    .hero-box{ padding:30px; }
+    .input-row, .payment-selector{ grid-template-columns:1fr; }
+    .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .theme-toggle span{ display:none; }
+    .nav-wrap{ padding:16px; }
+    .brand h2{ font-size:1rem; }
+    .brand p{ font-size:.8rem; }
+    .modal-content{ border-radius:28px; }
 }
-
 @media(max-width:480px){
-
-    .grid{
-        gap:14px;
-    }
-
-    .card{
-        border-radius:24px;
-    }
-
-    .hero{
-        margin-top:18px;
-    }
-
-    .hero-box{
-        border-radius:28px;
-    }
+    .grid{ gap:14px; }
+    .card{ border-radius:24px; }
+    .hero{ margin-top:18px; }
+    .hero-box{ border-radius:28px; }
 }
 </style>
 </head>
@@ -620,674 +249,336 @@ select{
 
 <header>
     <div class="nav-wrap">
-
         <div class="brand">
-            <div class="brand-icon">
-                <i class="fas fa-crown"></i>
-            </div>
-
+            <div class="brand-icon"><i class="fas fa-crown"></i></div>
             <div>
                 <h2>Farid Store Premium</h2>
                 <p>Aplikasi Premium & Jasa Digital</p>
             </div>
         </div>
-
         <div class="header-actions">
             <button class="theme-toggle" id="themeToggle">
-                <div class="toggle-icon">
-                    <i class="fas fa-moon"></i>
-                </div>
+                <div class="toggle-icon"><i class="fas fa-moon"></i></div>
                 <span>Tema</span>
             </button>
         </div>
-
     </div>
 </header>
 
 <section class="hero">
     <div class="hero-box">
         <h1>Produk Premium Digital</h1>
-        <p>
-            Dapatkan aplikasi premium, subscription, tools,
-            dan layanan digital terbaik dengan proses cepat,
-            aman, dan terpercaya.
-        </p>
+        <p>Dapatkan aplikasi premium, subscription, tools, dan layanan digital terbaik dengan proses cepat, aman, dan terpercaya.</p>
     </div>
 </section>
 
 <div class="container">
-
     <div class="search-card">
         <div class="search-wrapper">
             <i class="fas fa-search"></i>
-            <input
-                id="searchInput"
-                class="search-input"
-                type="text"
-                placeholder="Cari aplikasi premium atau layanan..."
-            />
+            <input id="searchInput" class="search-input" type="text" placeholder="Cari aplikasi premium atau layanan..." />
         </div>
     </div>
-
     <div id="productList" class="grid"></div>
-
 </div>
 
-<!-- Modal tetap memakai ID lama agar JS kompatibel -->
 <div id="modal" class="modal">
     <div class="modal-content">
-
         <div class="modal-grid">
 
             <div class="modal-left">
-
-                <img
-                    id="modalImage"
-                    class="prod-img"
-                    src=""
-                    alt="Produk"
-                />
+                <img id="modalImage" class="prod-img" src="" alt="Produk" />
 
                 <div id="view-qris" class="qris-box">
-                    <div id="qrcode"></div>
+                    <div id="qrcode" style="display:flex; justify-content:center; margin-bottom:10px;"></div>
+                    <small>Scan untuk membayar</small>
                 </div>
 
-                <div id="view-manual" class="payment-account">
+                <div id="view-manual" class="payment-account" style="display:none;">
                     <small>Atas Nama</small>
                     <h4>Farid Ja'far Siddiq</h4>
-
-                    <div
-                        class="rekening-number"
-                        id="rekening-number"
-                    >-</div>
-
-                    <button
-                        class="btn-submit"
-                        id="copy-btn"
-                    >
-                        Copy Rekening
-                    </button>
+                    <div class="rekening-number" id="rekening-number" style="font-size:1.2rem; font-weight:800; margin:10px 0;">-</div>
+                    <button class="btn-submit" id="copy-btn" style="height:50px;">Copy Rekening</button>
                 </div>
             </div>
 
             <div class="modal-right modal-details">
+                <h3 id="modalName">Nama Produk</h3>
+                <div id="modalPrice" class="modal-price">Rp0</div>
 
-                <h3 id="modalName"></h3>
-                <div
-                    id="modalPrice"
-                    class="modal-price"
-                ></div>
+                <div class="input-row">
+                    <div>
+                        <label>Periode</label>
+                        <select id="periodSelect">
+                            <option value="1">1 Hari</option>
+                            <option value="7">7 Hari</option>
+                            <option value="30" selected>1 Bulan</option>
+                            <option value="90">3 Bulan</option>
+                            <option value="365">12 Bulan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Jumlah</label>
+                        <input type="number" id="quantityInput" min="1" value="1" />
+                    </div>
+                </div>
 
-                <!-- lanjut JS PART 2 -->
+                <label>Kontak (WA / Email)</label>
+                <input id="contactInput" type="text" placeholder="0812xxxx atau email@email.com" />
+
+                <label>Metode Pembayaran</label>
+                <div class="payment-selector">
+                    <div class="payment-card active" id="card-qris">
+                        <i class="fas fa-qrcode fa-2x"></i>
+                        <h4 style="margin-top:12px">QRIS Otomatis</h4>
+                    </div>
+                    <div class="payment-card" id="card-manual">
+                        <i class="fas fa-university fa-2x"></i>
+                        <h4 style="margin-top:12px">Transfer Manual</h4>
+                    </div>
+                </div>
+
+                <div class="manual-list" id="manual-list" style="display:none">
+                    <div class="manual-item" data-method="dana"><i class="fas fa-wallet"></i><h5>DANA</h5></div>
+                    <div class="manual-item" data-method="gopay"><i class="fas fa-wallet"></i><h5>GoPay</h5></div>
+                    <div class="manual-item" data-method="seabank"><i class="fas fa-university"></i><h5>SeaBank</h5></div>
+                    <div class="manual-item" data-method="bank-bsi"><i class="fas fa-building"></i><h5>BSI</h5></div>
+                    <div class="manual-item" data-method="bank-jago"><i class="fas fa-building"></i><h5>Jago</h5></div>
+                    <div class="manual-item" data-method="bank-mandiri"><i class="fas fa-building"></i><h5>Mandiri</h5></div>
+                </div>
+
+                <div class="total-calc">
+                    Total Tagihan:
+                    <div id="totalDisplay" style="margin-top:10px;font-size:1.7rem;color:var(--primary)">Rp0</div>
+                </div>
+
+                <button id="submitOrder" class="btn-submit">Kirim Pesanan</button>
+                <p id="statusMessage" style="margin-top:14px; text-align:center; font-weight:600;"></p>
             </div>
-
+            
         </div>
     </div>
-</div>
-
-
-<!-- FORM CHECKOUT PREMIUM -->
-
-<div class="input-row">
-
-    <div>
-        <label>Periode</label>
-        <select id="periodSelect">
-            <option value="1hari">1 Hari</option>
-            <option value="7hari">7 Hari</option>
-            <option value="1bulan" selected>1 Bulan</option>
-            <option value="3bulan">3 Bulan</option>
-            <option value="12bulan">12 Bulan</option>
-        </select>
-    </div>
-
-    <div>
-        <label>Jumlah</label>
-        <input
-            type="number"
-            id="quantityInput"
-            min="1"
-            value="1"
-        />
-    </div>
-
-</div>
-
-<label>Kontak (WA / Email)</label>
-<input
-    id="contactInput"
-    type="text"
-    placeholder="0812xxxx atau email@email.com"
-/>
-
-<label>Metode Pembayaran</label>
-
-<div class="payment-selector">
-
-    <div
-        class="payment-card active"
-        id="card-qris"
-    >
-        <i class="fas fa-qrcode fa-2x"></i>
-        <h4 style="margin-top:12px">
-            QRIS Otomatis
-        </h4>
-    </div>
-
-    <div
-        class="payment-card"
-        id="card-manual"
-    >
-        <i class="fas fa-university fa-2x"></i>
-        <h4 style="margin-top:12px">
-            Transfer Manual
-        </h4>
-    </div>
-
-</div>
-
-<div
-    class="manual-list"
-    id="manual-list"
-    style="display:none"
->
-
-    <div
-        class="manual-item"
-        data-method="dana"
-    >
-        <i class="fas fa-wallet"></i>
-        <h5>DANA</h5>
-    </div>
-
-    <div
-        class="manual-item"
-        data-method="gopay"
-    >
-        <i class="fas fa-wallet"></i>
-        <h5>GoPay</h5>
-    </div>
-
-    <div
-        class="manual-item"
-        data-method="seabank"
-    >
-        <i class="fas fa-university"></i>
-        <h5>SeaBank</h5>
-    </div>
-
-    <div
-        class="manual-item"
-        data-method="bank-bsi"
-    >
-        <i class="fas fa-building"></i>
-        <h5>BSI</h5>
-    </div>
-
-    <div
-        class="manual-item"
-        data-method="bank-jago"
-    >
-        <i class="fas fa-building"></i>
-        <h5>Jago</h5>
-    </div>
-
-    <div
-        class="manual-item"
-        data-method="bank-mandiri"
-    >
-        <i class="fas fa-building"></i>
-        <h5>Mandiri</h5>
-    </div>
-
-</div>
-
-<div class="total-calc">
-    Total Tagihan:
-    <div
-        id="totalDisplay"
-        style="margin-top:10px;font-size:1.7rem;color:var(--primary)"
-    >
-        Rp0
-    </div>
-</div>
-
-<button
-    id="submitOrder"
-    class="btn-submit"
->
-    Kirim Pesanan
-</button>
-
-<p
-    id="statusMessage"
-    style="margin-top:14px"
-></p>
-
-</div>
-</div>
-</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
-/* ==========================
-THEME TOGGLE
-========================== */
-
-const themeToggle =
-document.getElementById("themeToggle");
-
+/* THEME TOGGLE */
+const themeToggle = document.getElementById("themeToggle");
 function loadTheme(){
-    const saved =
-    localStorage.getItem("theme");
-
-    if(saved){
-        document.documentElement
-        .setAttribute("data-theme", saved);
-    }
+    const saved = localStorage.getItem("theme");
+    if(saved){ document.documentElement.setAttribute("data-theme", saved); }
 }
-
 themeToggle.addEventListener("click", () => {
-
-    const current =
-    document.documentElement
-    .getAttribute("data-theme");
-
-    const next =
-    current === "dark"
-    ? "light"
-    : "dark";
-
-    document.documentElement
-    .setAttribute("data-theme", next);
-
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
 });
-
 loadTheme();
 
-/* ==========================
-PAYMENT DATA
-========================== */
-
+/* PAYMENT DATA */
 const paymentData = {
-    dana: {
-        name:"DANA",
-        rekening:"081233014523"
-    },
-
-    gopay: {
-        name:"GoPay",
-        rekening:"081233014523"
-    },
-
-    seabank: {
-        name:"SeaBank",
-        rekening:"901203701880"
-    },
-
-    "bank-bsi": {
-        name:"Bank BSI",
-        rekening:"7211388627"
-    },
-
-    "bank-jago": {
-        name:"Bank Jago",
-        rekening:"105140476589"
-    },
-
-    "bank-mandiri": {
-        name:"Bank Mandiri",
-        rekening:"1080028958644"
-    }
+    dana: { name:"DANA", rekening:"081233014523" },
+    gopay: { name:"GoPay", rekening:"081233014523" },
+    seabank: { name:"SeaBank", rekening:"901203701880" },
+    "bank-bsi": { name:"Bank BSI", rekening:"7211388627" },
+    "bank-jago": { name:"Bank Jago", rekening:"105140476589" },
+    "bank-mandiri": { name:"Bank Mandiri", rekening:"1080028958644" }
 };
 
-/* ==========================
-DOM
-========================== */
+/* DOM ELEMENTS */
+const productList = document.getElementById("productList");
+const modal = document.getElementById("modal");
+const searchInput = document.getElementById("searchInput");
+const modalImage = document.getElementById("modalImage");
+const modalName = document.getElementById("modalName");
+const modalPrice = document.getElementById("modalPrice");
+const totalDisplay = document.getElementById("totalDisplay");
+const quantityInput = document.getElementById("quantityInput");
+const periodSelect = document.getElementById("periodSelect");
+const contactInput = document.getElementById("contactInput");
+const submitOrder = document.getElementById("submitOrder");
+const toast = document.getElementById("toast");
+const cardQris = document.getElementById("card-qris");
+const cardManual = document.getElementById("card-manual");
+const manualList = document.getElementById("manual-list");
+const manualItems = document.querySelectorAll(".manual-item");
+const rekeningNumber = document.getElementById("rekening-number");
+const copyBtn = document.getElementById("copy-btn");
+const viewQris = document.getElementById("view-qris");
+const viewManual = document.getElementById("view-manual");
+const qrcodeContainer = document.getElementById("qrcode");
 
-const productList =
-document.getElementById("productList");
-
-const modal =
-document.getElementById("modal");
-
-const searchInput =
-document.getElementById("searchInput");
-
-const modalImage =
-document.getElementById("modalImage");
-
-const modalName =
-document.getElementById("modalName");
-
-const modalPrice =
-document.getElementById("modalPrice");
-
-const totalDisplay =
-document.getElementById("totalDisplay");
-
-const quantityInput =
-document.getElementById("quantityInput");
-
-const periodSelect =
-document.getElementById("periodSelect");
-
-const contactInput =
-document.getElementById("contactInput");
-
-const submitOrder =
-document.getElementById("submitOrder");
-
-const toast =
-document.getElementById("toast");
-
-const cardQris =
-document.getElementById("card-qris");
-
-const cardManual =
-document.getElementById("card-manual");
-
-const manualList =
-document.getElementById("manual-list");
-
-const manualItems =
-document.querySelectorAll(".manual-item");
-
-const rekeningNumber =
-document.getElementById("rekening-number");
-
-const copyBtn =
-document.getElementById("copy-btn");
-
-const viewQris =
-document.getElementById("view-qris");
-
-const viewManual =
-document.getElementById("view-manual");
-
-/* ==========================
-STATE
-========================== */
-
+/* STATE */
 let items = [];
 let currentProduct = null;
 let selectedMethod = "QRIS";
 let selectedManualKey = "";
 
-/* ==========================
-UTILS
-========================== */
-
-function formatRupiah(number){
-    return "Rp" +
-    number.toLocaleString("id-ID");
-}
-
+/* UTILS */
+function formatRupiah(number){ return "Rp" + number.toLocaleString("id-ID"); }
 function showToast(message){
-
     toast.innerHTML = message;
     toast.classList.add("show");
-
-    setTimeout(()=>{
-        toast.classList.remove("show");
-    },2500);
+    setTimeout(()=>{ toast.classList.remove("show"); }, 2500);
 }
 
-/* ==========================
-RENDER PRODUCT PREMIUM
-========================== */
-
+/* RENDER PRODUCTS */
 function renderProducts(filter=""){
-
     productList.innerHTML = "";
-
-    const filtered =
-    items.filter(item =>
-        item.name
-        .toLowerCase()
-        .includes(filter.toLowerCase())
-    );
-
+    const filtered = items.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
+    
     filtered.forEach(item => {
-
-        const card =
-        document.createElement("div");
-
+        const card = document.createElement("div");
         card.className = "card";
-
         card.innerHTML = `
             <div class="card-image">
                 <img src="${item.img}">
-                <span class="status ${item.status}">
-                    ${
-                        item.status === "ready"
-                        ? "Ready"
-                        : "Pending"
-                    }
-                </span>
+                <span class="status ${item.status}">${item.status === "ready" ? "Ready" : "Pending"}</span>
             </div>
-
             <div class="card-body">
                 <h4>${item.name}</h4>
-
-                <div class="price-tag">
-                    ${formatRupiah(item.price)}
-                </div>
+                <div class="price-tag">${formatRupiah(item.price)}</div>
             </div>
         `;
-
-        card.onclick =
-        ()=>openModal(item);
-
+        card.onclick = () => openModal(item);
         productList.appendChild(card);
     });
 }
 
-/* ==========================
-DUMMY / API
-========================== */
-
+/* LOAD API/DUMMY */
 async function loadProducts(){
-
     try{
-
-        const response =
-        await fetch("/api/products")
-        .catch(()=>null);
-
+        const response = await fetch("/api/products").catch(()=>null);
         if(response && response.ok){
-
-            const data =
-            await response.json();
-
-            items =
-            data.record || data;
-
+            const data = await response.json();
+            items = data.record || data;
         }else{
-
             items = [
-                {
-                    name:"Netflix Premium",
-                    price:35000,
-                    img:"https://via.placeholder.com/300",
-                    status:"ready"
-                },
-                {
-                    name:"Spotify Premium",
-                    price:25000,
-                    img:"https://via.placeholder.com/300",
-                    status:"ready"
-                }
+                { name:"Netflix Premium", price:35000, img:"https://via.placeholder.com/300", status:"ready" },
+                { name:"Spotify Premium", price:25000, img:"https://via.placeholder.com/300", status:"ready" }
             ];
         }
-
         renderProducts();
-
     }catch(e){
-        showToast(
-            "Gagal memuat katalog"
-        );
+        showToast("Gagal memuat katalog");
     }
 }
 
-/* ==========================
-MODAL
-========================== */
-
+/* MODAL LOGIC & QRIS GENERATOR */
 function openModal(product){
-
     currentProduct = product;
-
     modal.classList.add("show");
-
-    modalImage.src =
-    product.img;
-
-    modalName.innerText =
-    product.name;
-
-    modalPrice.innerText =
-    formatRupiah(product.price);
-
+    modalImage.src = product.img;
+    modalName.innerText = product.name;
+    modalPrice.innerText = formatRupiah(product.price);
     quantityInput.value = 1;
+    contactInput.value = "";
+    
+    // Generate QRIS (Bug Fix)
+    qrcodeContainer.innerHTML = "";
+    new QRCode(qrcodeContainer, {
+        text: "https://qris.link/faridstore", // Ganti dengan link QRIS aslimu
+        width: 160,
+        height: 160
+    });
 
     calculateTotal();
 }
 
-window.onclick = e => {
-    if(e.target === modal){
-        modal.classList.remove("show");
-    }
-};
+window.onclick = e => { if(e.target === modal) modal.classList.remove("show"); };
 
-/* ==========================
-PAYMENT
-========================== */
-
+/* PAYMENT SELECTION */
 cardQris.onclick = ()=>{
-
     selectedMethod = "QRIS";
-
     cardQris.classList.add("active");
     cardManual.classList.remove("active");
-
-    manualList.style.display =
-    "none";
-
-    viewQris.style.display =
-    "block";
-
-    viewManual.style.display =
-    "none";
+    manualList.style.display = "none";
+    viewQris.style.display = "block";
+    viewManual.style.display = "none";
 };
 
 cardManual.onclick = ()=>{
-
     selectedMethod = "Manual";
-
     cardManual.classList.add("active");
     cardQris.classList.remove("active");
-
-    manualList.style.display =
-    "grid";
-
-    viewQris.style.display =
-    "none";
-
-    viewManual.style.display =
-    "block";
+    manualList.style.display = "grid";
+    viewQris.style.display = "none";
+    viewManual.style.display = "block";
+    
+    // Auto-select opsi pertama (Bug Fix)
+    if(manualItems.length > 0 && !selectedManualKey){
+        manualItems[0].click(); 
+    }
 };
 
 manualItems.forEach(item => {
-
     item.onclick = ()=>{
-
-        manualItems.forEach(x =>
-            x.classList.remove("active")
-        );
-
+        manualItems.forEach(x => x.classList.remove("active"));
         item.classList.add("active");
-
-        const key =
-        item.dataset.method;
-
-        selectedManualKey = key;
-
-        rekeningNumber.innerText =
-        paymentData[key].rekening;
+        selectedManualKey = item.dataset.method;
+        rekeningNumber.innerText = paymentData[selectedManualKey].rekening;
     };
 });
 
-/* ==========================
-COPY
-========================== */
-
+/* COPY REKENING */
 copyBtn.onclick = async()=>{
-
-    const text =
-    rekeningNumber.innerText;
-
-    await navigator.clipboard
-    .writeText(text);
-
-    showToast(
-        "Rekening berhasil disalin"
-    );
+    const text = rekeningNumber.innerText;
+    if(text === "-") return;
+    await navigator.clipboard.writeText(text);
+    showToast("Rekening berhasil disalin!");
 };
 
-/* ==========================
-TOTAL
-========================== */
-
+/* CALCULATION */
 function calculateTotal(){
-
     if(!currentProduct) return;
-
-    const qty =
-    parseInt(
-        quantityInput.value
-    ) || 1;
-
-    const total =
-    currentProduct.price * qty;
-
-    totalDisplay.innerText =
-    formatRupiah(total);
+    const qty = parseInt(quantityInput.value) || 1;
+    
+    // Jika harga dipengaruhi periode, bisa dikalikan di sini
+    // Contoh: const periodMultiplier = parseInt(periodSelect.value) / 30; 
+    
+    const total = currentProduct.price * qty;
+    totalDisplay.innerText = formatRupiah(total);
 }
+quantityInput.addEventListener("input", calculateTotal);
+periodSelect.addEventListener("change", calculateTotal);
 
-quantityInput
-.addEventListener(
-    "input",
-    calculateTotal
-);
-
-periodSelect
-.addEventListener(
-    "change",
-    calculateTotal
-);
-
-/* ==========================
-SEARCH
-========================== */
-
-searchInput.addEventListener(
-    "input",
-    ()=>{
-        renderProducts(
-            searchInput.value
-        );
+/* SUBMIT ORDER LOGIC (Bug Fix) */
+submitOrder.onclick = () => {
+    const contact = contactInput.value.trim();
+    if(!contact){
+        showToast("Mohon isi kontak (WA/Email)");
+        return;
     }
-);
+    
+    showToast("Memproses pesanan...");
+    
+    // Format pesan WhatsApp otomatis
+    const qty = quantityInput.value;
+    const total = totalDisplay.innerText;
+    const method = selectedMethod === "QRIS" ? "QRIS" : paymentData[selectedManualKey]?.name || "Manual";
+    
+    let text = `Halo Farid Store, saya ingin membeli:\n\n`;
+    text += `*Produk:* ${currentProduct.name}\n`;
+    text += `*Jumlah:* ${qty}\n`;
+    text += `*Total:* ${total}\n`;
+    text += `*Kontak Saya:* ${contact}\n`;
+    text += `*Metode Bayar:* ${method}\n\n`;
+    text += `Mohon segera diproses ya.`;
+    
+    const waLink = `https://wa.me/62812xxxxxx?text=${encodeURIComponent(text)}`;
+    
+    setTimeout(() => {
+        window.open(waLink, "_blank");
+        modal.classList.remove("show");
+    }, 1000);
+};
 
-document.addEventListener(
-    "DOMContentLoaded",
-    loadProducts
-);
+/* SEARCH */
+searchInput.addEventListener("input", ()=> renderProducts(searchInput.value));
+
+document.addEventListener("DOMContentLoaded", loadProducts);
 </script>
-
 </body>
 </html>
