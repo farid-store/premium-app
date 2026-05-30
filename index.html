@@ -279,7 +279,7 @@
     let qrEngine = null; // Menyimpan instance QRCode agar tidak tumpang tindih
 
     function formatRupiah(number) {
-        return "Rp" + number.toLocaleString("id-ID");
+        return "Rp" + parseInt(number).toLocaleString("id-ID");
     }
 
     // Algoritma Keamanan CRC16-CCITT Standar Internasional EMVCo QRIS
@@ -328,11 +328,14 @@
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
+            
+            if (!response.ok) {
+                throw new Error('Server mengalami kendala atau API tidak ditemukan.');
+            }
+
             const data = await response.json();
-            
-            if (!response.ok) throw new Error(data.error || 'Server mengalami kendala.');
-            
             const extractedData = extractArray(data);
+            
             if (extractedData) {
                 items = extractedData;
             } else {
@@ -343,7 +346,12 @@
             renderProducts();
         } catch (error) {
             console.error("Error loadProducts:", error);
-            productList.innerHTML = `<p class="no-results" style="color:#d32f2f;"><i class="fas fa-exclamation-triangle fa-2x mb-2 block"></i><br>Gagal memuat katalog: ${error.message}</p>`;
+            // Fallback UI jika terjadi error (tidak mematikan script)
+            productList.innerHTML = `
+                <div class="no-results" style="color:#d32f2f;">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2 block"></i><br>
+                    Gagal memuat katalog: ${error.message}
+                </div>`;
         }
     }
 
@@ -363,7 +371,7 @@
         const filtered = items.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
         
         if (filtered.length === 0) {
-            productList.innerHTML = '<p class="no-results"><i class="fas fa-box-open fa-2x mb-2 block"></i><br>Produk tidak ditemukan.</p>';
+            productList.innerHTML = '<div class="no-results"><i class="fas fa-box-open fa-2x mb-2 block"></i><br>Produk tidak ditemukan.</div>';
             return;
         }
         
@@ -389,19 +397,26 @@
         totalDisplay.innerText = formatRupiah(total);
 
         // Regenerasi kode QRIS dinamis secara otomatis berdasarkan nominal total
-        if (total > 0) {
+        if (total > 0 && typeof QRCode !== "undefined") {
             const qrisPayload = buildQRIS(total);
             const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = ""; // Bersihkan QR lawas
             
-            qrEngine = new QRCode(qrContainer, {
-                text: qrisPayload,
-                width: 180,
-                height: 180,
-                colorDark : "#0f172a",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.M
-            });
+            if (qrEngine) {
+                // Gunakan fitur bawaan library untuk memperbarui tanpa merusak DOM
+                qrEngine.clear();
+                qrEngine.makeCode(qrisPayload);
+            } else {
+                // Inisialisasi perdana
+                qrContainer.innerHTML = "";
+                qrEngine = new QRCode(qrContainer, {
+                    text: qrisPayload,
+                    width: 180,
+                    height: 180,
+                    colorDark : "#0f172a",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.M
+                });
+            }
         }
     }
 
