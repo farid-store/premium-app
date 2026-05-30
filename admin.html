@@ -350,7 +350,8 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
         </select>
       </div>
       <div class="form-group"><label>URL Gambar (Icon)</label><input type="text" id="pm-img" placeholder="https://..." oninput="document.getElementById('pm-preview').src=this.value"/></div>
-      <div style="margin-bottom:14px;text-align:center"><img id="pm-preview" src="https://via.placeholder.com/80" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--border)" onerror="this.src='https://via.placeholder.com/80'"/></div>
+      
+      <div style="margin-bottom:14px;text-align:center"><img id="pm-preview" src="https://placehold.co/80x80/e2e8f0/94a3b8?text=Img" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--border)" onerror="this.onerror=null; this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Img'"/></div>
       
       <div class="form-group">
         <label>Pilihan Periode & Harga (Minimal 1) *</label>
@@ -508,9 +509,11 @@ function renderTable(list){
     }
 
     const tr=document.createElement('tr');
+    
+    // FIX INFINITE LOOP PADA GAMBAR CADANGAN DI TABEL (ditambah "this.onerror=null;")
     tr.innerHTML=`
       <td><input type="checkbox" class="row-check" data-idx="${idx}" style="accent-color:var(--brand)" onchange="onRowCheck()"/></td>
-      <td><img src="${item.img||'https://via.placeholder.com/40'}" class="img-thumb" id="prev-${idx}" onerror="this.src='https://via.placeholder.com/40'"/></td>
+      <td><img src="${item.img||'https://placehold.co/40x40/e2e8f0/94a3b8?text=Img'}" class="img-thumb" id="prev-${idx}" onerror="this.onerror=null; this.src='https://placehold.co/40x40/e2e8f0/94a3b8?text=Img'"/></td>
       <td><input type="text" class="cell-input" value="${item.name||''}" oninput="currentData[${idx}].name=this.value" placeholder="Nama Produk" style="min-width:140px"/></td>
       <td>
         <select class="category-select" onchange="currentData[${idx}].cat=this.value" style="width:100%">
@@ -583,7 +586,7 @@ function openAddProductModal(){
   document.getElementById('pm-badge').value='';
   document.getElementById('pm-status').value='ready';
   document.getElementById('pm-cat').value='streaming';
-  document.getElementById('pm-preview').src='https://via.placeholder.com/80';
+  document.getElementById('pm-preview').src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Img';
   
   // Kosongkan dan tambah 1 baris varian default
   document.getElementById('pm-variants-container').innerHTML = '';
@@ -599,7 +602,7 @@ function openEditProduct(idx){
   document.getElementById('pm-name').value=p.name||'';
   document.getElementById('pm-cat').value=p.cat||'streaming';
   document.getElementById('pm-img').value=p.img||'';
-  document.getElementById('pm-preview').src=p.img||'https://via.placeholder.com/80';
+  document.getElementById('pm-preview').src=p.img||'https://placehold.co/80x80/e2e8f0/94a3b8?text=Img';
   document.getElementById('pm-rating').value=p.rating||4.5;
   document.getElementById('pm-badge').value=p.badge||'';
   document.getElementById('pm-status').value=p.status||'ready';
