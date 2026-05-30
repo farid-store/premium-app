@@ -179,18 +179,34 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // AMAN: Memanggil proxy lokal GET
+    // AMAN: Memanggil proxy lokal GET dengan Proteksi Array
     async function fetchData() {
         const tbody = document.getElementById("productTableBody");
         try {
             const response = await fetch('/api/products');
-            if (!response.ok) throw new Error("Gagal mengambil data database.");
+            const data = await response.json();
+            
+            console.log("Data dari server (Admin):", data);
 
-            currentData = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Gagal mengambil data dari server.");
+            }
+
+            // Pengecekan struktur format data agar tidak terjadi "forEach is not a function"
+            if (Array.isArray(data)) {
+                currentData = data;
+            } else if (data && Array.isArray(data.record)) {
+                currentData = data.record; 
+            } else {
+                currentData = [];
+                throw new Error("Format data dari server tidak valid (bukan array).");
+            }
+
             renderTable();
         } catch (error) {
+            console.error("Fetch Data Error:", error);
             showBanner(error.message, "error");
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--danger); font-weight: bold;">Gagal Memuat Data.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--danger); font-weight: bold;">Gagal Memuat Data: ${error.message}</td></tr>`;
         }
     }
 
