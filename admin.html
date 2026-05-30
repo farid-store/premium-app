@@ -64,7 +64,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .content{padding:28px;flex:1}
 
 /* ===== STAT CARDS ===== */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:28px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;transition:var(--transition)}
 .stat-card:hover{border-color:var(--border2);background:var(--surface2)}
 .stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -72,18 +72,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .si-blue{background:var(--blue-soft);color:var(--blue-text)}
 .si-green{background:var(--green-soft);color:var(--green-text)}
 .si-amber{background:var(--amber-soft);color:var(--amber-text)}
-.si-brand{background:rgba(79,70,229,.15);color:#a5b4fc}
 .stat-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px}
 .sb-up{background:var(--green-soft);color:var(--green-text)}
-.sb-down{background:var(--red-soft);color:var(--red-text)}
 .stat-val{font-size:24px;font-weight:800;color:var(--text);line-height:1}
 .stat-lbl{font-size:12px;color:var(--text2);margin-top:4px;font-weight:500}
-
-/* ===== SECTION TABS ===== */
-.section-tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);padding:4px;border-radius:var(--radius-lg);margin-bottom:22px;width:fit-content}
-.stab{padding:8px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);color:var(--text2);border:none;background:none;font-family:inherit;white-space:nowrap}
-.stab.active{background:var(--brand);color:#fff}
-.stab:hover:not(.active){background:var(--surface2);color:var(--text)}
 
 /* ===== PANEL SECTIONS ===== */
 .panel-section{display:none}
@@ -122,41 +114,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .ib-danger:hover{background:rgba(239,68,68,.25)}
 .ib-blue{background:var(--blue-soft);color:var(--blue-text)}
 .ib-blue:hover{background:rgba(59,130,246,.25)}
-.ib-green{background:var(--green-soft);color:var(--green-text)}
-.ib-green:hover{background:rgba(34,197,94,.25)}
 .table-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2)}
-
-/* ===== PERIOD MANAGER ===== */
-.period-manager-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.period-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;transition:var(--transition);position:relative}
-.period-card:hover{border-color:var(--border2)}
-.period-card.disabled-card{opacity:.55}
-.pc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:10px}
-.pc-icon{width:40px;height:40px;border-radius:var(--radius-md);background:rgba(79,70,229,.15);display:flex;align-items:center;justify-content:center;font-size:17px;color:#a5b4fc;flex-shrink:0}
-.pc-info{flex:1}
-.pc-label{font-size:15px;font-weight:800;color:var(--text);line-height:1.2}
-.pc-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.pc-toggle{position:relative;width:42px;height:24px;flex-shrink:0}
-.pc-toggle input{opacity:0;width:0;height:0;position:absolute}
-.pc-slider{position:absolute;inset:0;background:var(--surface3);border-radius:12px;cursor:pointer;transition:var(--transition)}
-.pc-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:var(--transition)}
-.pc-toggle input:checked+.pc-slider{background:var(--brand)}
-.pc-toggle input:checked+.pc-slider::before{transform:translateX(18px)}
-.pc-fields{display:flex;flex-direction:column;gap:10px}
-.pc-field{display:flex;flex-direction:column;gap:5px}
-.pc-field label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
-.pc-field input{padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:var(--transition)}
-.pc-field input:focus{border-color:var(--brand)}
-.pc-field input:disabled{opacity:.4;cursor:not-allowed}
-.pc-field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.discount-badge{position:absolute;top:10px;right:56px;font-size:10px;font-weight:700;padding:3px 7px;border-radius:8px;background:var(--green-soft);color:var(--green-text)}
-
-/* ===== ADD PERIOD MODAL ===== */
-.add-period-card{background:var(--surface);border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:var(--transition);min-height:200px}
-.add-period-card:hover{border-color:var(--brand-mid);background:rgba(79,70,229,.05)}
-.add-period-card i{font-size:28px;color:var(--text3);transition:var(--transition)}
-.add-period-card:hover i{color:var(--brand-mid)}
-.add-period-card span{font-size:13px;font-weight:600;color:var(--text2)}
 
 /* ===== STORE SETTINGS ===== */
 .settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
@@ -172,11 +130,17 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .tr-info{flex:1}
 .tr-label{font-size:13px;font-weight:600;color:var(--text)}
 .tr-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.pc-toggle{position:relative;width:42px;height:24px;flex-shrink:0}
+.pc-toggle input{opacity:0;width:0;height:0;position:absolute}
+.pc-slider{position:absolute;inset:0;background:var(--surface3);border-radius:12px;cursor:pointer;transition:var(--transition)}
+.pc-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:var(--transition)}
+.pc-toggle input:checked+.pc-slider{background:var(--brand)}
+.pc-toggle input:checked+.pc-slider::before{transform:translateX(18px)}
 
 /* ===== MODAL ===== */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
 .modal-bg.show{display:flex;opacity:1}
-.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-xl);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;transform:scale(.96);opacity:0;transition:.3s cubic-bezier(.4,0,.2,1)}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-xl);width:100%;max-width:540px;max-height:90vh;overflow-y:auto;transform:scale(.96);opacity:0;transition:.3s cubic-bezier(.4,0,.2,1)}
 .modal-bg.show .modal-box{transform:scale(1);opacity:1}
 .modal-hd{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-hd h3{font-size:16px;font-weight:800;color:var(--text)}
@@ -184,6 +148,13 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .modal-close:hover{background:var(--surface3);color:var(--text)}
 .modal-body-inner{padding:20px 22px}
 .modal-foot{padding:14px 22px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+/* ===== DYNAMIC VARIANTS ===== */
+.variant-row {display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.variant-row input {padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;width:100%;outline:none}
+.variant-row input:focus {border-color:var(--brand)}
+.variant-del-btn {width:34px;height:34px;flex-shrink:0;background:var(--red-soft);color:var(--red-text);border:none;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.variant-del-btn:hover {background:rgba(239,68,68,.25)}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:13px 18px;font-size:13px;font-weight:600;color:var(--text);box-shadow:var(--shadow);z-index:999;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:.4s cubic-bezier(.4,0,.2,1);max-width:320px}
@@ -207,8 +178,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .mobile-menu-btn{display:none;align-items:center;justify-content:center;width:36px;height:36px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;color:var(--text);font-size:16px;flex-shrink:0;margin-right:4px}
 .overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
 .overlay-bg.show{display:block}
-
-/* ===== BULK BADGE ===== */
 .bulk-bar{background:rgba(79,70,229,.15);border:1px solid rgba(79,70,229,.3);border-radius:var(--radius-md);padding:10px 16px;display:none;align-items:center;gap:12px;margin-bottom:12px}
 .bulk-bar.show{display:flex}
 .bulk-bar span{font-size:13px;font-weight:600;color:#a5b4fc;flex:1}
@@ -231,7 +200,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   <nav class="sidebar-nav">
     <div class="nav-label">Manajemen</div>
     <button class="nav-item active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Katalog Produk <span class="nav-badge" id="navProdCount">0</span></button>
-    <button class="nav-item" onclick="switchTab('periods',this)"><i class="fas fa-calendar-alt"></i> Periode & Harga</button>
     <button class="nav-item" onclick="switchTab('settings',this)"><i class="fas fa-sliders-h"></i> Pengaturan Toko</button>
     <div class="nav-label">Akses Cepat</div>
     <a href="/" target="_blank" class="nav-item"><i class="fas fa-store"></i> Lihat Toko</a>
@@ -261,12 +229,11 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-blue"><i class="fas fa-box"></i></div><span class="stat-badge sb-up">↑ Live</span></div><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total Produk</div></div>
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div></div><div class="stat-val" id="statReady">0</div><div class="stat-lbl">Status Ready</div></div>
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-amber"><i class="fas fa-clock"></i></div></div><div class="stat-val" id="statPending">0</div><div class="stat-lbl">Status Pending</div></div>
-      <div class="stat-card"><div class="stat-top"><div class="stat-icon si-brand"><i class="fas fa-calendar-check"></i></div></div><div class="stat-val" id="statPeriods">0</div><div class="stat-lbl">Periode Aktif</div></div>
     </div>
 
     <div class="panel-section active" id="panel-products">
       <div class="panel-header">
-        <div><div class="panel-title">Katalog Produk</div><div class="panel-subtitle">Tambah, edit, dan kelola semua produk yang tampil di toko</div></div>
+        <div><div class="panel-title">Katalog Produk</div><div class="panel-subtitle">Kelola produk beserta periode dan harganya masing-masing</div></div>
         <div class="btn-row">
           <button class="topbar-btn tb-outline" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
           <button class="topbar-btn tb-primary" onclick="openAddProductModal()"><i class="fas fa-plus"></i> Tambah Produk</button>
@@ -302,8 +269,8 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
                 <th style="width:50px">Img</th>
                 <th>Nama Produk</th>
                 <th style="width:120px">Kategori</th>
-                <th style="width:200px">URL Gambar</th>
-                <th style="width:110px">Harga/Bln (Rp)</th>
+                <th style="width:180px">URL Gambar</th>
+                <th style="width:120px">Harga (Mulai)</th>
                 <th style="width:90px">Badge</th>
                 <th style="width:90px">Status</th>
                 <th style="width:70px;text-align:center">Aksi</th>
@@ -316,16 +283,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div class="table-footer"><span id="tableCount">0 produk</span><span style="color:var(--text3);font-size:11px">Perubahan belum tersimpan hingga klik "Simpan Semua"</span></div>
       </div>
-    </div>
-
-    <div class="panel-section" id="panel-periods">
-      <div class="panel-header">
-        <div><div class="panel-title">Manajemen Periode & Harga</div><div class="panel-subtitle">Aktifkan/nonaktifkan periode, atur label, multiplier, dan diskon khusus</div></div>
-        <div class="btn-row">
-          <button class="topbar-btn tb-primary" onclick="openAddPeriodModal()"><i class="fas fa-plus"></i> Tambah Periode</button>
-        </div>
-      </div>
-      <div class="period-manager-grid" id="periodManagerGrid"></div>
     </div>
 
     <div class="panel-section" id="panel-settings">
@@ -394,7 +351,13 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="form-group"><label>URL Gambar (Icon)</label><input type="text" id="pm-img" placeholder="https://..." oninput="document.getElementById('pm-preview').src=this.value"/></div>
       <div style="margin-bottom:14px;text-align:center"><img id="pm-preview" src="https://via.placeholder.com/80" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--border)" onerror="this.src='https://via.placeholder.com/80'"/></div>
-      <div class="form-group"><label>Harga per Bulan (Rp) *</label><input type="number" id="pm-price" placeholder="45000" min="0"/></div>
+      
+      <div class="form-group">
+        <label>Pilihan Periode & Harga (Minimal 1) *</label>
+        <div id="pm-variants-container"></div>
+        <button type="button" class="topbar-btn tb-outline" style="width:100%;justify-content:center;margin-top:8px" onclick="addVariantRow('','')"><i class="fas fa-plus"></i> Tambah Periode</button>
+      </div>
+
       <div class="form-group"><label>Rating (1.0 – 5.0)</label><input type="number" id="pm-rating" placeholder="4.9" min="1" max="5" step="0.1"/></div>
       <div class="form-group"><label>Badge</label>
         <select id="pm-badge">
@@ -419,56 +382,19 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<div class="modal-bg" id="periodModal">
-  <div class="modal-box">
-    <div class="modal-hd"><h3 id="periodModalTitle">Tambah Periode Baru</h3><button class="modal-close" onclick="closeModal('periodModal')"><i class="fas fa-xmark"></i></button></div>
-    <div class="modal-body-inner">
-      <div class="form-group"><label>Nama Label *</label><input type="text" id="pem-label" placeholder="Contoh: 1 Bulan"/></div>
-      <div class="form-group"><label>Kunci (key, tanpa spasi) *</label><input type="text" id="pem-key" placeholder="Contoh: 1bulan"/></div>
-      <div class="form-group"><label>Multiplier Hari *</label><input type="number" id="pem-mult" placeholder="30" min="1"/><small style="color:var(--text3);font-size:11px;margin-top:4px;display:block">Harga = (harga_per_bulan × multiplier) / 30</small></div>
-      <div class="form-group"><label>Diskon % (opsional)</label><input type="number" id="pem-disc" placeholder="0" min="0" max="90"/></div>
-      <div class="form-group"><label>Ikon (Font Awesome class)</label><input type="text" id="pem-icon" placeholder="fa-calendar-day"/></div>
-      <div class="form-group"><label>Status Awal</label>
-        <select id="pem-status">
-          <option value="1">Aktif</option>
-          <option value="0">Nonaktif</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="topbar-btn tb-outline" onclick="closeModal('periodModal')">Batal</button>
-      <button class="topbar-btn tb-primary" onclick="savePeriod()"><i class="fas fa-floppy-disk"></i> Simpan Periode</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"><i class="fas fa-circle-check"></i><span id="toastMsg">Berhasil</span></div>
 
 <script>
 // ==========================================
-// API SEKARANG DIAMBIL DARI ROUTE INTERNAL VERCEL
-// API KEY & TOKEN DIRAHASIAKAN DI SERVER
+// STATE KESELURUHAN
 // ==========================================
-
-// ===== STATE KESELURUHAN =====
 let currentData = [];
-let periods = [];
 let settings = {};
-
 let editingProductIdx = null;
-let editingPeriodIdx = null;
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
 
 // Data Default (Jika Gagal Load / Pertama Kali)
-const defaultProducts = [
-  {id:1, name:'Poco M3 (Modal 450k)', cat:'gaming', price:450000, status:'ready', badge:'hot', rating:4.8, img:'https://via.placeholder.com/80', desc:'Unit mulus, garansi personal.'},
-  {id:2, name:'Netflix Premium 4K', cat:'streaming', price:45000, status:'ready', badge:'bestseller', rating:4.9, img:'https://via.placeholder.com/80/E50914/FFFFFF?text=Netflix', desc:'Akses Netflix tanpa batas.'}
-];
-const defaultPeriods = [
-  {key:'1hari',label:'1 Hari',mult:1,disc:0,icon:'fa-calendar-day',active:true},
-  {key:'1bulan',label:'1 Bulan',mult:30,disc:0,icon:'fa-calendar',active:true}
-];
 const defaultSettings = {
   storeName: 'Farid Store',
   city: 'Kota Pekanbaru',
@@ -506,7 +432,7 @@ function toast(msg, type='info'){
 // ===== UI HELPERS =====
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlayBg').classList.add('show')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlayBg').classList.remove('show')}
-const tabTitles={'products':'Katalog Produk <span>/ Kelola semua produk</span>','periods':'Periode & Harga <span>/ Konfigurasi periode langganan</span>','settings':'Pengaturan Toko <span>/ Konfigurasi toko & QRIS</span>'};
+const tabTitles={'products':'Katalog Produk <span>/ Kelola semua produk</span>','settings':'Pengaturan Toko <span>/ Konfigurasi toko & QRIS</span>'};
 function switchTab(tab, btn){
   document.querySelectorAll('.panel-section').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+tab).classList.add('active');
@@ -521,7 +447,6 @@ function updateStats(){
   document.getElementById('statTotal').textContent=currentData.length;
   document.getElementById('statReady').textContent=currentData.filter(p=>p.status==='ready').length;
   document.getElementById('statPending').textContent=currentData.filter(p=>p.status==='pending').length;
-  document.getElementById('statPeriods').textContent=periods.filter(p=>p.active).length;
   document.getElementById('navProdCount').textContent=currentData.length;
 }
 
@@ -534,20 +459,25 @@ async function fetchData(){
     const d = await r.json();
     const dataObj = d.record ? d.record : d;
     
-    currentData = dataObj.products || defaultProducts;
-    periods = dataObj.periods || defaultPeriods;
+    currentData = dataObj.products || [];
     settings = dataObj.settings || defaultSettings;
     
+    // Migrasi data lama jika masih menggunakan format harga tunggal 'price'
+    currentData = currentData.map(p => {
+      if (!p.variants || p.variants.length === 0) {
+        p.variants = [{ label: '1 Bulan (Default)', price: p.price || 0 }];
+      }
+      return p;
+    });
+
     toast('Data berhasil ditarik dari server', 'success');
   }catch(e){
     console.warn(e);
-    currentData = defaultProducts;
-    periods = defaultPeriods;
+    currentData = [];
     settings = defaultSettings;
     toast('Gagal terhubung server. Memakai data default memori.', 'error');
   }
   renderTable();
-  renderPeriods();
   populateSettingsForm();
   updateStats();
 }
@@ -570,6 +500,13 @@ function renderTable(list){
   
   data.forEach((item)=>{
     const idx=currentData.findIndex(x => x.id === item.id);
+    
+    // Ambil harga terendah dari varian sebagai harga display di tabel
+    let displayPrice = 0;
+    if (item.variants && item.variants.length > 0) {
+      displayPrice = item.variants[0].price;
+    }
+
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td><input type="checkbox" class="row-check" data-idx="${idx}" style="accent-color:var(--brand)" onchange="onRowCheck()"/></td>
@@ -581,7 +518,7 @@ function renderTable(list){
         </select>
       </td>
       <td><input type="text" class="cell-input" value="${item.img||''}" oninput="currentData[${idx}].img=this.value;document.getElementById('prev-${idx}').src=this.value" placeholder="https://..." style="min-width:140px"/></td>
-      <td><input type="number" class="cell-input" value="${item.price||0}" oninput="currentData[${idx}].price=parseInt(this.value)||0" style="width:100px"/></td>
+      <td style="font-weight:700; color:var(--text)">${fmt(displayPrice)}</td>
       <td>
         <select class="category-select" onchange="currentData[${idx}].badge=this.value" style="width:100%">
           ${[['','—'],['bestseller','Best Seller'],['new','Baru'],['hot','Hot']].map(([v,l])=>`<option value="${v}" ${item.badge===v?'selected':''}>${l}</option>`).join('')}
@@ -625,16 +562,36 @@ function bulkSetStatus(s){
   idxs.forEach(i=>currentData[i].status=s);
   renderTable();updateStats();toast(`Status diubah ke ${s}`,'success');
 }
+
+// ==== FUNGSI VARIANT DINAMIS ====
+function addVariantRow(label = '', price = '') {
+  const container = document.getElementById('pm-variants-container');
+  const div = document.createElement('div');
+  div.className = 'variant-row';
+  div.innerHTML = `
+    <input type="text" class="var-label" placeholder="Cth: 1 Bulan / Private" value="${label}">
+    <input type="number" class="var-price" placeholder="Harga (Rp)" value="${price}">
+    <button type="button" class="variant-del-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+  `;
+  container.appendChild(div);
+}
+
 function openAddProductModal(){
   editingProductIdx=null;
   document.getElementById('productModalTitle').textContent='Tambah Produk Baru';
-  ['name','img','price','rating','desc'].forEach(f=>document.getElementById('pm-'+f).value='');
+  ['name','img','rating','desc'].forEach(f=>document.getElementById('pm-'+f).value='');
   document.getElementById('pm-badge').value='';
   document.getElementById('pm-status').value='ready';
   document.getElementById('pm-cat').value='streaming';
   document.getElementById('pm-preview').src='https://via.placeholder.com/80';
+  
+  // Kosongkan dan tambah 1 baris varian default
+  document.getElementById('pm-variants-container').innerHTML = '';
+  addVariantRow('1 Bulan', '');
+
   openModal('productModal');
 }
+
 function openEditProduct(idx){
   editingProductIdx=idx;
   const p=currentData[idx];
@@ -643,133 +600,73 @@ function openEditProduct(idx){
   document.getElementById('pm-cat').value=p.cat||'streaming';
   document.getElementById('pm-img').value=p.img||'';
   document.getElementById('pm-preview').src=p.img||'https://via.placeholder.com/80';
-  document.getElementById('pm-price').value=p.price||0;
   document.getElementById('pm-rating').value=p.rating||4.5;
   document.getElementById('pm-badge').value=p.badge||'';
   document.getElementById('pm-status').value=p.status||'ready';
   document.getElementById('pm-desc').value=p.desc||'';
+  
+  // Render varian produk tersebut
+  const container = document.getElementById('pm-variants-container');
+  container.innerHTML = '';
+  if(p.variants && p.variants.length > 0) {
+    p.variants.forEach(v => addVariantRow(v.label, v.price));
+  } else {
+    addVariantRow('1 Bulan', p.price || 0); // fallback
+  }
+
   openModal('productModal');
 }
+
 function saveProduct(){
   const name=document.getElementById('pm-name').value.trim();
   if(!name){toast('Nama produk wajib diisi!','error');return;}
+  
+  // Ambil data varian dari DOM
+  const variantNodes = document.querySelectorAll('#pm-variants-container .variant-row');
+  const variants = [];
+  variantNodes.forEach(row => {
+    const l = row.querySelector('.var-label').value.trim();
+    const p = parseInt(row.querySelector('.var-price').value) || 0;
+    if(l) variants.push({ label: l, price: p });
+  });
+
+  if(variants.length === 0) {
+    toast('Minimal 1 pilihan periode & harga wajib diisi!','error');
+    return;
+  }
+
   const p={
     id: editingProductIdx!==null ? currentData[editingProductIdx].id : Date.now(),
     name, cat:document.getElementById('pm-cat').value,
     img:document.getElementById('pm-img').value.trim(),
-    price:parseInt(document.getElementById('pm-price').value)||0,
+    variants: variants,
+    price: variants[0].price, // Pertahankan field price untuk backward compatibility (sorting)
     rating:parseFloat(document.getElementById('pm-rating').value)||4.5,
     badge:document.getElementById('pm-badge').value,
     status:document.getElementById('pm-status').value,
     desc:document.getElementById('pm-desc').value.trim()
   };
+  
   if(editingProductIdx!==null) currentData[editingProductIdx]=p;
-  else currentData.push(p);
+  else currentData.unshift(p); // Tambah di atas
+  
   closeModal('productModal'); renderTable(); updateStats();
-  toast('Selesai. Klik "Simpan Semua" untuk upload!','info');
+  toast('Produk tersimpan di memori. Klik "Simpan Semua" untuk upload!','info');
 }
+
 function deleteProduct(idx){
   if(!confirm(`Hapus produk "${currentData[idx].name}"?`)) return;
   currentData.splice(idx,1);
   renderTable();updateStats();
   toast('Dihapus dari memori. Jangan lupa Simpan Semua.','info');
 }
+
 function exportCSV(){
-  const headers=['ID','Nama','Kategori','Harga','Status','Badge','Rating','Deskripsi','URL Gambar'];
-  const rows=currentData.map(p=>[p.id,p.name,p.cat,p.price,p.status,p.badge||'',p.rating||'',p.desc||'',p.img]);
+  const headers=['ID','Nama','Kategori','Harga (Mulai)','Status','Badge','Rating','Deskripsi','URL Gambar'];
+  const rows=currentData.map(p=>[p.id, p.name, p.cat, p.variants[0].price, p.status, p.badge||'', p.rating||'', p.desc||'', p.img]);
   const csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='faridstore-products.csv';a.click();
   toast('CSV berhasil diexport','success');
-}
-
-// ===== TAB 2: MANAJEMEN PERIODE =====
-function renderPeriods(){
-  const grid=document.getElementById('periodManagerGrid');
-  grid.innerHTML='';
-  periods.forEach((p,i)=>{
-    const baseSample=45000;
-    const priceBase=Math.round(baseSample*p.mult/30);
-    const discounted=p.disc>0?Math.round(priceBase*(1-p.disc/100)):priceBase;
-    const card=document.createElement('div');
-    card.className='period-card'+(p.active?'':' disabled-card');
-    card.innerHTML=`
-      ${p.disc>0?`<span class="discount-badge">-${p.disc}%</span>`:''}
-      <div class="pc-header">
-        <div class="pc-icon"><i class="fas ${p.icon||'fa-calendar'}"></i></div>
-        <div class="pc-info">
-          <div class="pc-label">${p.label}</div>
-          <div class="pc-sub">${p.mult} hari • ${p.disc>0?`<span style="color:var(--green-text)">${fmt(discounted)}</span> <s>${fmt(priceBase)}</s>`:fmt(priceBase)}</div>
-        </div>
-        <label class="pc-toggle">
-          <input type="checkbox" ${p.active?'checked':''} onchange="togglePeriod(${i},this)">
-          <span class="pc-slider"></span>
-        </label>
-      </div>
-      <div class="pc-fields">
-        <div class="pc-field-row">
-          <div class="pc-field"><label>Label</label><input type="text" value="${p.label}" ${p.active?'':'disabled'} oninput="periods[${i}].label=this.value; renderPeriods()"/></div>
-          <div class="pc-field"><label>Key (ID)</label><input type="text" value="${p.key}" ${p.active?'':'disabled'} oninput="periods[${i}].key=this.value"/></div>
-        </div>
-        <div class="pc-field-row">
-          <div class="pc-field"><label>Multiplier (hari)</label><input type="number" min="1" value="${p.mult}" ${p.active?'':'disabled'} oninput="periods[${i}].mult=parseInt(this.value)||1; renderPeriods()"/></div>
-          <div class="pc-field"><label>Diskon %</label><input type="number" min="0" max="90" value="${p.disc||0}" ${p.active?'':'disabled'} oninput="periods[${i}].disc=parseInt(this.value)||0; renderPeriods()"/></div>
-        </div>
-        <div class="pc-field">
-          <label>Ikon (Font Awesome)</label>
-          <input type="text" value="${p.icon||'fa-calendar'}" ${p.active?'':'disabled'} oninput="periods[${i}].icon=this.value; renderPeriods()"/>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="topbar-btn tb-danger" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="deletePeriod(${i})"><i class="fas fa-trash"></i></button>
-          <button class="topbar-btn tb-outline" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="duplicatePeriod(${i})"><i class="fas fa-copy"></i></button>
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-  const addCard=document.createElement('div');
-  addCard.className='add-period-card';
-  addCard.onclick=openAddPeriodModal;
-  addCard.innerHTML='<i class="fas fa-plus-circle"></i><span>Tambah Periode Baru</span>';
-  grid.appendChild(addCard);
-  updateStats();
-}
-function togglePeriod(i, cb){
-  periods[i].active=cb.checked;
-  renderPeriods();
-}
-function deletePeriod(i){
-  if(!confirm(`Hapus periode "${periods[i].label}"?`)) return;
-  periods.splice(i,1); renderPeriods();
-}
-function duplicatePeriod(i){
-  const copy={...periods[i],key:periods[i].key+'_copy',label:periods[i].label+' (Salinan)'};
-  periods.splice(i+1,0,copy); renderPeriods();
-}
-function openAddPeriodModal(){
-  editingPeriodIdx=null;
-  document.getElementById('periodModalTitle').textContent='Tambah Periode Baru';
-  document.getElementById('pem-label').value='';
-  document.getElementById('pem-key').value='';
-  document.getElementById('pem-mult').value='';
-  document.getElementById('pem-disc').value='0';
-  document.getElementById('pem-icon').value='fa-calendar';
-  document.getElementById('pem-status').value='1';
-  openModal('periodModal');
-}
-function savePeriod(){
-  const label=document.getElementById('pem-label').value.trim();
-  const key=document.getElementById('pem-key').value.trim().replace(/\s/g,'');
-  const mult=parseInt(document.getElementById('pem-mult').value)||1;
-  if(!label||!key){toast('Label dan Key wajib diisi!','error');return;}
-  const period={
-    key,label,mult,
-    disc:parseInt(document.getElementById('pem-disc').value)||0,
-    icon:document.getElementById('pem-icon').value||'fa-calendar',
-    active:document.getElementById('pem-status').value==='1'
-  };
-  periods.push(period);
-  closeModal('periodModal'); renderPeriods();
-  toast('Selesai. Klik "Simpan Semua" untuk upload!','info');
 }
 
 // ===== TAB 3: PENGATURAN TOKO =====
@@ -837,9 +734,8 @@ async function saveAllToDatabase(){
   
   const masterPayload = {
     products: currentData,
-    periods: periods,
     settings: settings
-  };
+  }; // Array periods sudah tidak dikirim
 
   try{
     const r = await fetch('/api/products', {
