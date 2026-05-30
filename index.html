@@ -768,7 +768,7 @@ document.getElementById('searchInput').addEventListener('input',renderProducts);
 // ==========================================
 async function loadData(){
   try{
-    const r = await fetch('/api/products');
+    const r = await fetch('/api/products.js');
     if(r.ok){
       const d = await r.json();
       const dataObj = d.record ? d.record : d;
