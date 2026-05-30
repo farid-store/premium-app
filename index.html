@@ -222,6 +222,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:11px 20px;border-radius:var(--radius-md);font-size:13px;font-weight:600;box-shadow:var(--shadow-lg);z-index:999;opacity:0;transition:.4s cubic-bezier(.4,0,.2,1);pointer-events:none;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
+/* ===== SUCCESS POPUP ===== */
+.success-modal {max-width: 400px; padding: 32px 24px; text-align: center; margin: auto; transform: scale(0.95); transition: 0.3s cubic-bezier(.4,0,.2,1);}
+.modal-overlay.show .success-modal {transform: scale(1);}
+.success-icon {font-size: 64px; color: var(--green); margin-bottom: 16px;}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:640px){
   .hero{padding:28px 16px}
@@ -398,6 +403,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
         <div class="status-msg" id="statusMsg"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="successPopup" class="modal-overlay" style="z-index: 600;">
+  <div class="modal-sheet success-modal">
+    <i class="fas fa-check-circle success-icon"></i>
+    <h3 style="font-size: 19px; font-weight: 800; color: var(--text); margin-bottom: 8px;">Pesanan Sedang Diproses!</h3>
+    <p style="font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 22px;">Sistem telah mencatat pesanan Anda. Klik tombol di bawah ini untuk mengirimkan detail Invoice ke WhatsApp Admin agar pesanan dapat segera diaktifkan.</p>
+    
+    <a href="#" id="invoiceWaBtn" target="_blank" class="wa-btn" style="font-size: 14px; padding: 13px; margin-bottom: 12px; border-radius: var(--radius-lg);">
+      <i class="fab fa-whatsapp" style="font-size: 18px;"></i> Kirim Invoice ke Admin
+    </a>
+    
+    <button onclick="document.getElementById('successPopup').classList.remove('show'); closeModal();" style="background: none; border: none; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--text3); cursor: pointer; padding: 8px; width: 100%; transition: var(--transition);">Tutup & Kembali</button>
   </div>
 </div>
 
@@ -585,7 +604,7 @@ function renderProducts(){
 }
 
 function openModal(p){
-  // Menggunakan varian per produk, BUKAN allPeriods
+  // Menggunakan varian per produk
   const activePeriods = p.variants && p.variants.length > 0 ? p.variants : [{label: '1 Bulan (Default)', price: p.price || 0}];
 
   if(activePeriods.length === 0) {
@@ -621,7 +640,7 @@ function openModal(p){
       currentPeriod=per;
       pg.querySelectorAll('.period-btn').forEach(x=>x.classList.remove('selected'));
       b.classList.add('selected');
-      document.getElementById('modalProdPrice').textContent=fmt(currentPeriod.price); // update harga di atas
+      document.getElementById('modalProdPrice').textContent=fmt(currentPeriod.price);
       updateTotal();
     });
     pg.appendChild(b);
@@ -653,7 +672,7 @@ function updateTotal(){
 
   const contact=document.getElementById('contactInput').value.trim();
   const waNum = storeSettings.wa || '6281234567890';
-  const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Paket: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
+  const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin bertanya mengenai:\n📦 *${currentProduct.name}*\n⏳ Paket: ${currentPeriod.label}`);
   document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
   if(total>0 && typeof QRCode!=='undefined' && storeSettings.togQris !== false){
@@ -728,9 +747,31 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
     const sm = document.getElementById('statusMsg');
 
     if(result.success) {
+      // Ubah status loading di modal utama
       sm.className = 'status-msg success';
-      sm.innerHTML = '<i class="fas fa-check-circle"></i> Pesanan terkirim ke Admin! Kami akan segera menghubungi Anda.';
+      sm.innerHTML = '<i class="fas fa-check-circle"></i> Memproses invoice...';
       updateSteps(4);
+
+      // --- FORMAT INVOICE MANUAL UNTUK POP-UP ---
+      const waNumber = "6281371127121"; // Nomor hardcode sesuai permintaan
+      const invoiceText =
+        `Halo Admin Farid Store, saya ingin mengkonfirmasi pesanan saya.\n\n` +
+        `🧾 *DETAIL INVOICE*\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `📦 *Produk:* ${currentProduct.name}\n` +
+        `⏳ *Paket:* ${currentPeriod.label}\n` +
+        `🔢 *Jumlah:* ${currentQty}x\n` +
+        `💰 *Total Tagihan:* ${fmt(total)}\n` +
+        `📞 *Kontak Saya:* ${contact}\n` +
+        `━━━━━━━━━━━━━━━━━━\n\n` +
+        `Mohon segera diproses ya min, terima kasih!`;
+
+      // Set link di tombol popup baru
+      document.getElementById('invoiceWaBtn').href = `https://wa.me/${waNumber}?text=${encodeURIComponent(invoiceText)}`;
+
+      // Munculkan Popup Success di atas segalanya
+      document.getElementById('successPopup').classList.add('show');
+
     } else {
       throw new Error(result.error);
     }
@@ -745,7 +786,9 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
 });
 
 document.getElementById('closeModalBtn').addEventListener('click',closeModal);
-document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))closeModal();});
+document.getElementById('modalOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('modalOverlay')) closeModal();
+});
 
 document.querySelectorAll('.chip').forEach(c=>{
   c.addEventListener('click',()=>{
