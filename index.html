@@ -322,7 +322,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <i class="fas fa-search"></i>
       <input type="text" id="searchInput" placeholder="Cari aplikasi premium..." autocomplete="off"/>
     </div>
-    <a href="wa.me/6281371127121" target="_blank" class="topbar-wa global-wa-link">
+    <a href="https://wa.me/6281371127121" target="_blank" class="topbar-wa global-wa-link">
       <i class="fab fa-whatsapp"></i><span>Hubungi Admin</span>
     </a>
   </div>
@@ -579,7 +579,8 @@ function applySettings() {
   document.getElementById('statSatNum').textContent = storeSettings.statSat || '-';
   document.getElementById('statTimeNum').textContent = storeSettings.statTime || '-';
 
-  const waNum = storeSettings.wa || '6281371127121';
+  // FIX: Force WA number to strictly use 6281371127121 regardless of backend settings
+  const waNum = '6281371127121';
   const waUrl = `https://wa.me/${waNum}`;
   document.querySelectorAll('.global-wa-link, #footerWa').forEach(el => el.href = waUrl);
   
@@ -730,7 +731,8 @@ function updateTotal(){
   document.getElementById('qrisAmount').textContent=fmt(total);
 
   const contact=document.getElementById('contactInput').value.trim();
-  const waNum = storeSettings.wa || '6281371127121';
+  // FIX: Force hardcode WA Number
+  const waNum = '6281371127121';
   const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin bertanya mengenai:\n📦 *${currentProduct.name}*\n⏳ Paket: ${currentPeriod.label}`);
   document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
@@ -801,6 +803,39 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   const finalPrice = currentPeriod.price;
   const total = finalPrice * currentQty;
 
+  // --- FIX: Pindahkan Fetch IP & Logika Detail ke Atas Agar API Dapat Menyamakan Detail Telegram ---
+  let userIP = "Tidak terdeteksi";
+  try {
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    userIP = ipData.ip;
+  } catch (e) {
+    console.warn("Gagal fetch IP address");
+  }
+
+  const orderDate = new Date().toLocaleString('id-ID', { 
+    timeZone: 'Asia/Jakarta', 
+    day: '2-digit', month: 'long', year: 'numeric', 
+    hour: '2-digit', minute: '2-digit' 
+  }) + ' WIB';
+  
+  const waNumber = "6281371127121"; // Nomor hardcode sesuai permintaan
+  
+  const invoiceText = 
+    `*INVOICE PEMESANAN - FARID STORE*\n` +
+    `──────────────────────────\n` +
+    `🗓️ *Waktu:* ${orderDate}\n\n` +
+    `📦 *Produk:* ${currentProduct.name}\n` +
+    `⏳ *Paket:* ${currentPeriod.label}\n` +
+    `🔢 *Jumlah:* ${currentQty}x\n` +
+    `💰 *Total Tagihan:* ${fmt(total)}\n` +
+    `📞 *Kontak Anda:* ${contact}\n\n` +
+    `🛡️ *Sistem & Keamanan*\n` +
+    `🌐 *IP Address:* ${userIP}\n` +
+    `📱 *Perangkat:* ${getDeviceInfo()}\n` +
+    `──────────────────────────\n` +
+    `Halo Admin, saya ingin mengkonfirmasi pesanan saya. Mohon segera diproses, terima kasih!`;
+
   try {
     const response = await fetch('/api/order', {
       method: 'POST',
@@ -810,7 +845,11 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
         period: currentPeriod.label,
         qty: currentQty,
         total: total,
-        contact: contact
+        contact: contact,
+        userIP: userIP,
+        deviceInfo: getDeviceInfo(),
+        orderDate: orderDate,
+        invoiceText: invoiceText // <- Mengirim format teks jadi agar backend (Telegram) detailnya 100% SAMA
       })
     });
 
@@ -821,39 +860,6 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
       sm.className = 'status-msg success';
       sm.innerHTML = '<i class="fas fa-check-circle"></i> Memproses invoice...';
       updateSteps(4);
-
-      // --- FETCH IP & SET FORMAT INVOICE MANUAL ---
-      let userIP = "Tidak terdeteksi";
-      try {
-        const ipRes = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipRes.json();
-        userIP = ipData.ip;
-      } catch (e) {
-        console.warn("Gagal fetch IP address");
-      }
-
-      const orderDate = new Date().toLocaleString('id-ID', { 
-        timeZone: 'Asia/Jakarta', 
-        day: '2-digit', month: 'long', year: 'numeric', 
-        hour: '2-digit', minute: '2-digit' 
-      }) + ' WIB';
-      
-      const waNumber = "6281371127121"; // Nomor hardcode sesuai permintaan
-      
-      const invoiceText = 
-        `*INVOICE PEMESANAN - FARID STORE*\n` +
-        `──────────────────────────\n` +
-        `🗓️ *Waktu:* ${orderDate}\n\n` +
-        `📦 *Produk:* ${currentProduct.name}\n` +
-        `⏳ *Paket:* ${currentPeriod.label}\n` +
-        `🔢 *Jumlah:* ${currentQty}x\n` +
-        `💰 *Total Tagihan:* ${fmt(total)}\n` +
-        `📞 *Kontak Anda:* ${contact}\n\n` +
-        `🛡️ *Sistem & Keamanan*\n` +
-        `🌐 *IP Address:* ${userIP}\n` +
-        `📱 *Perangkat:* ${getDeviceInfo()}\n` +
-        `──────────────────────────\n` +
-        `Halo Admin, saya ingin mengkonfirmasi pesanan saya. Mohon segera diproses, terima kasih!`;
 
       // Set link di tombol popup baru
       document.getElementById('invoiceWaBtn').href = `https://wa.me/${waNumber}?text=${encodeURIComponent(invoiceText)}`;
