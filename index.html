@@ -106,7 +106,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .prod-cat{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .prod-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .prod-price{font-size:15px;font-weight:800;color:var(--brand);margin-bottom:8px}
-.prod-price-old{font-size:11px;color:var(--text3);text-decoration:line-through;margin-left:6px;font-weight:500}
+.prod-price-old{font-size:11px;color:var(--text3);text-decoration:none;margin-left:6px;font-weight:500}
 .prod-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
 .prod-status{font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px}
 .status-ready{background:var(--green-soft);color:var(--green)}
@@ -373,7 +373,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
           <div class="step-item"><div class="step-dot" id="step4dot">4</div><div class="step-lbl">Akun<br>Aktif</div></div>
         </div>
 
-        <span class="form-label">Pilih Periode</span>
+        <span class="form-label">Pilih Periode / Tipe</span>
         <div class="period-grid" id="periodGrid"></div>
 
         <span class="form-label">Jumlah</span>
@@ -388,7 +388,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
         <div class="total-box">
           <div class="total-box-row"><span>Harga satuan</span><span id="unitPriceDisplay">Rp0</span></div>
-          <div class="total-box-row"><span>Periode</span><span id="periodDisplay">—</span></div>
+          <div class="total-box-row"><span>Paket</span><span id="periodDisplay">—</span></div>
           <div class="total-box-row"><span>Jumlah</span><span id="qtyDisplay2">1x</span></div>
           <div class="total-box-main"><span>Total Tagihan</span><span id="totalDisplay">Rp0</span></div>
         </div>
@@ -406,13 +406,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <script>
 // STATE DINAMIS DARI SERVER
 let allProducts = [];
-let allPeriods = [];
 let storeSettings = {};
 
 // STATE LOKAL MODAL
 let currentProduct = null;
 let currentQty = 1;
-let currentPeriod = null;
+let currentPeriod = null; // Menyimpan varian produk spesifik
 let qrEngine = null;
 
 const FAQS = [
@@ -470,23 +469,19 @@ function renderFAQ(){
 }
 
 function applySettings() {
-  // LOGIKA MAINTENANCE MODE YANG DIPERKUAT
   if (storeSettings.togMaintenance === true || String(storeSettings.togMaintenance).toLowerCase() === 'true') {
     document.getElementById('maintenanceScreen').classList.add('show');
-    document.body.style.overflow = 'hidden'; // Kunci scroll layar
+    document.body.style.overflow = 'hidden';
 
-    // Sembunyikan elemen latar belakang agar tidak bisa diakses
     ['mainHeader', 'mainHero', 'mainTrust', 'mainFilter', 'mainCatalog', 'mainFaq', 'mainFooter'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
-    
-    return; // Berhenti mengeksekusi script lainnya
+    return;
   } else {
     document.getElementById('maintenanceScreen').classList.remove('show');
     document.body.style.overflow = '';
     
-    // Tampilkan kembali elemen jika maintenance dimatikan
     ['mainHeader', 'mainHero', 'mainTrust', 'mainFilter', 'mainCatalog', 'mainFaq', 'mainFooter'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = ''; 
@@ -550,16 +545,20 @@ function renderProducts(){
     c.style.animationDelay=(i*0.05)+'s';
     const badgeHTML=p.badge?`<span class="card-badge badge-${p.badge}">${p.badge==='bestseller'?'Best Seller':p.badge==='new'?'Baru':'🔥 Hot'}</span>`:'';
     const starsHTML=showRating ? `<span class="prod-rating"><i class="fas fa-star"></i> ${p.rating||4.5}</span>` : '';
+    
+    // Tentukan harga display (mulai dari harga termurah jika ada varian)
+    let displayPrice = p.price || 0;
+    if (p.variants && p.variants.length > 0) displayPrice = p.variants[0].price;
 
     if(isListView){
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/150x150/e2e8f0/94a3b8?text=Img'"/></div>
         <div class="card-info">
           <div class="prod-cat">${p.cat}</div>
           <div class="prod-name">${p.name}</div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span class="prod-price">${fmt(p.price)}<span class="prod-price-old">/bulan</span></span>
+            <span class="prod-price">${fmt(displayPrice)}</span>
             ${starsHTML}
             <span class="prod-status status-${p.status}">${p.status==='ready'?'✓ Ready':'⏳ Pending'}</span>
           </div>
@@ -569,10 +568,10 @@ function renderProducts(){
     } else {
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/150x150/e2e8f0/94a3b8?text=Img'"/></div>
         <div class="prod-cat">${p.cat}</div>
         <div class="prod-name">${p.name}</div>
-        <div class="prod-price">${fmt(p.price)}<span class="prod-price-old">/bln</span></div>
+        <div class="prod-price">${fmt(displayPrice)}</div>
         <div class="prod-footer">${starsHTML}<span class="prod-status status-${p.status}">${p.status==='ready'?'✓ Ready':'⏳ Pending'}</span></div>
         <button class="buy-btn">Beli Sekarang</button>
       `;
@@ -586,18 +585,22 @@ function renderProducts(){
 }
 
 function openModal(p){
-  const activePeriods = allPeriods.filter(per => per.active);
+  // Menggunakan varian per produk, BUKAN allPeriods
+  const activePeriods = p.variants && p.variants.length > 0 ? p.variants : [{label: '1 Bulan (Default)', price: p.price || 0}];
+
   if(activePeriods.length === 0) {
-      showToast("Gagal: Belum ada periode berlangganan yang diaktifkan.");
+      showToast("Gagal: Belum ada varian produk yang tersedia.");
       return;
   }
 
-  currentProduct=p; currentQty=1; currentPeriod=activePeriods[0];
+  currentProduct=p; 
+  currentQty=1; 
+  currentPeriod=activePeriods[0];
 
   document.getElementById('modalTitle').textContent=p.name;
   document.getElementById('modalImg').src=p.img;
   document.getElementById('modalProdName').textContent=p.name;
-  document.getElementById('modalProdPrice').textContent=fmt(p.price)+' /bulan';
+  document.getElementById('modalProdPrice').textContent=fmt(currentPeriod.price);
   document.getElementById('modalProdDesc').textContent=p.desc||'';
   document.getElementById('qtyDisplay').textContent='1';
   document.getElementById('statusMsg').className='status-msg';
@@ -609,17 +612,16 @@ function openModal(p){
   const pg=document.getElementById('periodGrid');
   pg.innerHTML='';
   activePeriods.forEach((per)=>{
-    const baseSample = p.price;
-    const priceBase = Math.round(baseSample * per.mult / 30);
-    const price = per.disc > 0 ? Math.round(priceBase * (1 - per.disc / 100)) : priceBase;
+    const price = per.price;
     
     const b=document.createElement('button');
-    b.className='period-btn'+(per.key===currentPeriod.key?' selected':'');
+    b.className='period-btn'+(per.label===currentPeriod.label?' selected':'');
     b.innerHTML=`${per.label}<span class="period-price">${fmt(price)}</span>`;
     b.addEventListener('click',()=>{
       currentPeriod=per;
       pg.querySelectorAll('.period-btn').forEach(x=>x.classList.remove('selected'));
       b.classList.add('selected');
+      document.getElementById('modalProdPrice').textContent=fmt(currentPeriod.price); // update harga di atas
       updateTotal();
     });
     pg.appendChild(b);
@@ -639,8 +641,8 @@ function closeModal(){
 function updateTotal(){
   if(!currentProduct || !currentPeriod) return;
   
-  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
-  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  // Hitung langsung dari harga varian
+  const finalPrice = currentPeriod.price;
   const total = finalPrice * currentQty;
   
   document.getElementById('unitPriceDisplay').textContent=fmt(finalPrice);
@@ -651,7 +653,7 @@ function updateTotal(){
 
   const contact=document.getElementById('contactInput').value.trim();
   const waNum = storeSettings.wa || '6281234567890';
-  const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Periode: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
+  const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Paket: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
   document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
   if(total>0 && typeof QRCode!=='undefined' && storeSettings.togQris !== false){
@@ -689,8 +691,7 @@ document.getElementById('contactInput').addEventListener('input',()=>{
 
 document.getElementById('copyAmountBtn').addEventListener('click',()=>{
   if(!currentProduct || !currentPeriod) return;
-  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
-  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  const finalPrice = currentPeriod.price;
   const total = finalPrice * currentQty;
   navigator.clipboard.writeText(total).then(()=>showToast('Nominal Rp'+total.toLocaleString('id-ID')+' disalin!')).catch(()=>showToast('Salin: Rp'+total.toLocaleString('id-ID')));
 });
@@ -707,8 +708,7 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   const btn=document.getElementById('confirmOrderBtn');
   btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim Notifikasi...';
 
-  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
-  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  const finalPrice = currentPeriod.price;
   const total = finalPrice * currentQty;
 
   try {
@@ -784,7 +784,6 @@ async function loadData() {
     const dataObj = d.record ? d.record : d;
     
     allProducts = dataObj.products || [];
-    allPeriods = dataObj.periods || [];
     storeSettings = dataObj.settings || {};
     
     applySettings();
