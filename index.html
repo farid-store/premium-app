@@ -407,10 +407,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 <script>
 // ==========================================
-// KONFIGURASI API JSONBIN (GANTI DENGAN MILIK ANDA)
+// API SEKARANG DIAMBIL DARI ROUTE INTERNAL VERCEL
+// API KEY & TOKEN DIRAHASIAKAN DI SERVER
 // ==========================================
-const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/MASUKKAN_BIN_ID_ANDA_DISINI'; 
-const JSONBIN_KEY = 'MASUKKAN_MASTER_KEY_ANDA_DISINI'; 
 
 // STATE DINAMIS DARI SERVER
 let allProducts = [];
@@ -424,12 +423,12 @@ let currentPeriod = null;
 let qrEngine = null;
 
 const FAQS = [
-  {q:'Berapa lama proses aktivasi akun?',a:'Proses aktivasi biasanya membutuhkan waktu 1–5 menit setelah pembayaran dikonfirmasi admin. Anda akan dihubungi via kontak yang didaftarkan.'},
-  {q:'Apakah ada garansi jika akun bermasalah?',a:'Ya! Semua produk kami bergaransi penuh. Jika akun mengalami masalah dalam masa aktif, kami akan langsung mengganti akun tanpa biaya tambahan.'},
-  {q:'Metode pembayaran apa yang tersedia?',a:'Kami menerima pembayaran via QRIS (scan QR Code di modal produk). QRIS mendukung semua dompet digital dan mobile banking di Indonesia.'},
-  {q:'Bagaimana cara order jika tidak paham QRIS?',a:'Anda bisa klik tombol "Chat Langsung ke Admin WA" dan admin akan memandu proses pembayaran secara manual.'},
-  {q:'Apakah akun shared atau private?',a:'Tergantung produk. Akun shared berarti berbagi slot dengan pengguna lain (hemat), akun private adalah akun eksklusif hanya untuk Anda. Info ini tertera di deskripsi produk.'},
-  {q:'Bagaimana jika ada kendala setelah pembelian?',a:'Hubungi CS kami 24/7 via WhatsApp atau Telegram. Response time rata-rata kurang dari 15 menit.'},
+  {q:'Berapa lama proses aktivasi akun?',a:'Proses aktivasi biasanya membutuhkan waktu 1–5 menit setelah pembayaran dikonfirmasi admin.'},
+  {q:'Apakah ada garansi jika akun bermasalah?',a:'Ya! Semua produk kami bergaransi penuh.'},
+  {q:'Metode pembayaran apa yang tersedia?',a:'Kami menerima pembayaran via QRIS (scan QR Code di modal produk).'},
+  {q:'Bagaimana cara order jika tidak paham QRIS?',a:'Anda bisa klik tombol "Chat Langsung ke Admin WA".'},
+  {q:'Apakah akun shared atau private?',a:'Tergantung produk, info ini tertera di deskripsi produk.'},
+  {q:'Bagaimana jika ada kendala setelah pembelian?',a:'Hubungi CS kami 24/7 via WhatsApp atau Telegram.'},
 ];
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
@@ -444,8 +443,6 @@ function crc16(str){
 function buildQRIS(amount){
   const a = amount.toString();
   const al = pad2(a.length);
-  
-  // Ambil pengaturan dinamis JSON atau gunakan default
   const mid = storeSettings.qrisMid || '93600915300002827902090000282790'; 
   const merch = storeSettings.qrisMerchant || 'Farid Store';
   const merchL = pad2(merch.length);
@@ -455,15 +452,10 @@ function buildQRIS(amount){
   const postalL = pad2(postal.length);
   const isDynamic = storeSettings.qrisType === '12';
 
-  // Base Payload QRIS
   let raw = '00020101021226570011ID.DANA.WWW0118' + mid.substring(0,18) + '02090000282790303UMI' + 
             '51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI' + '520448145303360';
   
-  // Jika Dinamis dan Amount > 0, tambahkan Tag 54 (Amount)
-  if (isDynamic && amount > 0) {
-    raw += '54' + al + a;
-  }
-  
+  if (isDynamic && amount > 0) raw += '54' + al + a;
   raw += '5802ID' + '59' + merchL + merch + '60' + cityL + city + '61' + postalL + postal + '6304';
   return raw + crc16(raw);
 }
@@ -484,18 +476,16 @@ function renderFAQ(){
   });
 }
 
-// APPLY PENGATURAN TOKO KE HTML
 function applySettings() {
   if(storeSettings.togMaintenance) {
     document.getElementById('maintenanceScreen').classList.add('show');
     ['mainHeader','mainHero','mainTrust','mainFilter','mainCatalog','mainFaq','mainFooter'].forEach(id => {
       document.getElementById(id).style.display = 'none';
     });
-    return; // Hentikan eksekusi render jika maintenance
+    return; 
   }
 
   const sName = storeSettings.storeName || 'Farid Store';
-  // Pecah nama menjadi dua agar ada efek warna di span
   const nameParts = sName.split(' ');
   const nameHTML = nameParts.length > 1 ? `${nameParts[0]}<span>${nameParts.slice(1).join(' ')}</span>` : `${sName}<span></span>`;
   
@@ -503,13 +493,11 @@ function applySettings() {
   document.getElementById('copyName').textContent = sName;
   document.getElementById('storeDesc').textContent = storeSettings.desc || '';
 
-  // Stats Hero
   document.getElementById('statCustNum').textContent = storeSettings.statCust || '-';
   document.getElementById('statProdNum').textContent = storeSettings.statProd || '-';
   document.getElementById('statSatNum').textContent = storeSettings.statSat || '-';
   document.getElementById('statTimeNum').textContent = storeSettings.statTime || '-';
 
-  // Kontak Link
   const waNum = storeSettings.wa || '6281234567890';
   const waUrl = `https://wa.me/${waNum}`;
   document.querySelectorAll('.global-wa-link, #footerWa').forEach(el => el.href = waUrl);
@@ -517,10 +505,7 @@ function applySettings() {
   if(storeSettings.tg) document.getElementById('footerTg').href = `https://t.me/${storeSettings.tg.replace('@','')}`;
   if(storeSettings.ig) document.getElementById('footerIg').href = `https://instagram.com/${storeSettings.ig.replace('@','')}`;
 
-  // QRIS Label Modal
   document.getElementById('modalQrisLabel').textContent = storeSettings.qrisLabel || 'Scan & bayar sekarang';
-  
-  // Toggles Element Modal
   if(storeSettings.togQris === false) document.getElementById('modalQrisContainer').style.display = 'none';
   if(storeSettings.togWa === false) document.getElementById('waDirectBtn').style.display = 'none';
 }
@@ -541,8 +526,7 @@ function renderProducts(){
   else if(sort==='name-asc') list.sort((a,b)=>a.name.localeCompare(b.name));
 
   const grid=document.getElementById('productGrid');
-  const info=document.getElementById('resultInfo');
-  info.textContent=`Menampilkan ${list.length} produk`;
+  document.getElementById('resultInfo').textContent=`Menampilkan ${list.length} produk`;
   grid.innerHTML='';
 
   if(list.length===0){
@@ -562,7 +546,7 @@ function renderProducts(){
     if(isListView){
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
         <div class="card-info">
           <div class="prod-cat">${p.cat}</div>
           <div class="prod-name">${p.name}</div>
@@ -577,7 +561,7 @@ function renderProducts(){
     } else {
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
         <div class="prod-cat">${p.cat}</div>
         <div class="prod-name">${p.name}</div>
         <div class="prod-price">${fmt(p.price)}<span class="prod-price-old">/bln</span></div>
@@ -593,18 +577,14 @@ function renderProducts(){
   });
 }
 
-// MODAL
 function openModal(p){
-  // Ambil hanya periode yang diset Aktif oleh Admin
   const activePeriods = allPeriods.filter(per => per.active);
   if(activePeriods.length === 0) {
-      showToast("Gagal: Belum ada periode berlangganan yang diaktifkan Admin.");
+      showToast("Gagal: Belum ada periode berlangganan yang diaktifkan.");
       return;
   }
 
-  currentProduct=p;
-  currentQty=1;
-  currentPeriod=activePeriods[0]; // Default ambil yang pertama
+  currentProduct=p; currentQty=1; currentPeriod=activePeriods[0];
 
   document.getElementById('modalTitle').textContent=p.name;
   document.getElementById('modalImg').src=p.img;
@@ -616,13 +596,11 @@ function openModal(p){
   document.getElementById('confirmOrderBtn').disabled=false;
   document.getElementById('confirmOrderBtn').innerHTML='<i class="fas fa-paper-plane"></i> Konfirmasi & Kirim Pesanan';
 
-  const saved=localStorage.getItem('fs_contact')||'';
-  document.getElementById('contactInput').value=saved;
+  document.getElementById('contactInput').value=localStorage.getItem('fs_contact')||'';
 
-  // Render periods dynamic
   const pg=document.getElementById('periodGrid');
   pg.innerHTML='';
-  activePeriods.forEach((per, index)=>{
+  activePeriods.forEach((per)=>{
     const baseSample = p.price;
     const priceBase = Math.round(baseSample * per.mult / 30);
     const price = per.disc > 0 ? Math.round(priceBase * (1 - per.disc / 100)) : priceBase;
@@ -663,13 +641,11 @@ function updateTotal(){
   document.getElementById('totalDisplay').textContent=fmt(total);
   document.getElementById('qrisAmount').textContent=fmt(total);
 
-  // WA button text inject
   const contact=document.getElementById('contactInput').value.trim();
   const waNum = storeSettings.wa || '6281234567890';
-  const msg=encodeURIComponent(`Halo Admin ${storeSettings.storeName||'Farid Store'}!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Periode: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
+  const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Periode: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
   document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
-  // QRIS Generation
   if(total>0 && typeof QRCode!=='undefined' && storeSettings.togQris !== false){
     const payload=buildQRIS(total);
     const el=document.getElementById('qrcode');
@@ -691,7 +667,6 @@ function updateSteps(active){
   });
 }
 
-// Qty
 document.getElementById('qtyMinus').addEventListener('click',()=>{
   if(currentQty>1){currentQty--;document.getElementById('qtyDisplay').textContent=currentQty;updateTotal();}
 });
@@ -704,17 +679,15 @@ document.getElementById('contactInput').addEventListener('input',()=>{
   if(v) updateSteps(3); else updateSteps(2);
 });
 
-// Copy amount
 document.getElementById('copyAmountBtn').addEventListener('click',()=>{
   if(!currentProduct || !currentPeriod) return;
   const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
   const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
   const total = finalPrice * currentQty;
-  
   navigator.clipboard.writeText(total).then(()=>showToast('Nominal Rp'+total.toLocaleString('id-ID')+' disalin!')).catch(()=>showToast('Salin: Rp'+total.toLocaleString('id-ID')));
 });
 
-// Submit Placeholder API (Anda bisa hubungkan ini dengan Bot Telegram Webhook dsb)
+// PENGIRIMAN DATA ORDER KE VERCEL API (YANG MENERUSKAN KE TELEGRAM)
 document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   const contact=document.getElementById('contactInput').value.trim();
   if(!contact){
@@ -724,29 +697,49 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   }
   localStorage.setItem('fs_contact',contact);
   
-  // Karena fitur notif hanya dummy di JS murni, kita arahkan user agar klik WA saja
-  // Namun jika API bot siap, jalankan logika fetch() Anda di sini
-  if(storeSettings.togNotif === false) {
-     showToast('Sistem otomatis nonaktif, silahkan klik tombol WhatsApp');
-     return;
-  }
-  
   const btn=document.getElementById('confirmOrderBtn');
-  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-  
-  setTimeout(() => {
-    const sm=document.getElementById('statusMsg');
-    sm.className='status-msg error';
-    sm.innerHTML='<i class="fas fa-circle-xmark"></i> Server notifikasi belum diset. Gunakan tombol Chat WhatsApp di bawah.';
-    btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Konfirmasi & Kirim Pesanan';
-  }, 1000);
+  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim Notifikasi...';
+
+  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
+  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  const total = finalPrice * currentQty;
+
+  try {
+    const response = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        productName: currentProduct.name,
+        period: currentPeriod.label,
+        qty: currentQty,
+        total: total,
+        contact: contact
+      })
+    });
+
+    const result = await response.json();
+    const sm = document.getElementById('statusMsg');
+
+    if(result.success) {
+      sm.className = 'status-msg success';
+      sm.innerHTML = '<i class="fas fa-check-circle"></i> Pesanan terkirim ke Admin! Kami akan segera menghubungi Anda.';
+      updateSteps(4);
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (error) {
+    const sm = document.getElementById('statusMsg');
+    sm.className = 'status-msg error';
+    sm.innerHTML = '<i class="fas fa-circle-xmark"></i> Server sibuk. Silakan gunakan tombol Chat WhatsApp.';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Konfirmasi & Kirim Pesanan';
+  }
 });
 
-// Close modal
 document.getElementById('closeModalBtn').addEventListener('click',closeModal);
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))closeModal();});
 
-// Filters
 document.querySelectorAll('.chip').forEach(c=>{
   c.addEventListener('click',()=>{
     document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
@@ -754,7 +747,6 @@ document.querySelectorAll('.chip').forEach(c=>{
   });
 });
 
-// View toggle
 document.getElementById('gridViewBtn').addEventListener('click',()=>{
   document.getElementById('productGrid').classList.remove('list-view');
   document.getElementById('gridViewBtn').classList.add('active');
@@ -771,12 +763,12 @@ document.getElementById('listViewBtn').addEventListener('click',()=>{
 document.getElementById('sortSelect').addEventListener('change',renderProducts);
 document.getElementById('searchInput').addEventListener('input',renderProducts);
 
-// ===== FETCH KESELURUHAN DATA =====
+// ==========================================
+// LOAD DATA DARI VERCEL API (/api/products)
+// ==========================================
 async function loadData(){
   try{
-    const r = await fetch(JSONBIN_URL, {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
-    });
+    const r = await fetch('/api/products');
     if(r.ok){
       const d = await r.json();
       const dataObj = d.record ? d.record : d;
@@ -784,9 +776,11 @@ async function loadData(){
       allProducts = dataObj.products || [];
       allPeriods = dataObj.periods || [];
       storeSettings = dataObj.settings || {};
+    } else {
+        console.error("Gagal load API");
     }
   } catch(e){
-    console.error("Gagal load API, pastikan JSONBIN terkonfigurasi.", e);
+    console.error("Koneksi Error", e);
   }
   
   applySettings();
