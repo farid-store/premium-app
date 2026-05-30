@@ -579,7 +579,7 @@ function applySettings() {
   document.getElementById('statSatNum').textContent = storeSettings.statSat || '-';
   document.getElementById('statTimeNum').textContent = storeSettings.statTime || '-';
 
-  const waNum = storeSettings.wa || '6281234567890';
+  const waNum = storeSettings.wa || '6281371127121';
   const waUrl = `https://wa.me/${waNum}`;
   document.querySelectorAll('.global-wa-link, #footerWa').forEach(el => el.href = waUrl);
   
@@ -730,7 +730,7 @@ function updateTotal(){
   document.getElementById('qrisAmount').textContent=fmt(total);
 
   const contact=document.getElementById('contactInput').value.trim();
-  const waNum = storeSettings.wa || '6281234567890';
+  const waNum = storeSettings.wa || '6281371127121';
   const msg=encodeURIComponent(`Halo Admin!\n\nSaya ingin bertanya mengenai:\n📦 *${currentProduct.name}*\n⏳ Paket: ${currentPeriod.label}`);
   document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
