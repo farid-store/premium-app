@@ -254,17 +254,33 @@
         return "Rp" + number.toLocaleString("id-ID");
     }
 
-    // MENGGUNAKAN API INTERNAL VERCEL (Aman, menyembunyikan API KEY JSONBIN)
+    // MENGGUNAKAN API INTERNAL VERCEL DENGAN PROTEKSI FORMAT DATA
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
-            if (!response.ok) throw new Error('Gagal memuat data dari server.');
+            const data = await response.json();
             
-            items = await response.json(); 
+            // Console log untuk mengecek data yang masuk
+            console.log("Data dari server (Katalog):", data);
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Server mengalami kendala.');
+            }
+            
+            // Proteksi: Mencegah error .forEach is not a function
+            if (Array.isArray(data)) {
+                items = data; // Jika data langsung berupa array
+            } else if (data && Array.isArray(data.record)) {
+                items = data.record; // Jika data dibungkus objek record (format JSONBin)
+            } else {
+                items = []; // Kosongkan agar tidak error
+                throw new Error("Format data dari server tidak valid (bukan array).");
+            }
+            
             renderProducts();
         } catch (error) {
-            console.error("Error:", error);
-            productList.innerHTML = `<p class="no-results" style="color:#d32f2f;">Gagal memuat katalog. Periksa koneksi atau konfigurasi server.</p>`;
+            console.error("Error loadProducts:", error);
+            productList.innerHTML = `<p class="no-results" style="color:#d32f2f;"><i class="fas fa-exclamation-triangle fa-2x mb-2 block"></i><br>Gagal memuat katalog: ${error.message}</p>`;
         }
     }
 
