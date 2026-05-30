@@ -121,7 +121,7 @@
     
     .modal-content {
         background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto;
+        max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto;
         padding: 30px; position: relative; transform: scale(0.95); transition: transform 0.3s ease;
     }
     .modal.show .modal-content { transform: scale(1); }
@@ -132,45 +132,65 @@
     }
     .modal-close:hover { color: #d32f2f; }
 
-    .modal-body { display: flex; gap: 30px; flex-wrap: wrap; }
-    .modal-image-wrapper { flex: 1 1 250px; }
-    .modal-image-wrapper img { width: 100%; border-radius: 12px; object-fit: contain; background: #f8f9fa; }
+    .modal-body { display: flex; gap: 25px; flex-wrap: wrap; }
+    .modal-image-wrapper { flex: 1 1 220px; display: flex; flex-direction: column; align-items: center; }
+    .modal-image-wrapper img.prod-img { width: 100%; max-width: 220px; border-radius: 12px; object-fit: contain; background: #f8f9fa; margin-bottom: 15px; }
     
-    .modal-details { flex: 1 1 300px; display: flex; flex-direction: column; }
+    /* === QRIS Wrapper Box di Modal === */
+    .qris-box {
+        background: white;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        display: inline-block;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        text-align: center;
+    }
+    #qrcode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 180px;
+        height: 180px;
+        margin: 0 auto;
+    }
+    .qris-hint { font-size: 0.75rem; color: #666; margin-top: 6px; font-weight: 600; }
+
+    .modal-details { flex: 1 1 320px; display: flex; flex-direction: column; }
     .modal-details h3 { margin: 0; font-size: 1.4rem; color: #333; }
-    .modal-details .modal-price { font-size: 1.2rem; font-weight: 700; color: #7367f0; margin: 10px 0 20px 0; }
+    .modal-details .modal-price { font-size: 1.2rem; font-weight: 700; color: #7367f0; margin: 8px 0 15px 0; }
     
-    .modal-details label { font-weight: 600; margin-top: 15px; color: #555; font-size: 0.9rem; }
+    .modal-details label { font-weight: 600; margin-top: 12px; color: #555; font-size: 0.9rem; }
     .modal-details select, .modal-details input {
-        margin-top: 8px; padding: 12px; font-size: 1rem;
+        margin-top: 6px; padding: 10px; font-size: 0.95rem;
         border-radius: 8px; border: 1px solid #ccc; transition: all 0.3s;
         box-sizing: border-box; width: 100%;
     }
     .modal-details select:focus, .modal-details input:focus {
-        outline: none; border-color: #7367f0; box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.2);
+        outline: none; border-color: #7367f0; box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.1);
     }
 
     .total-calc {
-        background: #f8f9fa; border: 1px dashed #ccc; padding: 15px; border-radius: 8px;
-        margin-top: 20px; text-align: center; font-size: 1.1rem; font-weight: bold;
+        background: #f8f9fa; border: 1px dashed #7367f0; padding: 12px; border-radius: 8px;
+        margin-top: 15px; text-align: center; font-size: 1.1rem; font-weight: bold; color: #333;
     }
 
     .btn-submit {
-        margin-top: 20px; padding: 14px; font-size: 1rem; font-weight: 700;
+        margin-top: 15px; padding: 12px; font-size: 1rem; font-weight: 700;
         background: #7367f0; color: white; border: none; border-radius: 8px;
         cursor: pointer; transition: background 0.3s ease;
     }
     .btn-submit:hover:not(:disabled) { background: #5a4fcc; }
     .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    .status-message { margin-top: 15px; font-weight: 600; text-align: center; font-size: 0.9rem; }
-    
+    .status-message { margin-top: 12px; font-weight: 600; text-align: center; font-size: 0.85rem; }
     .loading-state { text-align: center; padding: 40px; color: #888; grid-column: 1 / -1; }
 
     /* Responsive Modal Mobile */
     @media (max-width: 600px) {
         .modal-body { flex-direction: column; gap: 15px; }
         .modal-content { padding: 20px; }
+        .modal-image-wrapper { flex: 1 1 auto; }
     }
 </style>
 </head>
@@ -199,8 +219,14 @@
         <button id="closeModal" class="modal-close"><i class="fas fa-times"></i></button>
         <div class="modal-body">
             <div class="modal-image-wrapper">
-                <img id="modalImage" src="" alt="Produk" />
+                <img id="modalImage" class="prod-img" src="" alt="Produk" />
+                
+                <div class="qris-box">
+                    <div id="qrcode"></div>
+                    <div class="qris-hint"><i class="fas fa-qrcode"></i> QRIS OTOMATIS FARID STORE</div>
+                </div>
             </div>
+            
             <div class="modal-details">
                 <h3 id="modalName">Nama Produk</h3>
                 <div id="modalPrice" class="modal-price">Rp0</div>
@@ -221,15 +247,17 @@
                 <input type="text" id="contactInput" placeholder="Contoh: 0812xxx atau @username" />
 
                 <div class="total-calc">
-                    Total: <span id="totalDisplay">Rp0</span>
+                    Total Tagihan: <span id="totalDisplay">Rp0</span>
                 </div>
 
-                <button id="submitOrder" class="btn-submit">Pesan Sekarang</button>
+                <button id="submitOrder" class="btn-submit">Konfirmasi Pesanan</button>
                 <p id="statusMessage" class="status-message"></p>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
     const productList = document.getElementById("productList");
@@ -248,31 +276,68 @@
 
     let items = [];
     let currentProduct = null;
+    let qrEngine = null; // Menyimpan instance QRCode agar tidak tumpang tindih
 
     function formatRupiah(number) {
         return "Rp" + number.toLocaleString("id-ID");
     }
 
-    // Mengambil data produk melalui endpoint serverless proxy internal Vercel
+    // Algoritma Keamanan CRC16-CCITT Standar Internasional EMVCo QRIS
+    function crc16(str) {
+        let crc = 0xFFFF;
+        for (let i = 0; i < str.length; i++) {
+            crc ^= str.charCodeAt(i) << 8;
+            for (let j = 0; j < 8; j++) {
+                if ((crc & 0x8000) !== 0) {
+                    crc = (crc << 1) ^ 0x1021;
+                } else {
+                    crc <<= 1;
+                }
+                crc &= 0xFFFF;
+            }
+        }
+        return crc.toString(16).toUpperCase().padStart(4, '0');
+    }
+
+    // Konstruktor String Payload Penentu Nominal QRIS Dinamis Instan
+    function buildQRIS(amount) {
+        const tag00 = "000201";
+        const tag01 = "010212"; // Kode 12 mengunci QRIS ke tipe Dinamis
+        const tag26 = "26570011ID.DANA.WWW011893600915300002827902090000282790303UMI";
+        const tag51 = "51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI";
+        const tag52 = "52044814";
+        const tag53 = "5303360"; // Mata uang rupiah Indonesia (IDR)
+        
+        const amountStr = amount.toString();
+        const amountLen = amountStr.length.toString().padStart(2, '0');
+        const tag54 = "54" + amountLen + amountStr; // Mengasimilasi nominal transaksi
+        
+        const tag58 = "5802ID";
+        const tag59 = "5911Farid Store";
+        const tag60 = "6014Kota Pekanbaru";
+        const tag61 = "610528294";
+        const tag63Header = "6304"; 
+        
+        const rawPayload = tag00 + tag01 + tag26 + tag51 + tag52 + tag53 + tag54 + tag58 + tag59 + tag60 + tag61 + tag63Header;
+        const finalCrc = crc16(rawPayload);
+        
+        return rawPayload + finalCrc;
+    }
+
+    // Sinkronisasi data katalog via Vercel Serverless internal proxy
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
             const data = await response.json();
             
-            console.log("Data dari server (Katalog):", data);
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Server mengalami kendala.');
-            }
+            if (!response.ok) throw new Error(data.error || 'Server mengalami kendala.');
             
-            // Menggunakan auto-extractor pintar pendeteksi tipe array beralgoritma traversal objek
             const extractedData = extractArray(data);
-            
             if (extractedData) {
                 items = extractedData;
             } else {
                 items = [];
-                throw new Error("Sistem gagal mengekstrak struktur data array produk.");
+                throw new Error("Sistem gagal memetakan struktur data array.");
             }
             
             renderProducts();
@@ -282,7 +347,6 @@
         }
     }
 
-    // Melakukan konversi atau de-nesting objek jika array terbungkus struktur root objek {}
     function extractArray(data) {
         if (Array.isArray(data)) return data;
         if (data && Array.isArray(data.record)) return data.record;
@@ -317,11 +381,28 @@
         });
     }
 
+    // FUNGSI UTAMA: Menghitung total tagihan sekaligus me-render ulang QRIS otomatis secara real-time
     function calculateTotal() {
         if (!currentProduct) return;
         const qty = parseInt(quantityInput.value) || 1;
         const total = currentProduct.price * qty;
         totalDisplay.innerText = formatRupiah(total);
+
+        // Regenerasi kode QRIS dinamis secara otomatis berdasarkan nominal total
+        if (total > 0) {
+            const qrisPayload = buildQRIS(total);
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = ""; // Bersihkan QR lawas
+            
+            qrEngine = new QRCode(qrContainer, {
+                text: qrisPayload,
+                width: 180,
+                height: 180,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+        }
     }
 
     function openModal(product) {
@@ -336,9 +417,9 @@
         const savedContact = localStorage.getItem("user_contact_app");
         contactInput.value = savedContact ? savedContact : "";
         
-        calculateTotal();
+        calculateTotal(); // Trigger pembuatan QRIS otomatis pertama kali saat modal terbuka
         statusMessage.textContent = "";
-        submitOrder.innerHTML = "Pesan Sekarang";
+        submitOrder.innerHTML = "Konfirmasi Pesanan";
         submitOrder.disabled = false;
         
         modal.classList.add("show");
@@ -351,6 +432,7 @@
     document.getElementById("closeModal").addEventListener("click", closeModalFunc);
     window.addEventListener("click", e => { if (e.target === modal) closeModalFunc(); });
     
+    // Pasang listener pemantau perubahan form input untuk kalkulasi & update QRIS otomatis
     quantityInput.addEventListener("input", calculateTotal);
     periodSelect.addEventListener("change", calculateTotal);
 
@@ -375,7 +457,7 @@
         localStorage.setItem("user_contact_app", contact);
 
         submitOrder.disabled = true;
-        submitOrder.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+        submitOrder.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim Notifikasi...';
         statusMessage.textContent = "";
 
         const messageText = 
@@ -399,14 +481,14 @@
 
             if (res.ok && data.success) {
                 statusMessage.style.color = "#2e7d32";
-                statusMessage.innerHTML = "<i class='fas fa-check-circle'></i> Pesanan terkirim! Admin akan segera menghubungi.";
+                statusMessage.innerHTML = "<i class='fas fa-check-circle'></i> Notifikasi terkirim! Admin akan segera memproses akun Anda.";
                 setTimeout(() => closeModalFunc(), 2500);
             } else {
-                throw new Error("Gagal mengirim pesanan via server backend.");
+                throw new Error("Gagal memproses via server gateway.");
             }
         } catch (error) {
             statusMessage.style.color = "#d32f2f";
-            statusMessage.innerHTML = "<i class='fas fa-times-circle'></i> Gagal mengirim pesanan. Cek koneksi Anda.";
+            statusMessage.innerHTML = "<i class='fas fa-times-circle'></i> Gagal mengirim konfirmasi. Cek koneksi internet Anda.";
             submitOrder.disabled = false;
             submitOrder.innerHTML = "Coba Lagi";
         }
@@ -418,6 +500,5 @@
 
     document.addEventListener('DOMContentLoaded', loadProducts);
 </script>
-
 </body>
 </html>
