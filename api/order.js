@@ -1,41 +1,53 @@
+// File: api/order.js
+
 export default async function handler(req, res) {
+  // ==========================================
+  // HARDCODED API KEYS (PASTIKAN REPO PRIVATE)
+  // ==========================================
+  const TELEGRAM_BOT_TOKEN = "MASUKKAN_BOT_TOKEN_TELEGRAM_DISINI";
+  const TELEGRAM_CHAT_ID = "MASUKKAN_CHAT_ID_ADMIN_DISINI";
+
+  // Hanya izinkan metode POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const { productName, period, qty, total, contact } = req.body;
-  
-  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-  const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-  // Format pesan Telegram
-  const message = `🚨 *PESANAN BARU MASUK* 🚨\n\n` +
-                  `📦 *Produk:* ${productName}\n` +
-                  `⏳ *Periode:* ${period}\n` +
-                  `🔢 *Jumlah:* ${qty}x\n` +
-                  `💰 *Total:* Rp${total.toLocaleString('id-ID')}\n` +
-                  `📞 *Kontak:* ${contact}\n\n` +
-                  `_Segera proses pesanan ini di Dashboard!_`;
-
   try {
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const { productName, period, qty, total, contact } = req.body;
+
+    // Susun format pesan yang akan dikirim ke Telegram
+    const messageText = 
+      `🔔 *PESANAN BARU MASUK*\n\n` +
+      `📦 *Produk:* ${productName}\n` +
+      `⏳ *Periode:* ${period}\n` +
+      `🔢 *Jumlah:* ${qty}x\n` +
+      `💰 *Total:* Rp${total.toLocaleString('id-ID')}\n` +
+      `📞 *Kontak:* ${contact}\n\n` +
+      `_Segera cek mutasi QRIS dan proses pesanan ini._`;
+
+    // Endpoint API Telegram
+    const tgUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    
+    const response = await fetch(tgUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
+        chat_id: TELEGRAM_CHAT_ID,
+        text: messageText,
         parse_mode: 'Markdown'
       })
     });
 
-    const data = await response.json();
-    
-    if (data.ok) {
-      res.status(200).json({ success: true, message: 'Pesanan terkirim ke Telegram' });
-    } else {
-      res.status(500).json({ success: false, error: data.description });
+    if (!response.ok) {
+      throw new Error(`Telegram API Error ${response.status}`);
     }
+
+    return res.status(200).json({ success: true, message: 'Notifikasi berhasil dikirim' });
+
   } catch (error) {
-    res.status(500).json({ success: false, error: 'Koneksi ke Telegram gagal' });
+    console.error("Order POST Error:", error.message);
+    return res.status(500).json({ success: false, error: error.message });
   }
 }
