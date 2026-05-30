@@ -4,8 +4,8 @@ export default async function handler(req, res) {
   // ==========================================
   // HARDCODED API KEYS (PASTIKAN REPO PRIVATE)
   // ==========================================
-  const JSONBIN_API_KEY = "MASUKKAN_API_KEY_JSONBIN_ANDA_DISINI";
-  const JSONBIN_BIN_ID = "MASUKKAN_BIN_ID_ANDA_DISINI";
+  const JSONBIN_API_KEY = "$2a$10$tcKHEWwuz2sqRoMCKJfga.1xxTFW0RxpXUPnP.NI4YbivtlK1xxau";
+  const JSONBIN_BIN_ID = "6a1a841eddf5aa59f7777a2a";
   
   const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
