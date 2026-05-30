@@ -3,153 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pembayaran Ebook - QRIS Dinamis</title>
+<title>Checkout Pembayaran Ebook - Farid Store</title>
 
 <style>
+:root {
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --accent-blue: #2563eb;
+    --accent-hover: #1d4ed8;
+    --border-color: #e2e8f0;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background: #f4f4f4;
-    padding: 30px;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    padding: 40px 20px;
+    line-height: 1.5;
 }
 
 .container {
-    max-width: 1000px;
-    margin: auto;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-h1 {
+header {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 40px;
 }
 
-.products {
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* Layout Grid Utama Split-Screen */
+.checkout-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    align-items: start;
 }
 
+.products-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Desain Kartu Produk Premium */
 .card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+/* Status Kartu saat Dipilih */
+.card.active {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 1px var(--accent-blue), 0 10px 25px -5px rgba(37, 99, 235, 0.1);
+    background-color: #f8fafc;
+}
+
+.card-info {
+    flex: 1;
+    padding-right: 20px;
 }
 
 .card h3 {
-    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-main);
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.card-action {
+    text-align: right;
 }
 
 .price {
-    font-size: 24px;
-    font-weight: bold;
-    color: #1f7cff;
-    margin: 10px 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
 }
 
-button {
-    width: 100%;
+.btn-select {
     border: none;
-    background: #111;
+    background: #0f172a;
     color: #fff;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: .3s;
+    transition: background 0.2s;
 }
 
-button:hover {
-    background: #333;
+.card.active .btn-select {
+    background: var(--accent-blue);
 }
 
+/* Kotak Pembayaran Sticky (Sisi Kanan) */
 .payment-box {
-    margin-top: 35px;
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 36px;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 40px;
 }
 
-#qrcode {
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
+.payment-box h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 6px;
 }
 
 .badge {
     display: inline-block;
-    background: #111;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 30px;
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 18px;
+    background: #f1f5f9;
+    color: var(--text-main);
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.badge.has-price {
+    background: #eff6ff;
+    color: var(--accent-blue);
+    border-color: #bfdbfe;
+}
+
+/* QR Code Container */
+.qrcode-wrapper {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 16px;
+    display: inline-block;
+    border: 1px solid var(--border-color);
+    margin: 0 auto;
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 240px;
+    min-height: 240px;
+}
+
+/* Tampilan Placeholder Sebelum QR Terbentuk */
+.qr-placeholder {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 180px;
+}
+
+.payment-instruction {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.merchant-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 12px;
+    }
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .card {
+        padding: 18px;
+    }
+    .payment-box {
+        position: static;
+        padding: 24px;
+    }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 Pembayaran Ebook QRIS</h1>
+    <header>
+        <h1>Secure Checkout</h1>
+        <p>Pilih produk untuk menghasilkan kode QRIS secara instan</p>
+    </header>
 
-    <div class="products">
-        <div class="card">
-            <h3>Ebook Trading Basic</h3>
-            <p>Belajar dasar trading & money management</p>
-            <div class="price">Rp50.000</div>
-            <button onclick="buyProduct('Ebook Trading Basic', 50000)">Beli Sekarang</button>
+    <div class="checkout-layout">
+        <div class="products-section">
+            <div class="card" id="prod-1" onclick="buyProduct('Ebook Trading Basic', 50000, 'prod-1')">
+                <div class="card-info">
+                    <h3>Ebook Trading Basic</h3>
+                    <p>Belajar dasar trading struktural & money management konvensional</p>
+                </div>
+                <div class="card-action">
+                    <div class="price">Rp50.000</div>
+                    <button class="btn-select">Pilih</button>
+                </div>
+            </div>
+
+            <div class="card" id="prod-2" onclick="buyProduct('Ebook Smart Money', 100000, 'prod-2')">
+                <div class="card-info">
+                    <h3>Ebook Smart Money</h3>
+                    <p>Membongkar strategi pasar institusional & Smart Money Concept (SMC)</p>
+                </div>
+                <div class="card-action">
+                    <div class="price">Rp100.000</div>
+                    <button class="btn-select">Pilih</button>
+                </div>
+            </div>
+
+            <div class="card" id="prod-3" onclick="buyProduct('Ebook Crypto Pro', 150000, 'prod-3')">
+                <div class="card-info">
+                    <h3>Ebook Crypto Pro</h3>
+                    <p>Analisis siklus makro crypto & setup teknikal dengan probabilitas tinggi</p>
+                </div>
+                <div class="card-action">
+                    <div class="price">Rp150.000</div>
+                    <button class="btn-select">Pilih</button>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>Ebook Smart Money</h3>
-            <p>Strategi market maker & smart money concept</p>
-            <div class="price">Rp100.000</div>
-            <button onclick="buyProduct('Ebook Smart Money', 100000)">Beli Sekarang</button>
-        </div>
+        <div class="payment-box">
+            <h2 id="productName">Menunggu Pemilihan...</h2>
+            <div class="badge" id="priceText">Rp0</div>
+            
+            <div class="block-qr">
+                <div class="qrcode-wrapper">
+                    <div id="qrcode">
+                        <div class="qr-placeholder">Silakan pilih salah satu produk di sebelah kiri untuk menampilkan kode QRIS pembayaran.</div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="card">
-            <h3>Ebook Crypto Pro</h3>
-            <p>Analisa crypto & setup profit konsisten</p>
-            <div class="price">Rp150.000</div>
-            <button onclick="buyProduct('Ebook Crypto Pro', 150000)">Beli Sekarang</button>
+            <p class="payment-instruction">
+                Mendukung seluruh aplikasi m-banking dan dompet digital (GoPay, OVO, Dana, LinkAja, ShopeePay).
+            </p>
+            
+            <div class="merchant-footer">
+                Official Payment Gateway: <strong>Farid Store</strong>
+            </div>
         </div>
-    </div>
-
-    <div class="payment-box">
-        <h2 id="productName">Pilih Ebook Dulu</h2>
-        <div class="badge" id="priceText">Rp0</div>
-        <div id="qrcode"></div>
-        <p style="margin-top: 15px; color: #555;">Scan QRIS di atas menggunakan aplikasi m-banking atau e-wallet Anda.</p>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
-// ⚠️ BAGIAN KRUSIAL 1: Isi dengan VALUE asli dari Tag 26 QRIS Farid Store Anda.
-// Cara dapatnya: Scan QRIS asli Anda pakai aplikasi Barcode Scanner biasa, 
-// lalu ambil isi teks yang ada setelah "26" (Tag) dan panjang angkanya (Length).
-// Contoh lengkap formatnya: "0014ID.CO.QRIS.WWW0215ID10265066640140303UME"
-const merchantAccountInfo = "0014ID.CO.QRIS.WWW0215ID10265066640140303UME"; 
-
-// ⚠️ BAGIAN KRUSIAL 2: Pastikan Merchant Category Code (MCC) di Tag 52 sesuai.
-// "5411" biasanya untuk Grocery Stores. Pastikan kode ini sama dengan yang ada di raw string QRIS Anda.
-const merchantCategoryCode = "5411"; 
-
-// Algoritma CRC16 CCITT
+// Algoritma CRC16-CCITT Standar EMVCo
 function crc16(str) {
     let crc = 0xFFFF;
-    for(let i=0; i<str.length; i++){
+    for (let i = 0; i < str.length; i++) {
         crc ^= str.charCodeAt(i) << 8;
-        for(let j=0; j<8; j++){
-            if((crc & 0x8000) !== 0){
+        for (let j = 0; j < 8; j++) {
+            if ((crc & 0x8000) !== 0) {
                 crc = (crc << 1) ^ 0x1021;
             } else {
                 crc <<= 1;
@@ -160,57 +323,64 @@ function crc16(str) {
     return crc.toString(16).toUpperCase().padStart(4, '0');
 }
 
+// Fungsi rekonstruksi string QRIS Statis menjadi Dinamis secara presisi
 function buildQRIS(amount) {
-    const payload = {
-        "00": "01",
-        "01": "12", // Status 12: Dinamis
-        "26": merchantAccountInfo,
-        "52": merchantCategoryCode,
-        "53": "360", // 360 = IDR
-        "54": amount.toString(), // Nominal ditambahkan ke sini
-        "58": "ID",
-        "59": "Farid Store", // Nama Toko
-        "60": "PEKANBARU" // Kota Operasional
-    };
-
-    let result = "";
-
-    // Membangun string TLV (Tag-Length-Value)
-    for (const tag in payload) {
-        const value = payload[tag];
-        const length = value.length.toString().padStart(2, '0');
-        result += tag + length + value;
-    }
-
-    // Menambahkan Tag 63 (CRC)
-    const raw = result + "6304";
-    const crc = crc16(raw);
-
-    return raw + crc;
+    // Komponen data asli hasil ekstraksi QRIS Farid Store
+    const tag00 = "000201";
+    const tag01 = "010212"; // Mengunci nilai ke 12 (Dinamis)
+    const tag26 = "26570011ID.DANA.WWW011893600915300002827902090000282790303UMI";
+    const tag51 = "51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI";
+    const tag52 = "52044814";
+    const tag53 = "5303360"; // Mata uang IDR
+    
+    // Pembuatan Tag 54 (Nominal Transaksi)
+    const amountStr = amount.toString();
+    const amountLen = amountStr.length.toString().padStart(2, '0');
+    const tag54 = "54" + amountLen + amountStr;
+    
+    const tag58 = "5802ID";
+    const tag59 = "5911Farid Store";
+    const tag60 = "6014Kota Pekanbaru";
+    const tag61 = "610528294";
+    const tag63Header = "6304"; // Header penanda hitungan CRC
+    
+    // Penggabungan urutan data string matriks
+    const rawPayload = tag00 + tag01 + tag26 + tag51 + tag52 + tag53 + tag54 + tag58 + tag59 + tag60 + tag61 + tag63Header;
+    
+    // Kalkulasi nilai keamanan baru
+    const finalCrc = crc16(rawPayload);
+    
+    return rawPayload + finalCrc;
 }
 
-function buyProduct(name, price) {
-    // 1. Update UI Text
-    document.getElementById("productName").innerText = name;
-    document.getElementById("priceText").innerText = "Rp" + price.toLocaleString("id-ID");
+function buyProduct(name, price, cardId) {
+    // 1. Mengatur efek visual aktif pada kartu yang dipilih
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+    document.getElementById(cardId).classList.add('active');
 
-    // 2. Generate Raw String QRIS
+    // 2. Memperbarui teks UI detail pembayaran
+    document.getElementById("productName").innerText = name;
+    
+    const priceBadge = document.getElementById("priceText");
+    priceBadge.innerText = "Rp" + price.toLocaleString("id-ID");
+    priceBadge.classList.add("has-price");
+
+    // 3. Memproses pembuatan payload QRIS baru
     const qrisPayload = buildQRIS(price);
 
-    // 3. Clear QR Code lama
-    document.getElementById("qrcode").innerHTML = "";
+    // 4. Reset kontainer gambar QR lama
+    const qrContainer = document.getElementById("qrcode");
+    qrContainer.innerHTML = "";
 
-    // 4. Render QR Code baru
-    new QRCode(document.getElementById("qrcode"), {
+    // 5. Render gambar QR Code dinamis yang siap dipindai
+    new QRCode(qrContainer, {
         text: qrisPayload,
-        width: 260,
-        height: 260,
-        colorDark : "#000000",
+        width: 240,
+        height: 240,
+        colorDark : "#0f172a",
         colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.M // Level koreksi error medium
+        correctLevel : QRCode.CorrectLevel.M
     });
-
-    console.log("String QRIS Generated: ", qrisPayload);
 }
 </script>
 
