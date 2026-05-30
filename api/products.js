@@ -1,5 +1,3 @@
-// File: api/products.js
-
 export default async function handler(req, res) {
   // ==========================================
   // HARDCODED API KEYS (PASTIKAN REPO PRIVATE)
@@ -9,7 +7,7 @@ export default async function handler(req, res) {
   
   const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-  // MENANGANI METODE GET (Mengambil Data)
+  // 1. MENANGANI METODE GET (Mengambil Data)
   if (req.method === 'GET') {
     try {
       const response = await fetch(BIN_URL, {
@@ -28,28 +26,35 @@ export default async function handler(req, res) {
     }
   }
 
-  // MENANGANI METODE PUT (Menyimpan Data dari Admin Panel)
+  // 2. MENANGANI METODE PUT (Menyimpan Data dari Admin Panel)
   if (req.method === 'PUT') {
     try {
       const response = await fetch(BIN_URL, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'X-Master-Key': JSONBIN_API_KEY
+          'X-Master-Key': JSONBIN_API_KEY,
+          'X-Bin-Versioning': 'false' // <-- KUNCI PENTING: Matikan versioning agar tidak kena limit gratisan
         },
         body: JSON.stringify(req.body)
       });
       
-      if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+      // Tangkap error spesifik dari JSONBin jika gagal
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`JSONBin Error ${response.status}: ${errorText}`);
+      }
       
       const data = await response.json();
       return res.status(200).json({ success: true, data });
     } catch (error) {
       console.error("PUT Error:", error.message);
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({ success: false, error: error.message });
     }
   }
 
   // Jika method bukan GET atau PUT
   return res.status(405).json({ error: 'Method not allowed' });
 }
+
+
