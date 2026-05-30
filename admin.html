@@ -218,10 +218,8 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 </head>
 <body>
 
-<!-- MOBILE OVERLAY -->
 <div class="overlay-bg" id="overlayBg" onclick="closeSidebar()"></div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
@@ -248,7 +246,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main">
   <header class="topbar">
     <button class="mobile-menu-btn" id="menuBtn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
@@ -260,7 +257,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </header>
 
   <div class="content">
-    <!-- STATS -->
     <div class="stats-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-blue"><i class="fas fa-box"></i></div><span class="stat-badge sb-up">↑ Live</span></div><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total Produk</div></div>
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div></div><div class="stat-val" id="statReady">0</div><div class="stat-lbl">Status Ready</div></div>
@@ -268,7 +264,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-brand"><i class="fas fa-calendar-check"></i></div></div><div class="stat-val" id="statPeriods">0</div><div class="stat-lbl">Periode Aktif</div></div>
     </div>
 
-    <!-- PRODUCTS PANEL -->
     <div class="panel-section active" id="panel-products">
       <div class="panel-header">
         <div><div class="panel-title">Katalog Produk</div><div class="panel-subtitle">Tambah, edit, dan kelola semua produk yang tampil di toko</div></div>
@@ -323,7 +318,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
-    <!-- PERIODS PANEL -->
     <div class="panel-section" id="panel-periods">
       <div class="panel-header">
         <div><div class="panel-title">Manajemen Periode & Harga</div><div class="panel-subtitle">Aktifkan/nonaktifkan periode, atur label, multiplier, dan diskon khusus</div></div>
@@ -334,65 +328,57 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       <div class="period-manager-grid" id="periodManagerGrid"></div>
     </div>
 
-    <!-- SETTINGS PANEL -->
     <div class="panel-section" id="panel-settings">
       <div class="panel-header">
         <div><div class="panel-title">Pengaturan Toko</div><div class="panel-subtitle">Konfigurasi informasi toko, QRIS, notifikasi, dan tampilan</div></div>
       </div>
       <div class="settings-grid">
-        <!-- Store Info -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-store"></i> Informasi Toko</div>
-          <div class="form-group"><label>Nama Toko</label><input type="text" id="set-storeName" value="Farid Store"/></div>
-          <div class="form-group"><label>Kota</label><input type="text" id="set-city" value="Kota Pekanbaru"/></div>
-          <div class="form-group"><label>Kode Pos</label><input type="text" id="set-postal" value="28294"/></div>
-          <div class="form-group"><label>Deskripsi Singkat</label><textarea id="set-desc" rows="3">Toko aplikasi premium terpercaya dengan harga terjangkau dan garansi penuh.</textarea></div>
+          <div class="form-group"><label>Nama Toko</label><input type="text" id="set-storeName"/></div>
+          <div class="form-group"><label>Kota</label><input type="text" id="set-city"/></div>
+          <div class="form-group"><label>Kode Pos</label><input type="text" id="set-postal"/></div>
+          <div class="form-group"><label>Deskripsi Singkat</label><textarea id="set-desc" rows="3"></textarea></div>
         </div>
-        <!-- QRIS -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-qrcode"></i> Konfigurasi QRIS</div>
-          <div class="form-group"><label>QRIS Merchant ID (Dana)</label><input type="text" id="set-qrisMid" value="93600915300002827902090000282790"/></div>
+          <div class="form-group"><label>QRIS Merchant ID (Dana)</label><input type="text" id="set-qrisMid"/></div>
           <div class="form-group"><label>Tipe QRIS</label><select id="set-qrisType"><option value="12">Dinamis (Nominal Otomatis)</option><option value="11">Statis</option></select></div>
-          <div class="form-group"><label>Label QR di Modal</label><input type="text" id="set-qrisLabel" value="QRIS OTOMATIS FARID STORE"/></div>
-          <div class="form-group"><label>Nama Merchant di QRIS</label><input type="text" id="set-qrisMerchant" value="Farid Store"/></div>
+          <div class="form-group"><label>Label QR di Modal</label><input type="text" id="set-qrisLabel"/></div>
+          <div class="form-group"><label>Nama Merchant di QRIS</label><input type="text" id="set-qrisMerchant"/></div>
         </div>
-        <!-- Contact -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-headset"></i> Kontak & CS</div>
-          <div class="form-group"><label>Nomor WhatsApp Admin</label><input type="text" id="set-wa" value="6281234567890" placeholder="628xxxxxxxxxx"/></div>
-          <div class="form-group"><label>Username Telegram</label><input type="text" id="set-tg" value="@faridstore" placeholder="@username"/></div>
-          <div class="form-group"><label>Username Instagram</label><input type="text" id="set-ig" value="@faridstore" placeholder="@username"/></div>
+          <div class="form-group"><label>Nomor WhatsApp Admin</label><input type="text" id="set-wa" placeholder="628xxxxxxxxxx"/></div>
+          <div class="form-group"><label>Username Telegram</label><input type="text" id="set-tg" placeholder="@username"/></div>
+          <div class="form-group"><label>Username Instagram</label><input type="text" id="set-ig" placeholder="@username"/></div>
         </div>
-        <!-- Feature Toggles -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-toggle-on"></i> Fitur Toko</div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">QRIS Dinamis Otomatis</div><div class="tr-sub">QR berubah sesuai nominal pembayaran</div></div><label class="pc-toggle"><input type="checkbox" id="tog-qris" checked><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Notifikasi Pesanan (API)</div><div class="tr-sub">Kirim notif ke Telegram/WA saat ada order</div></div><label class="pc-toggle"><input type="checkbox" id="tog-notif" checked><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tampilkan Rating Produk</div><div class="tr-sub">Bintang rating di card produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-rating" checked><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Mode Maintenance</div><div class="tr-sub">Toko ditutup sementara untuk umum</div></div><label class="pc-toggle"><input type="checkbox" id="tog-maintenance"><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Chat Langsung WA di Modal</div><div class="tr-sub">Tombol WA otomatis di modal produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-wa" checked><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">QRIS Dinamis Otomatis</div><div class="tr-sub">QR berubah sesuai nominal pembayaran</div></div><label class="pc-toggle"><input type="checkbox" id="tog-qris"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Notifikasi Pesanan (API)</div><div class="tr-sub">Kirim notif ke Telegram/WA saat ada order</div></div><label class="pc-toggle"><input type="checkbox" id="tog-notif"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tampilkan Rating Produk</div><div class="tr-sub">Bintang rating di card produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-rating"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label" style="color:var(--red-text)">Mode Maintenance</div><div class="tr-sub">Toko ditutup sementara untuk umum</div></div><label class="pc-toggle"><input type="checkbox" id="tog-maintenance"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Chat Langsung WA di Modal</div><div class="tr-sub">Tombol WA otomatis di modal produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-wa"><span class="pc-slider"></span></label></div>
         </div>
-        <!-- Hero Stats -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-chart-bar"></i> Statistik Hero</div>
-          <div class="form-group"><label>Jumlah Pelanggan (teks)</label><input type="text" id="set-statCust" value="2.400+"/></div>
-          <div class="form-group"><label>Jumlah Produk (teks)</label><input type="text" id="set-statProd" value="50+"/></div>
-          <div class="form-group"><label>Persentase Kepuasan</label><input type="text" id="set-statSat" value="99%"/></div>
-          <div class="form-group"><label>Waktu Proses</label><input type="text" id="set-statTime" value="&lt;5 Menit"/></div>
+          <div class="form-group"><label>Jumlah Pelanggan (teks)</label><input type="text" id="set-statCust"/></div>
+          <div class="form-group"><label>Jumlah Produk (teks)</label><input type="text" id="set-statProd"/></div>
+          <div class="form-group"><label>Persentase Kepuasan</label><input type="text" id="set-statSat"/></div>
+          <div class="form-group"><label>Waktu Proses</label><input type="text" id="set-statTime"/></div>
         </div>
-        <!-- Save Settings -->
         <div class="settings-card" style="display:flex;flex-direction:column;justify-content:flex-end;gap:10px">
-          <div class="sc-title"><i class="fas fa-floppy-disk"></i> Simpan Pengaturan</div>
-          <p style="font-size:13px;color:var(--text2);line-height:1.6">Semua pengaturan akan disimpan dan diterapkan ke halaman toko secara otomatis saat disimpan ke server.</p>
-          <button class="topbar-btn tb-success" style="width:100%;justify-content:center;padding:11px" onclick="saveSettings()"><i class="fas fa-floppy-disk"></i> Simpan Pengaturan Toko</button>
-          <button class="topbar-btn tb-outline" style="width:100%;justify-content:center;padding:11px" onclick="resetSettings()"><i class="fas fa-rotate-left"></i> Reset ke Default</button>
+          <div class="sc-title"><i class="fas fa-save"></i> Terapkan Pengaturan</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.6">Simpan form pengaturan ke dalam memori aplikasi sebelum melakukan Upload Global.</p>
+          <button class="topbar-btn tb-primary" style="width:100%;justify-content:center;padding:11px" onclick="saveSettingsToMemory()"><i class="fas fa-check"></i> Update Memori Pengaturan</button>
+          <button class="topbar-btn tb-outline" style="width:100%;justify-content:center;padding:11px" onclick="resetSettingsForm()"><i class="fas fa-rotate-left"></i> Reset Form ke Data Server</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL: ADD/EDIT PRODUCT -->
 <div class="modal-bg" id="productModal">
   <div class="modal-box">
     <div class="modal-hd"><h3 id="productModalTitle">Tambah Produk Baru</h3><button class="modal-close" onclick="closeModal('productModal')"><i class="fas fa-xmark"></i></button></div>
@@ -433,7 +419,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<!-- MODAL: ADD PERIOD -->
 <div class="modal-bg" id="periodModal">
   <div class="modal-box">
     <div class="modal-hd"><h3 id="periodModalTitle">Tambah Periode Baru</h3><button class="modal-close" onclick="closeModal('periodModal')"><i class="fas fa-xmark"></i></button></div>
@@ -457,24 +442,56 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"><i class="fas fa-circle-check"></i><span id="toastMsg">Berhasil</span></div>
 
 <script>
-// ===== STATE =====
+// ==========================================
+// KONFIGURASI API JSONBIN (GANTI DENGAN MILIK ANDA)
+// ==========================================
+const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6a1a841eddf5aa59f7777a2a'; 
+const JSONBIN_KEY = '$2a$10$tcKHEWwuz2sqRoMCKJfga.1xxTFW0RxpXUPnP.NI4YbivtlK1xxau'; 
+
+// ===== STATE KESELURUHAN =====
 let currentData = [];
+let periods = [];
+let settings = {};
+
 let editingProductIdx = null;
 let editingPeriodIdx = null;
-let periods = JSON.parse(localStorage.getItem('fs_periods') || 'null') || [
-  {key:'1hari',label:'1 Hari',mult:1,disc:0,icon:'fa-calendar-day',active:true},
-  {key:'7hari',label:'7 Hari',mult:7,disc:0,icon:'fa-calendar-week',active:true},
-  {key:'1bulan',label:'1 Bulan',mult:30,disc:0,icon:'fa-calendar',active:true},
-  {key:'3bulan',label:'3 Bulan',mult:90,disc:5,icon:'fa-calendar-alt',active:true},
-  {key:'6bulan',label:'6 Bulan',mult:180,disc:10,icon:'fa-calendar-check',active:true},
-  {key:'12bulan',label:'12 Bulan',mult:365,disc:15,icon:'fa-star',active:true},
-];
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
+
+// Data Default (Jika Gagal Load / Pertama Kali)
+const defaultProducts = [
+  {id:1, name:'Poco M3 (Modal 450k)', cat:'gaming', price:450000, status:'ready', badge:'hot', rating:4.8, img:'https://via.placeholder.com/80', desc:'Unit mulus, garansi personal.'},
+  {id:2, name:'Netflix Premium 4K', cat:'streaming', price:45000, status:'ready', badge:'bestseller', rating:4.9, img:'https://via.placeholder.com/80/E50914/FFFFFF?text=Netflix', desc:'Akses Netflix tanpa batas.'}
+];
+const defaultPeriods = [
+  {key:'1hari',label:'1 Hari',mult:1,disc:0,icon:'fa-calendar-day',active:true},
+  {key:'1bulan',label:'1 Bulan',mult:30,disc:0,icon:'fa-calendar',active:true}
+];
+const defaultSettings = {
+  storeName: 'Farid Store',
+  city: 'Kota Pekanbaru',
+  postal: '28294',
+  desc: 'Toko aplikasi premium dan elektronik terpercaya.',
+  qrisMid: '93600915300002827902090000282790',
+  qrisType: '12',
+  qrisLabel: 'QRIS OTOMATIS FARID STORE',
+  qrisMerchant: 'Farid Store',
+  wa: '6281234567890',
+  tg: '@faridstore',
+  ig: '@faridstore',
+  statCust: '2.400+',
+  statProd: '50+',
+  statSat: '99%',
+  statTime: '<5 Menit',
+  togQris: true,
+  togNotif: true,
+  togRating: true,
+  togMaintenance: false,
+  togWa: true
+};
 
 // ===== TOAST =====
 function toast(msg, type='info'){
@@ -487,11 +504,9 @@ function toast(msg, type='info'){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ===== SIDEBAR =====
+// ===== UI HELPERS =====
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlayBg').classList.add('show')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlayBg').classList.remove('show')}
-
-// ===== TAB SWITCH =====
 const tabTitles={'products':'Katalog Produk <span>/ Kelola semua produk</span>','periods':'Periode & Harga <span>/ Konfigurasi periode langganan</span>','settings':'Pengaturan Toko <span>/ Konfigurasi toko & QRIS</span>'};
 function switchTab(tab, btn){
   document.querySelectorAll('.panel-section').forEach(p=>p.classList.remove('active'));
@@ -501,12 +516,8 @@ function switchTab(tab, btn){
   document.getElementById('topbarTitle').innerHTML=tabTitles[tab]||tab;
   closeSidebar();
 }
-
-// ===== MODAL =====
 function openModal(id){const m=document.getElementById(id);m.style.display='flex';requestAnimationFrame(()=>m.classList.add('show'))}
 function closeModal(id){const m=document.getElementById(id);m.classList.remove('show');setTimeout(()=>m.style.display='none',300)}
-
-// ===== STATS UPDATE =====
 function updateStats(){
   document.getElementById('statTotal').textContent=currentData.length;
   document.getElementById('statReady').textContent=currentData.filter(p=>p.status==='ready').length;
@@ -515,44 +526,53 @@ function updateStats(){
   document.getElementById('navProdCount').textContent=currentData.length;
 }
 
-// ===== FETCH DATA =====
+// ===== FETCH DATA (GET KESELURUHAN DARI SERVER) =====
 async function fetchData(){
   try{
-    const r=await fetch('/api/products');
+    const r = await fetch(JSONBIN_URL, {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    });
     if(!r.ok) throw new Error('Server error');
-    const d=await r.json();
-    const arr=Array.isArray(d)?d:d&&Array.isArray(d.record)?d.record:null;
-    if(arr) currentData=arr;
-    else throw new Error('Format data tidak valid');
+    
+    const d = await r.json();
+    const dataObj = d.record ? d.record : d;
+    
+    currentData = dataObj.products || defaultProducts;
+    periods = dataObj.periods || defaultPeriods;
+    settings = dataObj.settings || defaultSettings;
+    
+    toast('Data berhasil ditarik dari server', 'success');
   }catch(e){
-    if(currentData.length===0){
-      currentData=[
-        {id:1,name:'Netflix Premium 4K',cat:'streaming',price:45000,status:'ready',badge:'bestseller',rating:4.9,img:'https://via.placeholder.com/300/E50914/FFFFFF?text=Netflix',desc:'Akses Netflix tanpa batas, 4K Ultra HD.'},
-        {id:2,name:'Spotify Premium',cat:'musik',price:25000,status:'ready',badge:'hot',rating:4.8,img:'https://via.placeholder.com/300/1DB954/FFFFFF?text=Spotify',desc:'Musik tanpa iklan, download offline.'},
-        {id:3,name:'YouTube Premium',cat:'streaming',price:30000,status:'ready',badge:'new',rating:4.7,img:'https://via.placeholder.com/300/FF0000/FFFFFF?text=YouTube',desc:'YouTube tanpa iklan, background play.'},
-        {id:4,name:'Microsoft 365',cat:'produktivitas',price:55000,status:'ready',badge:'bestseller',rating:4.9,img:'https://via.placeholder.com/300/D83B01/FFFFFF?text=MS+365',desc:'Word, Excel, PowerPoint, 1TB OneDrive.'},
-      ];
-    }
+    console.warn(e);
+    currentData = defaultProducts;
+    periods = defaultPeriods;
+    settings = defaultSettings;
+    toast('Gagal terhubung server. Memakai data default memori.', 'error');
   }
   renderTable();
+  renderPeriods();
+  populateSettingsForm();
   updateStats();
 }
 
-// ===== RENDER TABLE =====
+// ===== TAB 1: MANAJEMEN PRODUK =====
 function renderTable(list){
   const search=document.getElementById('tableSearch').value.toLowerCase();
   const catF=document.getElementById('catFilter').value;
   const statF=document.getElementById('statusFilter').value;
   let data=list||currentData;
+  
   if(search) data=data.filter(p=>p.name.toLowerCase().includes(search));
   if(catF) data=data.filter(p=>p.cat===catF);
   if(statF) data=data.filter(p=>p.status===statF);
+  
   document.getElementById('tableCount').textContent=data.length+' produk ditampilkan';
   const tbody=document.getElementById('productTableBody');
   tbody.innerHTML='';
   if(data.length===0){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text2)">Tidak ada produk ditemukan.</td></tr>';return;}
+  
   data.forEach((item)=>{
-    const idx=currentData.indexOf(item);
+    const idx=currentData.findIndex(x => x.id === item.id);
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td><input type="checkbox" class="row-check" data-idx="${idx}" style="accent-color:var(--brand)" onchange="onRowCheck()"/></td>
@@ -582,8 +602,6 @@ function renderTable(list){
   });
 }
 function filterTable(){renderTable();}
-
-// ===== STATUS TOGGLE =====
 function toggleStatus(idx, btn){
   const s=currentData[idx].status==='ready'?'pending':'ready';
   currentData[idx].status=s;
@@ -591,8 +609,6 @@ function toggleStatus(idx, btn){
   btn.textContent=s==='ready'?'✓ Ready':'⏳ Pending';
   updateStats();
 }
-
-// ===== BULK =====
 function onRowCheck(){
   const checked=document.querySelectorAll('.row-check:checked');
   const bar=document.getElementById('bulkBar');
@@ -610,10 +626,8 @@ function bulkDelete(){
 function bulkSetStatus(s){
   const idxs=[...document.querySelectorAll('.row-check:checked')].map(c=>parseInt(c.dataset.idx));
   idxs.forEach(i=>currentData[i].status=s);
-  renderTable();updateStats();toast(`Status diubah ke ${s} untuk ${idxs.length} produk`,'success');
+  renderTable();updateStats();toast(`Status diubah ke ${s}`,'success');
 }
-
-// ===== ADD / EDIT PRODUCT =====
 function openAddProductModal(){
   editingProductIdx=null;
   document.getElementById('productModalTitle').textContent='Tambah Produk Baru';
@@ -654,17 +668,15 @@ function saveProduct(){
   };
   if(editingProductIdx!==null) currentData[editingProductIdx]=p;
   else currentData.push(p);
-  closeModal('productModal');
-  renderTable();updateStats();
-  toast(editingProductIdx!==null?'Produk diperbarui!':'Produk ditambahkan!','success');
+  closeModal('productModal'); renderTable(); updateStats();
+  toast('Selesai. Klik "Simpan Semua" untuk upload!','info');
 }
 function deleteProduct(idx){
   if(!confirm(`Hapus produk "${currentData[idx].name}"?`)) return;
   currentData.splice(idx,1);
-  renderTable();updateStats();toast('Produk dihapus','info');
+  renderTable();updateStats();
+  toast('Dihapus dari memori. Jangan lupa Simpan Semua.','info');
 }
-
-// ===== EXPORT CSV =====
 function exportCSV(){
   const headers=['ID','Nama','Kategori','Harga','Status','Badge','Rating','Deskripsi','URL Gambar'];
   const rows=currentData.map(p=>[p.id,p.name,p.cat,p.price,p.status,p.badge||'',p.rating||'',p.desc||'',p.img]);
@@ -673,9 +685,7 @@ function exportCSV(){
   toast('CSV berhasil diexport','success');
 }
 
-// ===== PERIOD MANAGER =====
-function savePeriodState(){localStorage.setItem('fs_periods',JSON.stringify(periods));}
-
+// ===== TAB 2: MANAJEMEN PERIODE =====
 function renderPeriods(){
   const grid=document.getElementById('periodManagerGrid');
   grid.innerHTML='';
@@ -685,42 +695,40 @@ function renderPeriods(){
     const discounted=p.disc>0?Math.round(priceBase*(1-p.disc/100)):priceBase;
     const card=document.createElement('div');
     card.className='period-card'+(p.active?'':' disabled-card');
-    card.id='pc-'+i;
     card.innerHTML=`
       ${p.disc>0?`<span class="discount-badge">-${p.disc}%</span>`:''}
       <div class="pc-header">
         <div class="pc-icon"><i class="fas ${p.icon||'fa-calendar'}"></i></div>
         <div class="pc-info">
           <div class="pc-label">${p.label}</div>
-          <div class="pc-sub">${p.mult} hari • ${p.disc>0?`<span style="color:var(--green-text)">${fmt(discounted)}</span> <s style="font-size:11px;color:var(--text3)">${fmt(priceBase)}</s>`:fmt(priceBase)}</div>
+          <div class="pc-sub">${p.mult} hari • ${p.disc>0?`<span style="color:var(--green-text)">${fmt(discounted)}</span> <s>${fmt(priceBase)}</s>`:fmt(priceBase)}</div>
         </div>
-        <label class="pc-toggle" title="${p.active?'Nonaktifkan':'Aktifkan'} periode ini">
+        <label class="pc-toggle">
           <input type="checkbox" ${p.active?'checked':''} onchange="togglePeriod(${i},this)">
           <span class="pc-slider"></span>
         </label>
       </div>
       <div class="pc-fields">
         <div class="pc-field-row">
-          <div class="pc-field"><label>Label</label><input type="text" value="${p.label}" ${p.active?'':'disabled'} oninput="periods[${i}].label=this.value;savePeriodState();updatePeriodCard(${i})"/></div>
-          <div class="pc-field"><label>Key (ID)</label><input type="text" value="${p.key}" ${p.active?'':'disabled'} oninput="periods[${i}].key=this.value;savePeriodState()"/></div>
+          <div class="pc-field"><label>Label</label><input type="text" value="${p.label}" ${p.active?'':'disabled'} oninput="periods[${i}].label=this.value; renderPeriods()"/></div>
+          <div class="pc-field"><label>Key (ID)</label><input type="text" value="${p.key}" ${p.active?'':'disabled'} oninput="periods[${i}].key=this.value"/></div>
         </div>
         <div class="pc-field-row">
-          <div class="pc-field"><label>Multiplier (hari)</label><input type="number" min="1" value="${p.mult}" ${p.active?'':'disabled'} oninput="periods[${i}].mult=parseInt(this.value)||1;savePeriodState();updatePeriodCard(${i})"/></div>
-          <div class="pc-field"><label>Diskon %</label><input type="number" min="0" max="90" value="${p.disc||0}" ${p.active?'':'disabled'} oninput="periods[${i}].disc=parseInt(this.value)||0;savePeriodState();updatePeriodCard(${i})"/></div>
+          <div class="pc-field"><label>Multiplier (hari)</label><input type="number" min="1" value="${p.mult}" ${p.active?'':'disabled'} oninput="periods[${i}].mult=parseInt(this.value)||1; renderPeriods()"/></div>
+          <div class="pc-field"><label>Diskon %</label><input type="number" min="0" max="90" value="${p.disc||0}" ${p.active?'':'disabled'} oninput="periods[${i}].disc=parseInt(this.value)||0; renderPeriods()"/></div>
         </div>
         <div class="pc-field">
           <label>Ikon (Font Awesome)</label>
-          <input type="text" value="${p.icon||'fa-calendar'}" ${p.active?'':'disabled'} oninput="periods[${i}].icon=this.value;savePeriodState()"/>
+          <input type="text" value="${p.icon||'fa-calendar'}" ${p.active?'':'disabled'} oninput="periods[${i}].icon=this.value; renderPeriods()"/>
         </div>
         <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="topbar-btn tb-danger" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="deletePeriod(${i})"><i class="fas fa-trash"></i> Hapus</button>
-          <button class="topbar-btn tb-outline" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="duplicatePeriod(${i})"><i class="fas fa-copy"></i> Duplikat</button>
+          <button class="topbar-btn tb-danger" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="deletePeriod(${i})"><i class="fas fa-trash"></i></button>
+          <button class="topbar-btn tb-outline" style="flex:1;justify-content:center;font-size:12px;padding:7px" onclick="duplicatePeriod(${i})"><i class="fas fa-copy"></i></button>
         </div>
       </div>
     `;
     grid.appendChild(card);
   });
-  // Add new card
   const addCard=document.createElement('div');
   addCard.className='add-period-card';
   addCard.onclick=openAddPeriodModal;
@@ -728,23 +736,18 @@ function renderPeriods(){
   grid.appendChild(addCard);
   updateStats();
 }
-
-function updatePeriodCard(i){renderPeriods();}
-
 function togglePeriod(i, cb){
   periods[i].active=cb.checked;
-  savePeriodState();renderPeriods();
-  toast(cb.checked?`Periode "${periods[i].label}" diaktifkan`:`Periode "${periods[i].label}" dinonaktifkan`,cb.checked?'success':'info');
+  renderPeriods();
 }
 function deletePeriod(i){
   if(!confirm(`Hapus periode "${periods[i].label}"?`)) return;
-  periods.splice(i,1);savePeriodState();renderPeriods();toast('Periode dihapus','info');
+  periods.splice(i,1); renderPeriods();
 }
 function duplicatePeriod(i){
   const copy={...periods[i],key:periods[i].key+'_copy',label:periods[i].label+' (Salinan)'};
-  periods.splice(i+1,0,copy);savePeriodState();renderPeriods();toast('Periode diduplikat','success');
+  periods.splice(i+1,0,copy); renderPeriods();
 }
-
 function openAddPeriodModal(){
   editingPeriodIdx=null;
   document.getElementById('periodModalTitle').textContent='Tambah Periode Baru';
@@ -761,74 +764,115 @@ function savePeriod(){
   const key=document.getElementById('pem-key').value.trim().replace(/\s/g,'');
   const mult=parseInt(document.getElementById('pem-mult').value)||1;
   if(!label||!key){toast('Label dan Key wajib diisi!','error');return;}
-  if(editingPeriodIdx===null && periods.find(p=>p.key===key)){toast('Key sudah digunakan!','error');return;}
   const period={
     key,label,mult,
     disc:parseInt(document.getElementById('pem-disc').value)||0,
     icon:document.getElementById('pem-icon').value||'fa-calendar',
     active:document.getElementById('pem-status').value==='1'
   };
-  if(editingPeriodIdx!==null) periods[editingPeriodIdx]=period;
-  else periods.push(period);
-  savePeriodState();closeModal('periodModal');renderPeriods();
-  toast(editingPeriodIdx!==null?'Periode diperbarui!':'Periode baru ditambahkan!','success');
+  periods.push(period);
+  closeModal('periodModal'); renderPeriods();
+  toast('Selesai. Klik "Simpan Semua" untuk upload!','info');
 }
 
-// ===== SAVE TO DB =====
+// ===== TAB 3: PENGATURAN TOKO =====
+function populateSettingsForm(){
+  document.getElementById('set-storeName').value = settings.storeName || '';
+  document.getElementById('set-city').value = settings.city || '';
+  document.getElementById('set-postal').value = settings.postal || '';
+  document.getElementById('set-desc').value = settings.desc || '';
+  document.getElementById('set-qrisMid').value = settings.qrisMid || '';
+  document.getElementById('set-qrisType').value = settings.qrisType || '12';
+  document.getElementById('set-qrisLabel').value = settings.qrisLabel || '';
+  document.getElementById('set-qrisMerchant').value = settings.qrisMerchant || '';
+  document.getElementById('set-wa').value = settings.wa || '';
+  document.getElementById('set-tg').value = settings.tg || '';
+  document.getElementById('set-ig').value = settings.ig || '';
+  document.getElementById('set-statCust').value = settings.statCust || '';
+  document.getElementById('set-statProd').value = settings.statProd || '';
+  document.getElementById('set-statSat').value = settings.statSat || '';
+  document.getElementById('set-statTime').value = settings.statTime || '';
+  
+  document.getElementById('tog-qris').checked = settings.togQris ?? true;
+  document.getElementById('tog-notif').checked = settings.togNotif ?? true;
+  document.getElementById('tog-rating').checked = settings.togRating ?? true;
+  document.getElementById('tog-maintenance').checked = settings.togMaintenance ?? false;
+  document.getElementById('tog-wa').checked = settings.togWa ?? true;
+}
+
+function saveSettingsToMemory(){
+  settings = {
+    storeName: document.getElementById('set-storeName').value,
+    city: document.getElementById('set-city').value,
+    postal: document.getElementById('set-postal').value,
+    desc: document.getElementById('set-desc').value,
+    qrisMid: document.getElementById('set-qrisMid').value,
+    qrisType: document.getElementById('set-qrisType').value,
+    qrisLabel: document.getElementById('set-qrisLabel').value,
+    qrisMerchant: document.getElementById('set-qrisMerchant').value,
+    wa: document.getElementById('set-wa').value,
+    tg: document.getElementById('set-tg').value,
+    ig: document.getElementById('set-ig').value,
+    statCust: document.getElementById('set-statCust').value,
+    statProd: document.getElementById('set-statProd').value,
+    statSat: document.getElementById('set-statSat').value,
+    statTime: document.getElementById('set-statTime').value,
+    togQris: document.getElementById('tog-qris').checked,
+    togNotif: document.getElementById('tog-notif').checked,
+    togRating: document.getElementById('tog-rating').checked,
+    togMaintenance: document.getElementById('tog-maintenance').checked,
+    togWa: document.getElementById('tog-wa').checked,
+  };
+  toast('Masuk ke memori. Klik "Simpan Semua" di topbar untuk Upload.', 'success');
+}
+
+function resetSettingsForm(){
+  if(!confirm('Kembalikan isian form ini ke data server terakhir?')) return;
+  populateSettingsForm();
+  toast('Form dikembalikan ke data server.', 'info');
+}
+
+// ===== MASTER SAVE: PUSH KE SERVER API JSONBIN =====
 async function saveAllToDatabase(){
-  const btn=document.getElementById('saveBtn');
-  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+  
+  const masterPayload = {
+    products: currentData,
+    periods: periods,
+    settings: settings
+  };
+
   try{
-    const r=await fetch('/api/products',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(currentData)});
-    if(!r.ok) throw new Error();
-    toast('Database berhasil diperbarui!','success');
+    const r = await fetch(JSONBIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_KEY 
+      },
+      body: JSON.stringify(masterPayload)
+    });
+    
+    if(!r.ok) throw new Error('API Error');
+    toast('Berhasil! Semua data tersimpan di server global.', 'success');
   }catch(e){
-    toast('Gagal menyimpan ke server. Cek koneksi.','error');
+    toast('Gagal mengupload. Cek kembali URL & Master Key JSONBin Anda.', 'error');
   }finally{
-    btn.disabled=false;btn.innerHTML='<i class="fas fa-floppy-disk"></i> Simpan Semua';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Simpan Semua';
   }
 }
 
-// ===== SETTINGS =====
-function saveSettings(){
-  const s={
-    storeName:document.getElementById('set-storeName').value,
-    city:document.getElementById('set-city').value,
-    postal:document.getElementById('set-postal').value,
-    desc:document.getElementById('set-desc').value,
-    qrisMid:document.getElementById('set-qrisMid').value,
-    qrisType:document.getElementById('set-qrisType').value,
-    qrisLabel:document.getElementById('set-qrisLabel').value,
-    qrisMerchant:document.getElementById('set-qrisMerchant').value,
-    wa:document.getElementById('set-wa').value,
-    tg:document.getElementById('set-tg').value,
-    ig:document.getElementById('set-ig').value,
-    statCust:document.getElementById('set-statCust').value,
-    statProd:document.getElementById('set-statProd').value,
-    statSat:document.getElementById('set-statSat').value,
-    statTime:document.getElementById('set-statTime').value,
-    togQris:document.getElementById('tog-qris').checked,
-    togNotif:document.getElementById('tog-notif').checked,
-    togRating:document.getElementById('tog-rating').checked,
-    togMaintenance:document.getElementById('tog-maintenance').checked,
-    togWa:document.getElementById('tog-wa').checked,
-  };
-  localStorage.setItem('fs_settings',JSON.stringify(s));
-  toast('Pengaturan toko tersimpan!','success');
-}
-function resetSettings(){
-  if(!confirm('Reset semua pengaturan ke default?')) return;
-  localStorage.removeItem('fs_settings');
-  toast('Pengaturan direset ke default','info');
-}
-
-// ===== CLOSE MODALS ON BG CLICK =====
+// Tutup modal jika user klik background
 document.querySelectorAll('.modal-bg').forEach(m=>{
   m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)});
 });
 
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',()=>{fetchData();renderPeriods();});
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+  fetchData();
+});
 </script>
 </body>
 </html>
