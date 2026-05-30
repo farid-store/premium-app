@@ -1,387 +1,422 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout Pembayaran Ebook - Farid Store</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Produk Premium | Farid Store</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 <style>
-:root {
-    --bg-primary: #f8fafc;
-    --bg-card: #ffffff;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --accent-blue: #2563eb;
-    --accent-hover: #1d4ed8;
-    --border-color: #e2e8f0;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-main);
-    padding: 40px 20px;
-    line-height: 1.5;
-}
-
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-header h1 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text-main);
-    margin-bottom: 8px;
-}
-
-header p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
-/* Layout Grid Utama Split-Screen */
-.checkout-layout {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 32px;
-    align-items: start;
-}
-
-.products-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* Desain Kartu Produk Premium */
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    border-color: #cbd5e1;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-}
-
-/* Status Kartu saat Dipilih */
-.card.active {
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 1px var(--accent-blue), 0 10px 25px -5px rgba(37, 99, 235, 0.1);
-    background-color: #f8fafc;
-}
-
-.card-info {
-    flex: 1;
-    padding-right: 20px;
-}
-
-.card h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text-main);
-}
-
-.card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-}
-
-.card-action {
-    text-align: right;
-}
-
-.price {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--accent-blue);
-    margin-bottom: 8px;
-}
-
-.btn-select {
-    border: none;
-    background: #0f172a;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.card.active .btn-select {
-    background: var(--accent-blue);
-}
-
-/* Kotak Pembayaran Sticky (Sisi Kanan) */
-.payment-box {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-    padding: 36px;
-    text-align: center;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 40px;
-}
-
-.payment-box h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.badge {
-    display: inline-block;
-    background: #f1f5f9;
-    color: var(--text-main);
-    padding: 6px 16px;
-    border-radius: 9999px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 24px;
-    border: 1px solid var(--border-color);
-}
-
-.badge.has-price {
-    background: #eff6ff;
-    color: var(--accent-blue);
-    border-color: #bfdbfe;
-}
-
-/* QR Code Container */
-.qrcode-wrapper {
-    background: #ffffff;
-    padding: 16px;
-    border-radius: 16px;
-    display: inline-block;
-    border: 1px solid var(--border-color);
-    margin: 0 auto;
-}
-
-#qrcode {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 240px;
-    min-height: 240px;
-}
-
-/* Tampilan Placeholder Sebelum QR Terbentuk */
-.qr-placeholder {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    max-width: 180px;
-}
-
-.payment-instruction {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-}
-
-.merchant-footer {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px dashed var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-/* Responsif untuk Mobile */
-@media (max-width: 768px) {
     body {
-        padding: 20px 12px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 0;
+        margin: 0;
+        background: #f4f6f9;
+        color: #333;
     }
-    .checkout-layout {
-        grid-template-columns: 1fr;
-        gap: 24px;
+
+    /* === Header & Breadcrumb === */
+    header {
+        background: linear-gradient(135deg, #7367f0 0%, #9b8cfb 100%);
+        padding: 30px 20px;
+        color: white;
+        box-shadow: 0 4px 12px rgba(115, 103, 240, 0.2);
+    }
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .header-content h2 { margin: 0; font-size: 1.8rem; }
+    .breadcrumb { opacity: 0.9; font-size: 0.9rem; margin-top: 8px; }
+
+    /* === Main Container === */
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    /* === Search Bar === */
+    .search-wrapper {
+        position: relative;
+        max-width: 400px;
+        margin-bottom: 25px;
+    }
+    .search-wrapper i {
+        position: absolute;
+        top: 50%;
+        left: 15px;
+        transform: translateY(-50%);
+        color: #888;
+    }
+    .search-input {
+        padding: 12px 15px 12px 40px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.2);
+        border-color: #7367f0;
+    }
+
+    /* === Grid Produk (Responsif) === */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+        gap: 20px;
+    }
+    .no-results {
+        text-align: center; color: #888; font-style: italic; grid-column: 1 / -1; padding: 40px 0;
+    }
+
+    /* === Card Animasi === */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     .card {
-        padding: 18px;
+        animation: fadeInUp 0.5s ease forwards;
+        background: white; border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        padding: 15px; text-align: center;
+        display: flex; flex-direction: column; justify-content: space-between;
+        cursor: pointer; transition: all 0.3s ease;
+        border: 1px solid transparent;
     }
-    .payment-box {
-        position: static;
-        padding: 24px;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(115, 103, 240, 0.15);
+        border-color: rgba(115, 103, 240, 0.3);
     }
-}
+    .card img {
+        width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+        border-radius: 8px; background: #f8f9fa; margin-bottom: 12px;
+    }
+    .card h4 {
+        margin: 0 0 8px 0; font-size: 0.95rem; flex-grow: 1;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .price-tag {
+        font-weight: 700; color: #7367f0; font-size: 1rem; margin-bottom: 10px;
+    }
+    .status {
+        padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        display: inline-block;
+    }
+    .status.ready { background-color: #e8f5e9; color: #2e7d32; }
+    .status.pending { background-color: #fff8e1; color: #f57f17; }
+
+    /* === Modal === */
+    .modal {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+        justify-content: center; align-items: center;
+        padding: 20px; z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal.show { display: flex; opacity: 1; }
+    
+    .modal-content {
+        background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto;
+        padding: 30px; position: relative; transform: scale(0.95); transition: transform 0.3s ease;
+    }
+    .modal.show .modal-content { transform: scale(1); }
+
+    .modal-close {
+        position: absolute; top: 15px; right: 20px; font-size: 24px;
+        background: none; border: none; cursor: pointer; color: #888;
+    }
+    .modal-close:hover { color: #d32f2f; }
+
+    .modal-body { display: flex; gap: 30px; flex-wrap: wrap; }
+    .modal-image-wrapper { flex: 1 1 250px; }
+    .modal-image-wrapper img { width: 100%; border-radius: 12px; object-fit: contain; background: #f8f9fa; }
+    
+    .modal-details { flex: 1 1 300px; display: flex; flex-direction: column; }
+    .modal-details h3 { margin: 0; font-size: 1.4rem; color: #333; }
+    .modal-details .modal-price { font-size: 1.2rem; font-weight: 700; color: #7367f0; margin: 10px 0 20px 0; }
+    
+    .modal-details label { font-weight: 600; margin-top: 15px; color: #555; font-size: 0.9rem; }
+    .modal-details select, .modal-details input {
+        margin-top: 8px; padding: 12px; font-size: 1rem;
+        border-radius: 8px; border: 1px solid #ccc; transition: all 0.3s;
+        box-sizing: border-box; width: 100%;
+    }
+    .modal-details select:focus, .modal-details input:focus {
+        outline: none; border-color: #7367f0; box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.2);
+    }
+
+    .total-calc {
+        background: #f8f9fa; border: 1px dashed #ccc; padding: 15px; border-radius: 8px;
+        margin-top: 20px; text-align: center; font-size: 1.1rem; font-weight: bold;
+    }
+
+    .btn-submit {
+        margin-top: 20px; padding: 14px; font-size: 1rem; font-weight: 700;
+        background: #7367f0; color: white; border: none; border-radius: 8px;
+        cursor: pointer; transition: background 0.3s ease;
+    }
+    .btn-submit:hover:not(:disabled) { background: #5a4fcc; }
+    .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .status-message { margin-top: 15px; font-weight: 600; text-align: center; font-size: 0.9rem; }
+    
+    .loading-state { text-align: center; padding: 40px; color: #888; grid-column: 1 / -1; }
+
+    /* Responsive Modal Mobile */
+    @media (max-width: 600px) {
+        .modal-body { flex-direction: column; gap: 15px; }
+        .modal-content { padding: 20px; }
+    }
 </style>
 </head>
 <body>
 
+<header>
+    <div class="header-content">
+        <h2>Aplikasi Premium</h2>
+        <p class="breadcrumb">Prabayar &gt; Aplikasi & Jasa Premium</p>
+    </div>
+</header>
+
 <div class="container">
-    <header>
-        <h1>Secure Checkout</h1>
-        <p>Pilih produk untuk menghasilkan kode QRIS secara instan</p>
-    </header>
+    <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Cari aplikasi atau layanan..." id="searchInput" class="search-input" />
+    </div>
+    
+    <div id="productList" class="grid">
+        <div class="loading-state"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Memuat Katalog Harga...</div>
+    </div>
+</div>
 
-    <div class="checkout-layout">
-        <div class="products-section">
-            <div class="card" id="prod-1" onclick="buyProduct('Ebook Trading Basic', 500, 'prod-1')">
-                <div class="card-info">
-                    <h3>Ebook Trading Basic</h3>
-                    <p>Belajar dasar trading struktural & money management konvensional</p>
-                </div>
-                <div class="card-action">
-                    <div class="price">Rp500</div>
-                    <button class="btn-select">Pilih</button>
-                </div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <button id="closeModal" class="modal-close"><i class="fas fa-times"></i></button>
+        <div class="modal-body">
+            <div class="modal-image-wrapper">
+                <img id="modalImage" src="" alt="Produk" />
             </div>
+            <div class="modal-details">
+                <h3 id="modalName">Nama Produk</h3>
+                <div id="modalPrice" class="modal-price">Rp0</div>
 
-            <div class="card" id="prod-2" onclick="buyProduct('Ebook Smart Money', 1000, 'prod-2')">
-                <div class="card-info">
-                    <h3>Ebook Smart Money</h3>
-                    <p>Membongkar strategi pasar institusional & Smart Money Concept (SMC)</p>
-                </div>
-                <div class="card-action">
-                    <div class="price">Rp1.000</div>
-                    <button class="btn-select">Pilih</button>
-                </div>
-            </div>
+                <label for="periodSelect">Periode Langganan:</label>
+                <select id="periodSelect">
+                    <option value="1hari">1 Hari</option>
+                    <option value="7hari">7 Hari</option>
+                    <option value="1bulan">1 Bulan</option>
+                    <option value="3bulan">3 Bulan</option>
+                    <option value="12bulan">12 Bulan</option>
+                </select>
 
-            <div class="card" id="prod-3" onclick="buyProduct('Ebook Crypto Pro', 5000, 'prod-3')">
-                <div class="card-info">
-                    <h3>Ebook Crypto Pro</h3>
-                    <p>Analisis siklus makro crypto & setup teknikal dengan probabilitas tinggi</p>
-                </div>
-                <div class="card-action">
-                    <div class="price">Rp5.000</div>
-                    <button class="btn-select">Pilih</button>
-                </div>
-            </div>
-        </div>
+                <label for="quantityInput">Jumlah Pesanan:</label>
+                <input type="number" id="quantityInput" min="1" value="1" />
 
-        <div class="payment-box">
-            <h2 id="productName">Menunggu Pemilihan...</h2>
-            <div class="badge" id="priceText">Rp0</div>
-            
-            <div class="block-qr">
-                <div class="qrcode-wrapper">
-                    <div id="qrcode">
-                        <div class="qr-placeholder">Silakan pilih salah satu produk di sebelah kiri untuk menampilkan kode QRIS pembayaran.</div>
-                    </div>
-                </div>
-            </div>
+                <label for="contactInput">Kontak Anda (WA/Telegram):</label>
+                <input type="text" id="contactInput" placeholder="Contoh: 0812xxx atau @username" />
 
-            <p class="payment-instruction">
-                Mendukung seluruh aplikasi m-banking dan dompet digital (GoPay, OVO, Dana, LinkAja, ShopeePay).
-            </p>
-            
-            <div class="merchant-footer">
-                Official Payment Gateway: <strong>Farid Store</strong>
+                <div class="total-calc">
+                    Total: <span id="totalDisplay">Rp0</span>
+                </div>
+
+                <button id="submitOrder" class="btn-submit">Pesan Sekarang</button>
+                <p id="statusMessage" class="status-message"></p>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script>
-// Algoritma CRC16-CCITT Standar EMVCo
-function crc16(str) {
-    let crc = 0xFFFF;
-    for (let i = 0; i < str.length; i++) {
-        crc ^= str.charCodeAt(i) << 8;
-        for (let j = 0; j < 8; j++) {
-            if ((crc & 0x8000) !== 0) {
-                crc = (crc << 1) ^ 0x1021;
-            } else {
-                crc <<= 1;
-            }
-            crc &= 0xFFFF;
+    // --- KONFIGURASI JSONBIN ---
+    const BIN_ID = 'GANTI_DENGAN_BIN_ID_KAMU'; // Masukkan Bin ID
+    const API_KEY = 'GANTI_DENGAN_API_KEY_KAMU'; // Masukkan Master/Access Key
+    const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+    const productList = document.getElementById("productList");
+    const searchInput = document.getElementById("searchInput");
+    const modal = document.getElementById("modal");
+    
+    // Elemen Input Modal
+    const modalImage = document.getElementById("modalImage");
+    const modalName = document.getElementById("modalName");
+    const modalPrice = document.getElementById("modalPrice");
+    const periodSelect = document.getElementById("periodSelect");
+    const quantityInput = document.getElementById("quantityInput");
+    const contactInput = document.getElementById("contactInput");
+    const totalDisplay = document.getElementById("totalDisplay");
+    const submitOrder = document.getElementById("submitOrder");
+    const statusMessage = document.getElementById("statusMessage");
+
+    let items = []; // Akan diisi dari JSONBin
+    let currentProduct = null;
+
+    // Fungsi Format Rupiah
+    function formatRupiah(number) {
+        return "Rp" + number.toLocaleString("id-ID");
+    }
+
+    // Ambil Data dari Database
+    async function loadProducts() {
+        try {
+            const response = await fetch(JSONBIN_URL, {
+                method: 'GET',
+                headers: { 'X-Master-Key': API_KEY }
+            });
+            if (!response.ok) throw new Error('Gagal memuat data');
+            
+            const data = await response.json();
+            items = data.record; 
+            renderProducts();
+        } catch (error) {
+            console.error("Error:", error);
+            productList.innerHTML = `<p class="no-results" style="color:#d32f2f;">Gagal memuat katalog. Periksa koneksi atau konfigurasi API.</p>`;
         }
     }
-    return crc.toString(16).toUpperCase().padStart(4, '0');
-}
 
-// Fungsi rekonstruksi string QRIS Statis menjadi Dinamis secara presisi
-function buildQRIS(amount) {
-    // Komponen data asli hasil ekstraksi QRIS Farid Store
-    const tag00 = "000201";
-    const tag01 = "010212"; // Mengunci nilai ke 12 (Dinamis)
-    const tag26 = "26570011ID.DANA.WWW011893600915300002827902090000282790303UMI";
-    const tag51 = "51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI";
-    const tag52 = "52044814";
-    const tag53 = "5303360"; // Mata uang IDR
-    
-    // Pembuatan Tag 54 (Nominal Transaksi)
-    const amountStr = amount.toString();
-    const amountLen = amountStr.length.toString().padStart(2, '0');
-    const tag54 = "54" + amountLen + amountStr;
-    
-    const tag58 = "5802ID";
-    const tag59 = "5911Farid Store";
-    const tag60 = "6014Kota Pekanbaru";
-    const tag61 = "610528294";
-    const tag63Header = "6304"; // Header penanda hitungan CRC
-    
-    // Penggabungan urutan data string matriks
-    const rawPayload = tag00 + tag01 + tag26 + tag51 + tag52 + tag53 + tag54 + tag58 + tag59 + tag60 + tag61 + tag63Header;
-    
-    // Kalkulasi nilai keamanan baru
-    const finalCrc = crc16(rawPayload);
-    
-    return rawPayload + finalCrc;
-}
+    // Render List Produk
+    function renderProducts(filter = "") {
+        productList.innerHTML = "";
+        const filtered = items.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()));
+        
+        if (filtered.length === 0) {
+            productList.innerHTML = '<p class="no-results"><i class="fas fa-box-open fa-2x mb-2 block"></i><br>Produk tidak ditemukan.</p>';
+            return;
+        }
+        
+        filtered.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'" />
+                <h4>${item.name}</h4>
+                <div class="price-tag">${formatRupiah(item.price)}</div>
+                <div><span class="status ${item.status}">${item.status === "ready" ? "Ready" : "Pending"}</span></div>
+            `;
+            card.addEventListener("click", () => openModal(item));
+            productList.appendChild(card);
+        });
+    }
 
-function buyProduct(name, price, cardId) {
-    // 1. Mengatur efek visual aktif pada kartu yang dipilih
-    document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
-    document.getElementById(cardId).classList.add('active');
+    // Kalkulasi Total Real-time di Modal
+    function calculateTotal() {
+        if (!currentProduct) return;
+        const qty = parseInt(quantityInput.value) || 1;
+        const total = currentProduct.price * qty;
+        totalDisplay.innerText = formatRupiah(total);
+    }
 
-    // 2. Memperbarui teks UI detail pembayaran
-    document.getElementById("productName").innerText = name;
+    // Buka Modal
+    function openModal(product) {
+        currentProduct = product;
+        modalImage.src = product.img;
+        modalName.textContent = product.name;
+        modalPrice.textContent = formatRupiah(product.price);
+        
+        // Reset Form
+        periodSelect.value = "1bulan";
+        quantityInput.value = 1;
+        
+        // Ambil kontak dari cache jika ada
+        const savedContact = localStorage.getItem("user_contact_app");
+        contactInput.value = savedContact ? savedContact : "";
+        
+        calculateTotal();
+        statusMessage.textContent = "";
+        submitOrder.innerHTML = "Pesan Sekarang";
+        submitOrder.disabled = false;
+        
+        modal.classList.add("show");
+    }
+
+    // Tutup Modal
+    function closeModalFunc() {
+        modal.classList.remove("show");
+    }
+
+    document.getElementById("closeModal").addEventListener("click", closeModalFunc);
+    window.addEventListener("click", e => { if (e.target === modal) closeModalFunc(); });
     
-    const priceBadge = document.getElementById("priceText");
-    priceBadge.innerText = "Rp" + price.toLocaleString("id-ID");
-    priceBadge.classList.add("has-price");
+    // Event Listener untuk Kalkulasi Harga
+    quantityInput.addEventListener("input", calculateTotal);
+    periodSelect.addEventListener("change", calculateTotal);
 
-    // 3. Memproses pembuatan payload QRIS baru
-    const qrisPayload = buildQRIS(price);
+    // Format Periode String
+    function parsePeriod(value) {
+        const match = value.match(/^(\d+)([a-zA-Z]+)$/);
+        if (!match) return value;
+        return `${match[1]} ${match[2].charAt(0).toUpperCase() + match[2].slice(1)}`;
+    }
 
-    // 4. Reset kontainer gambar QR lama
-    const qrContainer = document.getElementById("qrcode");
-    qrContainer.innerHTML = "";
+    // Kirim Order ke Telegram
+    submitOrder.addEventListener("click", async () => {
+        const period = periodSelect.value;
+        const quantity = parseInt(quantityInput.value) || 1;
+        const contact = contactInput.value.trim();
+        const totalPrice = formatRupiah(currentProduct.price * quantity);
 
-    // 5. Render gambar QR Code dinamis yang siap dipindai
-    new QRCode(qrContainer, {
-        text: qrisPayload,
-        width: 240,
-        height: 240,
-        colorDark : "#0f172a",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.M
+        if (!contact) {
+            statusMessage.style.color = "#d32f2f";
+            statusMessage.innerHTML = "<i class='fas fa-exclamation-circle'></i> Mohon isi kontak Anda.";
+            return;
+        }
+
+        localStorage.setItem("user_contact_app", contact);
+
+        submitOrder.disabled = true;
+        submitOrder.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+        statusMessage.textContent = "";
+
+        // Peringatan Keamanan: Sebaiknya Token Bot disimpan di sisi server (backend), 
+        // menaruhnya di frontend JS akan membuatnya bisa dilihat publik.
+        const BOT_TOKEN = "7819700390:AAEO8_9_5Xr8msBPZd2hOQ4CkxDnlHVS3b8";
+        const CHAT_ID = "5775563021";
+        
+        const message = 
+            `🛒 *PESANAN APLIKASI BARU*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `📦 *Produk:* ${currentProduct.name}\n` +
+            `💸 *Harga Satuan:* ${formatRupiah(currentProduct.price)}\n` +
+            `⏳ *Periode:* ${parsePeriod(period)}\n` + 
+            `🔢 *Jumlah:* ${quantity}\n` +
+            `💰 *TOTAL TAGIHAN: ${totalPrice}*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `📞 *Kontak:* \`${contact}\``;
+
+        try {
+            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
+            });
+            const data = await res.json();
+
+            if (data.ok) {
+                statusMessage.style.color = "#2e7d32";
+                statusMessage.innerHTML = "<i class='fas fa-check-circle'></i> Pesanan terkirim! Admin akan segera menghubungi.";
+                setTimeout(() => closeModalFunc(), 2500);
+            } else {
+                throw new Error("Gagal dari server Telegram");
+            }
+        } catch (error) {
+            statusMessage.style.color = "#d32f2f";
+            statusMessage.innerHTML = "<i class='fas fa-times-circle'></i> Gagal mengirim pesanan. Cek koneksi Anda.";
+            submitOrder.disabled = false;
+            submitOrder.innerHTML = "Coba Lagi";
+        }
     });
-}
+
+    // Inisialisasi awal pencarian
+    searchInput.addEventListener("input", () => {
+        renderProducts(searchInput.value);
+    });
+
+    // Mulai Eksekusi Tarik Data saat Halaman Dimuat
+    document.addEventListener('DOMContentLoaded', loadProducts);
 </script>
 
 </body>
