@@ -236,7 +236,6 @@
     const searchInput = document.getElementById("searchInput");
     const modal = document.getElementById("modal");
     
-    // Elemen Input Modal
     const modalImage = document.getElementById("modalImage");
     const modalName = document.getElementById("modalName");
     const modalPrice = document.getElementById("modalPrice");
@@ -254,27 +253,26 @@
         return "Rp" + number.toLocaleString("id-ID");
     }
 
-    // MENGGUNAKAN API INTERNAL VERCEL DENGAN PROTEKSI FORMAT DATA
+    // Mengambil data produk melalui endpoint serverless proxy internal Vercel
     async function loadProducts() {
         try {
             const response = await fetch('/api/products');
             const data = await response.json();
             
-            // Console log untuk mengecek data yang masuk
             console.log("Data dari server (Katalog):", data);
 
             if (!response.ok) {
                 throw new Error(data.error || 'Server mengalami kendala.');
             }
             
-            // Proteksi: Mencegah error .forEach is not a function
-            if (Array.isArray(data)) {
-                items = data; // Jika data langsung berupa array
-            } else if (data && Array.isArray(data.record)) {
-                items = data.record; // Jika data dibungkus objek record (format JSONBin)
+            // Menggunakan auto-extractor pintar pendeteksi tipe array beralgoritma traversal objek
+            const extractedData = extractArray(data);
+            
+            if (extractedData) {
+                items = extractedData;
             } else {
-                items = []; // Kosongkan agar tidak error
-                throw new Error("Format data dari server tidak valid (bukan array).");
+                items = [];
+                throw new Error("Sistem gagal mengekstrak struktur data array produk.");
             }
             
             renderProducts();
@@ -282,6 +280,18 @@
             console.error("Error loadProducts:", error);
             productList.innerHTML = `<p class="no-results" style="color:#d32f2f;"><i class="fas fa-exclamation-triangle fa-2x mb-2 block"></i><br>Gagal memuat katalog: ${error.message}</p>`;
         }
+    }
+
+    // Melakukan konversi atau de-nesting objek jika array terbungkus struktur root objek {}
+    function extractArray(data) {
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.record)) return data.record;
+        if (data && typeof data === 'object') {
+            for (const key in data) {
+                if (Array.isArray(data[key])) return data[key];
+            }
+        }
+        return null;
     }
 
     function renderProducts(filter = "") {
@@ -350,7 +360,6 @@
         return `${match[1]} ${match[2].charAt(0).toUpperCase() + match[2].slice(1)}`;
     }
 
-    // MENGGUNAKAN API INTERNAL VERCEL (Aman, menyembunyikan Token Telegram)
     submitOrder.addEventListener("click", async () => {
         const period = periodSelect.value;
         const quantity = parseInt(quantityInput.value) || 1;
@@ -381,7 +390,6 @@
             `📞 *Kontak:* \`${contact}\``;
 
         try {
-            // Melakukan POST ke Vercel Serverless Function
             const res = await fetch('/api/order', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -394,7 +402,7 @@
                 statusMessage.innerHTML = "<i class='fas fa-check-circle'></i> Pesanan terkirim! Admin akan segera menghubungi.";
                 setTimeout(() => closeModalFunc(), 2500);
             } else {
-                throw new Error("Gagal dari server Telegram");
+                throw new Error("Gagal mengirim pesanan via server backend.");
             }
         } catch (error) {
             statusMessage.style.color = "#d32f2f";
