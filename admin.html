@@ -234,7 +234,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
     <button class="nav-item" onclick="switchTab('periods',this)"><i class="fas fa-calendar-alt"></i> Periode & Harga</button>
     <button class="nav-item" onclick="switchTab('settings',this)"><i class="fas fa-sliders-h"></i> Pengaturan Toko</button>
     <div class="nav-label">Akses Cepat</div>
-    <a href="index.html" target="_blank" class="nav-item"><i class="fas fa-store"></i> Lihat Toko</a>
+    <a href="/" target="_blank" class="nav-item"><i class="fas fa-store"></i> Lihat Toko</a>
     <button class="nav-item" onclick="fetchData()"><i class="fas fa-rotate-right"></i> Refresh Data</button>
   </nav>
   <div class="sidebar-footer">
@@ -446,10 +446,9 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 
 <script>
 // ==========================================
-// KONFIGURASI API JSONBIN (GANTI DENGAN MILIK ANDA)
+// API SEKARANG DIAMBIL DARI ROUTE INTERNAL VERCEL
+// API KEY & TOKEN DIRAHASIAKAN DI SERVER
 // ==========================================
-const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/6a1a841eddf5aa59f7777a2a'; 
-const JSONBIN_KEY = '$2a$10$tcKHEWwuz2sqRoMCKJfga.1xxTFW0RxpXUPnP.NI4YbivtlK1xxau'; 
 
 // ===== STATE KESELURUHAN =====
 let currentData = [];
@@ -526,12 +525,10 @@ function updateStats(){
   document.getElementById('navProdCount').textContent=currentData.length;
 }
 
-// ===== FETCH DATA (GET KESELURUHAN DARI SERVER) =====
+// ===== FETCH DATA (GET DARI VERCEL API) =====
 async function fetchData(){
   try{
-    const r = await fetch(JSONBIN_URL, {
-      headers: { 'X-Master-Key': JSONBIN_KEY }
-    });
+    const r = await fetch('/api/products');
     if(!r.ok) throw new Error('Server error');
     
     const d = await r.json();
@@ -832,7 +829,7 @@ function resetSettingsForm(){
   toast('Form dikembalikan ke data server.', 'info');
 }
 
-// ===== MASTER SAVE: PUSH KE SERVER API JSONBIN =====
+// ===== MASTER SAVE: PUSH KE SERVER API VERCEL =====
 async function saveAllToDatabase(){
   const btn = document.getElementById('saveBtn');
   btn.disabled = true;
@@ -845,11 +842,10 @@ async function saveAllToDatabase(){
   };
 
   try{
-    const r = await fetch(JSONBIN_URL, {
+    const r = await fetch('/api/products', {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_KEY 
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(masterPayload)
     });
@@ -857,7 +853,7 @@ async function saveAllToDatabase(){
     if(!r.ok) throw new Error('API Error');
     toast('Berhasil! Semua data tersimpan di server global.', 'success');
   }catch(e){
-    toast('Gagal mengupload. Cek kembali URL & Master Key JSONBin Anda.', 'error');
+    toast('Gagal mengupload. Periksa koneksi atau log Vercel.', 'error');
   }finally{
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Simpan Semua';
