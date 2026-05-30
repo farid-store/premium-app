@@ -179,7 +179,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // AMAN: Memanggil proxy lokal GET dengan Proteksi Array
+    // Mengambil data produk terupdate dari backend proxy internal Vercel dengan proteksi array otomatis
     async function fetchData() {
         const tbody = document.getElementById("productTableBody");
         try {
@@ -192,14 +192,14 @@
                 throw new Error(data.error || "Gagal mengambil data dari server.");
             }
 
-            // Pengecekan struktur format data agar tidak terjadi "forEach is not a function"
-            if (Array.isArray(data)) {
-                currentData = data;
-            } else if (data && Array.isArray(data.record)) {
-                currentData = data.record; 
+            // Fitur Ekstraktor Otomatis: Menghilangkan resiko kegagalan penelusuran data bertipe non-array
+            const extractedData = extractArray(data);
+
+            if (extractedData) {
+                currentData = extractedData;
             } else {
                 currentData = [];
-                throw new Error("Format data dari server tidak valid (bukan array).");
+                throw new Error("Struktur database JSONBin bukan array. Selesaikan konfigurasi data.");
             }
 
             renderTable();
@@ -208,6 +208,18 @@
             showBanner(error.message, "error");
             tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--danger); font-weight: bold;">Gagal Memuat Data: ${error.message}</td></tr>`;
         }
+    }
+
+    // Melakukan konversi atau de-nesting objek jika array terbungkus struktur root objek {}
+    function extractArray(data) {
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.record)) return data.record;
+        if (data && typeof data === 'object') {
+            for (const key in data) {
+                if (Array.isArray(data[key])) return data[key];
+            }
+        }
+        return null;
     }
 
     function renderTable() {
@@ -274,7 +286,6 @@
         }
     }
 
-    // AMAN: Memanggil proxy lokal PUT
     async function saveAllToDatabase() {
         const btnSave = document.getElementById("btnSaveAll");
 
