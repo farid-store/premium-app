@@ -4,8 +4,8 @@ export default async function handler(req, res) {
   // ==========================================
   // HARDCODED API KEYS (PASTIKAN REPO PRIVATE)
   // ==========================================
-  const TELEGRAM_BOT_TOKEN = "MASUKKAN_BOT_TOKEN_TELEGRAM_DISINI";
-  const TELEGRAM_CHAT_ID = "MASUKKAN_CHAT_ID_ADMIN_DISINI";
+  const TELEGRAM_BOT_TOKEN = "7819700390:AAEO8_9_5Xr8msBPZd2hOQ4CkxDnlHVS3b8";
+  const TELEGRAM_CHAT_ID = "5775563021";
 
   // Hanya izinkan metode POST
   if (req.method !== 'POST') {
