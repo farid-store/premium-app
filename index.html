@@ -24,6 +24,23 @@
 }
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
+/* ===== DEBUG PANEL ===== */
+#debugPanel {
+  display: none;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 2px solid #ef4444;
+  padding: 16px;
+  margin: 20px auto;
+  max-width: 1200px;
+  border-radius: var(--radius-md);
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+#debugPanel h4 { margin-bottom: 8px; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+
 /* ===== MAINTENANCE MODE ===== */
 .maintenance-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
 .maintenance-screen.show{display:flex}
@@ -246,6 +263,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </head>
 <body>
 
+<div id="debugPanel">
+  <h4><i class="fas fa-bug"></i> Terminal Debug Aktif</h4>
+</div>
+
 <div class="maintenance-screen" id="maintenanceScreen">
   <i class="fas fa-tools maintenance-icon"></i>
   <h2 class="maintenance-title">Toko Sedang Dalam Perbaikan</h2>
@@ -316,8 +337,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 <section class="catalog-section" id="mainCatalog">
   <div class="result-info" id="resultInfo">Memuat produk...</div>
   <div id="productGrid" class="product-grid">
-    <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
-    <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
@@ -407,9 +426,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 <script>
 // ==========================================
-// API SEKARANG DIAMBIL DARI ROUTE INTERNAL VERCEL
-// API KEY & TOKEN DIRAHASIAKAN DI SERVER
+// FUNGSI LOGGING DEBUG (TAMPIL DI LAYAR)
 // ==========================================
+function logDebug(msg) {
+  const panel = document.getElementById('debugPanel');
+  panel.style.display = 'block';
+  const time = new Date().toLocaleTimeString();
+  panel.innerHTML += `[${time}] ${msg}\n`;
+  console.log(`[DEBUG] ${msg}`);
+}
 
 // STATE DINAMIS DARI SERVER
 let allProducts = [];
@@ -477,6 +502,7 @@ function renderFAQ(){
 }
 
 function applySettings() {
+  logDebug("Menerapkan pengaturan toko ke HTML...");
   if(storeSettings.togMaintenance) {
     document.getElementById('maintenanceScreen').classList.add('show');
     ['mainHeader','mainHero','mainTrust','mainFilter','mainCatalog','mainFaq','mainFooter'].forEach(id => {
@@ -546,7 +572,7 @@ function renderProducts(){
     if(isListView){
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
         <div class="card-info">
           <div class="prod-cat">${p.cat}</div>
           <div class="prod-name">${p.name}</div>
@@ -561,7 +587,7 @@ function renderProducts(){
     } else {
       c.innerHTML=`
         ${badgeHTML}
-        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
+        <div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'"/></div>
         <div class="prod-cat">${p.cat}</div>
         <div class="prod-name">${p.name}</div>
         <div class="prod-price">${fmt(p.price)}<span class="prod-price-old">/bln</span></div>
@@ -687,7 +713,6 @@ document.getElementById('copyAmountBtn').addEventListener('click',()=>{
   navigator.clipboard.writeText(total).then(()=>showToast('Nominal Rp'+total.toLocaleString('id-ID')+' disalin!')).catch(()=>showToast('Salin: Rp'+total.toLocaleString('id-ID')));
 });
 
-// PENGIRIMAN DATA ORDER KE VERCEL API (YANG MENERUSKAN KE TELEGRAM)
 document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   const contact=document.getElementById('contactInput').value.trim();
   if(!contact){
@@ -764,27 +789,47 @@ document.getElementById('sortSelect').addEventListener('change',renderProducts);
 document.getElementById('searchInput').addEventListener('input',renderProducts);
 
 // ==========================================
-// LOAD DATA DARI VERCEL API (/api/products)
+// LOAD DATA DARI VERCEL API (DENGAN SUPER DEBUG)
 // ==========================================
-async function loadData(){
-  try{
-    const r = await fetch('/api/products');
-    if(r.ok){
-      const d = await r.json();
-      const dataObj = d.record ? d.record : d;
-      
-      allProducts = dataObj.products || [];
-      allPeriods = dataObj.periods || [];
-      storeSettings = dataObj.settings || {};
-    } else {
-        console.error("Gagal load API");
-    }
-  } catch(e){
-    console.error("Koneksi Error", e);
-  }
+async function loadData() {
+  logDebug("Memulai fetch ke rute '/api/products'...");
   
-  applySettings();
-  renderProducts();
+  try {
+    const r = await fetch('/api/products');
+    logDebug(`Response Network: Status ${r.status} (${r.statusText})`);
+
+    if (!r.ok) {
+      const errText = await r.text();
+      logDebug(`ERROR RAW RESPONSE:\n${errText}`);
+      throw new Error(`HTTP Error ${r.status}: ${r.statusText}`);
+    }
+
+    logDebug("Fetch berhasil (HTTP 200). Sedang mem-parsing JSON...");
+    const d = await r.json();
+    logDebug("Parsing JSON sukses.");
+
+    const dataObj = d.record ? d.record : d;
+    
+    allProducts = dataObj.products || [];
+    allPeriods = dataObj.periods || [];
+    storeSettings = dataObj.settings || {};
+
+    logDebug(`Total Data Terekstrak: ${allProducts.length} Produk, ${allPeriods.length} Periode.`);
+    
+    applySettings();
+    renderProducts();
+    logDebug("Render UI Selesai.");
+
+  } catch(e) {
+    logDebug(`EXCEPTION TERTANGKAP: ${e.message}`);
+    document.getElementById('resultInfo').innerHTML = `<span style="color:#dc2626;font-weight:bold"><i class="fas fa-exclamation-triangle"></i> Gagal Memuat Data</span>`;
+    document.getElementById('productGrid').innerHTML = `
+      <div class="empty-state" style="color:#991b1b">
+        <i class="fas fa-times-circle"></i>
+        <h3>Akses API Gagal</h3>
+        <p>Lihat kotak merah (Terminal Debug) di atas untuk melihat detail error.</p>
+      </div>`;
+  }
 }
 
 renderFAQ();
