@@ -24,6 +24,14 @@
 }
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
+/* ===== MAINTENANCE MODE ===== */
+.maintenance-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.maintenance-screen.show{display:flex}
+.maintenance-icon{font-size:56px;color:var(--brand);margin-bottom:20px;animation:pulse 2s infinite}
+.maintenance-title{font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px}
+.maintenance-desc{font-size:15px;color:var(--text2);max-width:400px;line-height:1.6}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+
 /* ===== TOPBAR ===== */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 20px}
 .topbar-inner{max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;gap:16px}
@@ -187,8 +195,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .status-msg{margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-align:center;display:none}
 .status-msg.success{display:block;background:var(--green-soft);color:var(--green)}
 .status-msg.error{display:block;background:var(--red-soft);color:var(--red)}
-.modal-overlay.pay-mode .order-form{display:none}
-.modal-overlay.pay-mode .pay-section{display:flex}
 
 /* ===== FAQ ===== */
 .faq-section{max-width:1200px;margin:0 auto;padding:32px 20px}
@@ -240,40 +246,43 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 </head>
 <body>
 
-<!-- TOPBAR -->
-<header class="topbar">
+<div class="maintenance-screen" id="maintenanceScreen">
+  <i class="fas fa-tools maintenance-icon"></i>
+  <h2 class="maintenance-title">Toko Sedang Dalam Perbaikan</h2>
+  <p class="maintenance-desc">Mohon maaf, kami sedang melakukan maintenance atau pembaruan sistem. Silakan kembali lagi beberapa saat.</p>
+</div>
+
+<header class="topbar" id="mainHeader">
   <div class="topbar-inner">
     <a href="#" class="logo">
       <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-      <span class="logo-text">Farid<span>Store</span></span>
+      <span class="logo-text dynamic-store-name">Store<span>Name</span></span>
     </a>
     <div class="topbar-search">
       <i class="fas fa-search"></i>
       <input type="text" id="searchInput" placeholder="Cari aplikasi premium..." autocomplete="off"/>
     </div>
-    <a href="https://wa.me/6281234567890" target="_blank" class="topbar-wa">
+    <a href="#" target="_blank" class="topbar-wa global-wa-link">
       <i class="fab fa-whatsapp"></i><span>Hubungi Admin</span>
     </a>
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero">
+<section class="hero" id="mainHero">
   <div class="hero-inner">
     <div class="hero-badge"><i class="fas fa-shield-halved"></i> Bergaransi & Terpercaya</div>
     <h1>Aplikasi Premium<br>Harga Terjangkau</h1>
-    <p>Dapatkan akses Netflix, Spotify, YouTube Premium, dan 50+ aplikasi premium lainnya dengan harga terbaik. Proses cepat, bergaransi penuh.</p>
+    <p id="storeDesc">Dapatkan akses Netflix, Spotify, YouTube Premium, dan aplikasi premium lainnya dengan harga terbaik. Proses cepat, bergaransi penuh.</p>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="num">2.400+</div><div class="lbl">Pelanggan</div></div>
-      <div class="hero-stat"><div class="num">50+</div><div class="lbl">Produk</div></div>
-      <div class="hero-stat"><div class="num">99%</div><div class="lbl">Kepuasan</div></div>
-      <div class="hero-stat"><div class="num">&lt;5 Menit</div><div class="lbl">Proses</div></div>
+      <div class="hero-stat"><div class="num" id="statCustNum">-</div><div class="lbl">Pelanggan</div></div>
+      <div class="hero-stat"><div class="num" id="statProdNum">-</div><div class="lbl">Produk</div></div>
+      <div class="hero-stat"><div class="num" id="statSatNum">-</div><div class="lbl">Kepuasan</div></div>
+      <div class="hero-stat"><div class="num" id="statTimeNum">-</div><div class="lbl">Proses</div></div>
     </div>
   </div>
 </section>
 
-<!-- TRUST BAR -->
-<div class="trust-bar">
+<div class="trust-bar" id="mainTrust">
   <div class="trust-bar-inner">
     <div class="trust-item"><i class="fas fa-lock"></i> Pembayaran QRIS Aman</div>
     <div class="trust-item"><i class="fas fa-rotate-right"></i> Garansi Ganti Akun</div>
@@ -283,8 +292,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
-<!-- FILTER -->
-<section class="filter-section">
+<section class="filter-section" id="mainFilter">
   <div class="filter-row">
     <span class="filter-label">Filter:</span>
     <button class="chip active" data-cat="all"><i class="fas fa-th"></i> Semua</button>
@@ -305,11 +313,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </section>
 
-<!-- CATALOG -->
-<section class="catalog-section">
+<section class="catalog-section" id="mainCatalog">
   <div class="result-info" id="resultInfo">Memuat produk...</div>
   <div id="productGrid" class="product-grid">
-    <!-- skeleton -->
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
     <div class="skel-card"><div class="skeleton skel-img"></div><div class="skeleton skel-line mid"></div><div class="skeleton skel-line short"></div></div>
@@ -319,26 +325,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="faq-section">
+<section class="faq-section" id="mainFaq">
   <h2 class="section-title"><i class="fas fa-circle-question" style="color:var(--brand);margin-right:8px"></i>Pertanyaan Umum</h2>
   <div class="faq-grid" id="faqGrid"></div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
+<footer class="footer" id="mainFooter">
   <div class="footer-inner">
-    <div class="footer-brand">Farid<span>Store</span></div>
+    <div class="footer-brand dynamic-store-name">Store<span>Name</span></div>
     <div class="footer-links">
-      <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-      <a href="#"><i class="fab fa-telegram"></i> Telegram</a>
-      <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+      <a href="#" id="footerWa" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="#" id="footerTg" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+      <a href="#" id="footerIg" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
     </div>
-    <p class="footer-copy">© 2025 Farid Store — Pekanbaru, Riau. Semua hak dilindungi.</p>
+    <p class="footer-copy">© 2026 <span id="copyName">Store Name</span>. Semua hak dilindungi.</p>
   </div>
 </footer>
 
-<!-- MODAL -->
 <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true">
   <div class="modal-sheet" id="modalSheet">
     <span class="modal-drag"></span>
@@ -347,24 +350,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
       <button class="modal-close-btn" id="closeModalBtn"><i class="fas fa-xmark"></i></button>
     </div>
     <div class="modal-body">
-      <!-- LEFT -->
       <div class="modal-left">
         <img id="modalImg" class="modal-prod-img" src="" alt="Produk"/>
-        <div class="modal-qris-box">
+        <div class="modal-qris-box" id="modalQrisContainer">
           <div class="modal-qris-title"><i class="fas fa-qrcode"></i> QRIS Pembayaran</div>
           <div id="qrcode"></div>
           <div class="qris-amount-display" id="qrisAmount">Rp0</div>
-          <div class="qris-label">Scan & bayar sekarang</div>
+          <div class="qris-label" id="modalQrisLabel">Scan & bayar sekarang</div>
           <button class="qris-copy-btn" id="copyAmountBtn"><i class="fas fa-copy"></i> Salin Nominal</button>
         </div>
       </div>
-      <!-- RIGHT -->
       <div class="modal-right">
         <div class="prod-meta-name" id="modalProdName"></div>
         <div class="prod-meta-price" id="modalProdPrice"></div>
         <div class="prod-desc" id="modalProdDesc"></div>
 
-        <!-- STEPS -->
         <div class="steps-row">
           <div class="step-item"><div class="step-dot done" id="step1dot">1</div><div class="step-lbl">Pilih<br>Paket</div></div>
           <div class="step-line" id="stepLine1"></div>
@@ -403,18 +403,25 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-const PERIODS = [
-  {key:'1hari',label:'1 Hari',mult:1},
-  {key:'7hari',label:'7 Hari',mult:7},
-  {key:'1bulan',label:'1 Bulan',mult:30},
-  {key:'3bulan',label:'3 Bulan',mult:90},
-  {key:'6bulan',label:'6 Bulan',mult:180},
-  {key:'12bulan',label:'12 Bulan',mult:365}
-];
+// ==========================================
+// KONFIGURASI API JSONBIN (GANTI DENGAN MILIK ANDA)
+// ==========================================
+const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/MASUKKAN_BIN_ID_ANDA_DISINI'; 
+const JSONBIN_KEY = 'MASUKKAN_MASTER_KEY_ANDA_DISINI'; 
+
+// STATE DINAMIS DARI SERVER
+let allProducts = [];
+let allPeriods = [];
+let storeSettings = {};
+
+// STATE LOKAL MODAL
+let currentProduct = null;
+let currentQty = 1;
+let currentPeriod = null;
+let qrEngine = null;
 
 const FAQS = [
   {q:'Berapa lama proses aktivasi akun?',a:'Proses aktivasi biasanya membutuhkan waktu 1–5 menit setelah pembayaran dikonfirmasi admin. Anda akan dihubungi via kontak yang didaftarkan.'},
@@ -425,37 +432,39 @@ const FAQS = [
   {q:'Bagaimana jika ada kendala setelah pembelian?',a:'Hubungi CS kami 24/7 via WhatsApp atau Telegram. Response time rata-rata kurang dari 15 menit.'},
 ];
 
-const SAMPLE_PRODUCTS = [
-  {id:1,name:'Netflix Premium 4K',cat:'streaming',price:45000,status:'ready',badge:'bestseller',rating:4.9,img:'https://via.placeholder.com/300/E50914/FFFFFF?text=Netflix',desc:'Akses Netflix tanpa batas, kualitas 4K Ultra HD, 4 layar sekaligus. Shared premium slot bergaransi penuh.'},
-  {id:2,name:'Spotify Premium',cat:'musik',price:25000,status:'ready',badge:'hot',rating:4.8,img:'https://via.placeholder.com/300/1DB954/FFFFFF?text=Spotify',desc:'Nikmati musik tanpa iklan, download offline, kualitas audio terbaik. Akun personal terpisah.'},
-  {id:3,name:'YouTube Premium',cat:'streaming',price:30000,status:'ready',badge:'new',rating:4.7,img:'https://via.placeholder.com/300/FF0000/FFFFFF?text=YouTube',desc:'YouTube tanpa iklan, background play, YouTube Music included. Akun Google terpisah.'},
-  {id:4,name:'Disney+ Hotstar',cat:'streaming',price:35000,status:'ready',badge:'',rating:4.6,img:'https://via.placeholder.com/300/0063E5/FFFFFF?text=Disney%2B',desc:'Disney, Marvel, Star Wars, National Geographic dan konten lokal terbaik. Kualitas 4K HDR.'},
-  {id:5,name:'Apple Music',cat:'musik',price:22000,status:'ready',badge:'',rating:4.5,img:'https://via.placeholder.com/300/FC3C44/FFFFFF?text=Apple+Music',desc:'100 juta lagu, audio lossless, Dolby Atmos. Pengalaman mendengarkan musik terbaik.'},
-  {id:6,name:'Microsoft 365',cat:'produktivitas',price:55000,status:'ready',badge:'bestseller',rating:4.9,img:'https://via.placeholder.com/300/D83B01/FFFFFF?text=MS+365',desc:'Word, Excel, PowerPoint, Teams, 1TB OneDrive. Paket lengkap produktivitas untuk profesional.'},
-  {id:7,name:'Canva Pro',cat:'produktivitas',price:40000,status:'ready',badge:'hot',rating:4.8,img:'https://via.placeholder.com/300/00C4CC/FFFFFF?text=Canva+Pro',desc:'Ribuan template premium, brand kit, background remover, magic resize. Untuk desainer & kreator.'},
-  {id:8,name:'Xbox Game Pass',cat:'gaming',price:65000,status:'pending',badge:'new',rating:4.7,img:'https://via.placeholder.com/300/107C10/FFFFFF?text=Xbox+Pass',desc:'100+ game premium termasuk day-one releases. Main di PC, Xbox, dan mobile via cloud gaming.'},
-  {id:9,name:'Zoom Pro',cat:'produktivitas',price:48000,status:'ready',badge:'',rating:4.5,img:'https://via.placeholder.com/300/2D8CFF/FFFFFF?text=Zoom+Pro',desc:'Meeting tanpa batas waktu, 100 peserta, cloud recording 5GB, fitur breakout rooms.'},
-  {id:10,name:'HBO Max',cat:'streaming',price:38000,status:'ready',badge:'',rating:4.6,img:'https://via.placeholder.com/300/5822FF/FFFFFF?text=HBO+Max',desc:'Game of Thrones, The Last of Us, dan konten HBO premium. Kualitas 4K + Dolby Atmos.'},
-  {id:11,name:'Grammarly Premium',cat:'produktivitas',price:35000,status:'ready',badge:'',rating:4.7,img:'https://via.placeholder.com/300/15C39A/FFFFFF?text=Grammarly',desc:'Koreksi grammar, gaya penulisan, plagiarism checker. Wajib untuk pelajar dan profesional.'},
-  {id:12,name:'PlayStation Plus',cat:'gaming',price:72000,status:'pending',badge:'hot',rating:4.8,img:'https://via.placeholder.com/300/003087/FFFFFF?text=PS+Plus',desc:'Game gratis bulanan, akses cloud, multiplayer online. Koleksi ratusan game PS4 & PS5.'},
-];
-
-let allProducts = SAMPLE_PRODUCTS;
-let currentProduct = null;
-let currentQty = 1;
-let currentPeriod = PERIODS[2];
-let qrEngine = null;
-
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
 
+// FUNGSI PEMBUATAN STRING QRIS
+function pad2(num){ return num.toString().padStart(2, '0'); }
 function crc16(str){
   let c=0xFFFF;
   for(let i=0;i<str.length;i++){c^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++){c=((c&0x8000)!==0)?(c<<1)^0x1021:c<<1;c&=0xFFFF;}}
   return c.toString(16).toUpperCase().padStart(4,'0');
 }
 function buildQRIS(amount){
-  const a=amount.toString(),al=a.length.toString().padStart(2,'0');
-  const raw='000201010212265700' + '11ID.DANA.WWW011893600915300002827902090000282790303UMI' + '51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI' + '52044814' + '5303360' + '54'+al+a + '5802ID5911Farid Store6014Kota Pekanbaru610528294' + '6304';
+  const a = amount.toString();
+  const al = pad2(a.length);
+  
+  // Ambil pengaturan dinamis JSON atau gunakan default
+  const mid = storeSettings.qrisMid || '93600915300002827902090000282790'; 
+  const merch = storeSettings.qrisMerchant || 'Farid Store';
+  const merchL = pad2(merch.length);
+  const city = storeSettings.city || 'Pekanbaru';
+  const cityL = pad2(city.length);
+  const postal = storeSettings.postal || '28294';
+  const postalL = pad2(postal.length);
+  const isDynamic = storeSettings.qrisType === '12';
+
+  // Base Payload QRIS
+  let raw = '00020101021226570011ID.DANA.WWW0118' + mid.substring(0,18) + '02090000282790303UMI' + 
+            '51440014ID.CO.QRIS.WWW0215ID10265066640140303UMI' + '520448145303360';
+  
+  // Jika Dinamis dan Amount > 0, tambahkan Tag 54 (Amount)
+  if (isDynamic && amount > 0) {
+    raw += '54' + al + a;
+  }
+  
+  raw += '5802ID' + '59' + merchL + merch + '60' + cityL + city + '61' + postalL + postal + '6304';
   return raw + crc16(raw);
 }
 
@@ -465,7 +474,6 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// Render FAQ
 function renderFAQ(){
   const g=document.getElementById('faqGrid');
   FAQS.forEach(f=>{
@@ -476,8 +484,50 @@ function renderFAQ(){
   });
 }
 
-// Render Products
+// APPLY PENGATURAN TOKO KE HTML
+function applySettings() {
+  if(storeSettings.togMaintenance) {
+    document.getElementById('maintenanceScreen').classList.add('show');
+    ['mainHeader','mainHero','mainTrust','mainFilter','mainCatalog','mainFaq','mainFooter'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    return; // Hentikan eksekusi render jika maintenance
+  }
+
+  const sName = storeSettings.storeName || 'Farid Store';
+  // Pecah nama menjadi dua agar ada efek warna di span
+  const nameParts = sName.split(' ');
+  const nameHTML = nameParts.length > 1 ? `${nameParts[0]}<span>${nameParts.slice(1).join(' ')}</span>` : `${sName}<span></span>`;
+  
+  document.querySelectorAll('.dynamic-store-name').forEach(el => el.innerHTML = nameHTML);
+  document.getElementById('copyName').textContent = sName;
+  document.getElementById('storeDesc').textContent = storeSettings.desc || '';
+
+  // Stats Hero
+  document.getElementById('statCustNum').textContent = storeSettings.statCust || '-';
+  document.getElementById('statProdNum').textContent = storeSettings.statProd || '-';
+  document.getElementById('statSatNum').textContent = storeSettings.statSat || '-';
+  document.getElementById('statTimeNum').textContent = storeSettings.statTime || '-';
+
+  // Kontak Link
+  const waNum = storeSettings.wa || '6281234567890';
+  const waUrl = `https://wa.me/${waNum}`;
+  document.querySelectorAll('.global-wa-link, #footerWa').forEach(el => el.href = waUrl);
+  
+  if(storeSettings.tg) document.getElementById('footerTg').href = `https://t.me/${storeSettings.tg.replace('@','')}`;
+  if(storeSettings.ig) document.getElementById('footerIg').href = `https://instagram.com/${storeSettings.ig.replace('@','')}`;
+
+  // QRIS Label Modal
+  document.getElementById('modalQrisLabel').textContent = storeSettings.qrisLabel || 'Scan & bayar sekarang';
+  
+  // Toggles Element Modal
+  if(storeSettings.togQris === false) document.getElementById('modalQrisContainer').style.display = 'none';
+  if(storeSettings.togWa === false) document.getElementById('waDirectBtn').style.display = 'none';
+}
+
 function renderProducts(){
+  if(storeSettings.togMaintenance) return;
+  
   const search=document.getElementById('searchInput').value.toLowerCase();
   const cat=document.querySelector('.chip.active')?.dataset.cat||'all';
   const sort=document.getElementById('sortSelect').value;
@@ -500,12 +550,14 @@ function renderProducts(){
     return;
   }
 
+  const showRating = storeSettings.togRating !== false;
+
   list.forEach((p,i)=>{
     const c=document.createElement('div');
     c.className='prod-card';
     c.style.animationDelay=(i*0.05)+'s';
     const badgeHTML=p.badge?`<span class="card-badge badge-${p.badge}">${p.badge==='bestseller'?'Best Seller':p.badge==='new'?'Baru':'🔥 Hot'}</span>`:'';
-    const starsHTML=`<span class="prod-rating"><i class="fas fa-star"></i> ${p.rating}</span>`;
+    const starsHTML=showRating ? `<span class="prod-rating"><i class="fas fa-star"></i> ${p.rating||4.5}</span>` : '';
 
     if(isListView){
       c.innerHTML=`
@@ -543,16 +595,23 @@ function renderProducts(){
 
 // MODAL
 function openModal(p){
+  // Ambil hanya periode yang diset Aktif oleh Admin
+  const activePeriods = allPeriods.filter(per => per.active);
+  if(activePeriods.length === 0) {
+      showToast("Gagal: Belum ada periode berlangganan yang diaktifkan Admin.");
+      return;
+  }
+
   currentProduct=p;
   currentQty=1;
-  currentPeriod=PERIODS[2];
+  currentPeriod=activePeriods[0]; // Default ambil yang pertama
+
   document.getElementById('modalTitle').textContent=p.name;
   document.getElementById('modalImg').src=p.img;
   document.getElementById('modalProdName').textContent=p.name;
   document.getElementById('modalProdPrice').textContent=fmt(p.price)+' /bulan';
   document.getElementById('modalProdDesc').textContent=p.desc||'';
   document.getElementById('qtyDisplay').textContent='1';
-  document.getElementById('contactInput').value=localStorage.getItem('fs_contact')||'';
   document.getElementById('statusMsg').className='status-msg';
   document.getElementById('confirmOrderBtn').disabled=false;
   document.getElementById('confirmOrderBtn').innerHTML='<i class="fas fa-paper-plane"></i> Konfirmasi & Kirim Pesanan';
@@ -560,14 +619,17 @@ function openModal(p){
   const saved=localStorage.getItem('fs_contact')||'';
   document.getElementById('contactInput').value=saved;
 
-  // Render periods
+  // Render periods dynamic
   const pg=document.getElementById('periodGrid');
   pg.innerHTML='';
-  PERIODS.forEach(per=>{
-    const price=p.price*per.mult/30;
+  activePeriods.forEach((per, index)=>{
+    const baseSample = p.price;
+    const priceBase = Math.round(baseSample * per.mult / 30);
+    const price = per.disc > 0 ? Math.round(priceBase * (1 - per.disc / 100)) : priceBase;
+    
     const b=document.createElement('button');
     b.className='period-btn'+(per.key===currentPeriod.key?' selected':'');
-    b.innerHTML=`${per.label}<span class="period-price">${fmt(Math.round(price))}</span>`;
+    b.innerHTML=`${per.label}<span class="period-price">${fmt(price)}</span>`;
     b.addEventListener('click',()=>{
       currentPeriod=per;
       pg.querySelectorAll('.period-btn').forEach(x=>x.classList.remove('selected'));
@@ -589,22 +651,26 @@ function closeModal(){
 }
 
 function updateTotal(){
-  if(!currentProduct) return;
-  const price=Math.round(currentProduct.price*currentPeriod.mult/30);
-  const total=price*currentQty;
-  document.getElementById('unitPriceDisplay').textContent=fmt(price);
+  if(!currentProduct || !currentPeriod) return;
+  
+  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
+  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  const total = finalPrice * currentQty;
+  
+  document.getElementById('unitPriceDisplay').textContent=fmt(finalPrice);
   document.getElementById('periodDisplay').textContent=currentPeriod.label;
   document.getElementById('qtyDisplay2').textContent=currentQty+'x';
   document.getElementById('totalDisplay').textContent=fmt(total);
   document.getElementById('qrisAmount').textContent=fmt(total);
 
-  // WA button
+  // WA button text inject
   const contact=document.getElementById('contactInput').value.trim();
-  const msg=encodeURIComponent(`Halo Admin Farid Store!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Periode: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
-  document.getElementById('waDirectBtn').href=`https://wa.me/6281234567890?text=${msg}`;
+  const waNum = storeSettings.wa || '6281234567890';
+  const msg=encodeURIComponent(`Halo Admin ${storeSettings.storeName||'Farid Store'}!\n\nSaya ingin order:\n📦 *${currentProduct.name}*\n⏳ Periode: ${currentPeriod.label}\n🔢 Jumlah: ${currentQty}\n💰 Total: ${fmt(total)}\n📞 Kontak: ${contact||'-'}`);
+  document.getElementById('waDirectBtn').href=`https://wa.me/${waNum}?text=${msg}`;
 
-  // QRIS
-  if(total>0 && typeof QRCode!=='undefined'){
+  // QRIS Generation
+  if(total>0 && typeof QRCode!=='undefined' && storeSettings.togQris !== false){
     const payload=buildQRIS(total);
     const el=document.getElementById('qrcode');
     if(qrEngine){qrEngine.clear();qrEngine.makeCode(payload);}
@@ -640,13 +706,15 @@ document.getElementById('contactInput').addEventListener('input',()=>{
 
 // Copy amount
 document.getElementById('copyAmountBtn').addEventListener('click',()=>{
-  if(!currentProduct) return;
-  const price=Math.round(currentProduct.price*currentPeriod.mult/30);
-  const total=price*currentQty;
+  if(!currentProduct || !currentPeriod) return;
+  const priceBase = Math.round(currentProduct.price * currentPeriod.mult / 30);
+  const finalPrice = currentPeriod.disc > 0 ? Math.round(priceBase * (1 - currentPeriod.disc / 100)) : priceBase;
+  const total = finalPrice * currentQty;
+  
   navigator.clipboard.writeText(total).then(()=>showToast('Nominal Rp'+total.toLocaleString('id-ID')+' disalin!')).catch(()=>showToast('Salin: Rp'+total.toLocaleString('id-ID')));
 });
 
-// Submit
+// Submit Placeholder API (Anda bisa hubungkan ini dengan Bot Telegram Webhook dsb)
 document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
   const contact=document.getElementById('contactInput').value.trim();
   if(!contact){
@@ -655,29 +723,23 @@ document.getElementById('confirmOrderBtn').addEventListener('click', async ()=>{
     return;
   }
   localStorage.setItem('fs_contact',contact);
-  const price=Math.round(currentProduct.price*currentPeriod.mult/30);
-  const total=price*currentQty;
+  
+  // Karena fitur notif hanya dummy di JS murni, kita arahkan user agar klik WA saja
+  // Namun jika API bot siap, jalankan logika fetch() Anda di sini
+  if(storeSettings.togNotif === false) {
+     showToast('Sistem otomatis nonaktif, silahkan klik tombol WhatsApp');
+     return;
+  }
+  
   const btn=document.getElementById('confirmOrderBtn');
   btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-  const msg=`🛒 *PESANAN BARU - FARID STORE*\n━━━━━━━━━━━━━━━━━━━━\n📦 *Produk:* ${currentProduct.name}\n💸 *Harga:* ${fmt(price)}\n⏳ *Periode:* ${currentPeriod.label}\n🔢 *Jumlah:* ${currentQty}\n💰 *TOTAL: ${fmt(total)}*\n━━━━━━━━━━━━━━━━━━━━\n📞 *Kontak:* ${contact}`;
-  try{
-    const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
-    const data=await res.json();
-    if(res.ok&&data.success){
-      const sm=document.getElementById('statusMsg');
-      sm.className='status-msg success';
-      sm.innerHTML='<i class="fas fa-circle-check"></i> Pesanan terkirim! Admin akan segera menghubungi Anda.';
-      updateSteps(4);
-      btn.innerHTML='<i class="fas fa-check"></i> Pesanan Terkirim!';
-      showToast('Pesanan berhasil dikirim!');
-      setTimeout(closeModal,3000);
-    } else throw new Error();
-  } catch(e){
+  
+  setTimeout(() => {
     const sm=document.getElementById('statusMsg');
     sm.className='status-msg error';
-    sm.innerHTML='<i class="fas fa-circle-xmark"></i> Gagal mengirim. Gunakan tombol WhatsApp di bawah atau coba lagi.';
+    sm.innerHTML='<i class="fas fa-circle-xmark"></i> Server notifikasi belum diset. Gunakan tombol Chat WhatsApp di bawah.';
     btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Konfirmasi & Kirim Pesanan';
-  }
+  }, 1000);
 });
 
 // Close modal
@@ -709,17 +771,30 @@ document.getElementById('listViewBtn').addEventListener('click',()=>{
 document.getElementById('sortSelect').addEventListener('change',renderProducts);
 document.getElementById('searchInput').addEventListener('input',renderProducts);
 
-// Load
-async function loadProducts(){
+// ===== FETCH KESELURUHAN DATA =====
+async function loadData(){
   try{
-    const r=await fetch('/api/products');
-    if(r.ok){const d=await r.json();if(Array.isArray(d)&&d.length>0)allProducts=d;}
-  }catch(e){}
+    const r = await fetch(JSONBIN_URL, {
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    });
+    if(r.ok){
+      const d = await r.json();
+      const dataObj = d.record ? d.record : d;
+      
+      allProducts = dataObj.products || [];
+      allPeriods = dataObj.periods || [];
+      storeSettings = dataObj.settings || {};
+    }
+  } catch(e){
+    console.error("Gagal load API, pastikan JSONBIN terkonfigurasi.", e);
+  }
+  
+  applySettings();
   renderProducts();
 }
 
 renderFAQ();
-loadProducts();
+loadData();
 </script>
 </body>
 </html>
