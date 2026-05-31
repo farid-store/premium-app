@@ -662,9 +662,7 @@ async function fetchData(){
     settings = dataObj.settings || defaultSettings;
     currentTestimonials = dataObj.testimonials || [];
     currentFaqs = dataObj.faqs || [];
-    currentOrders = dataObj.orders || []; // <-- Tarik data pesanan
-    
-    // Tarik data users dari database utama
+    currentOrders = dataObj.orders || [];
     currentUsers = dataObj.users || []; 
 
     currentProducts = currentProducts.map(p => {
@@ -673,7 +671,7 @@ async function fetchData(){
     });
 
     toast('Data tersinkronisasi dari server', 'success');
-  }catch(e){
+  } catch(e){
     console.warn(e);
     currentProducts = []; currentUsers = []; currentOrders = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
     toast('Gagal terhubung server. Memakai data default.', 'error');
@@ -685,7 +683,7 @@ async function fetchData(){
 function renderAll() {
   renderProductTable();
   renderUserTable();
-  renderOrderTable(); // <-- Render tabel pesanan
+  renderOrderTable();
   renderTestiTable();
   renderFaqTable();
   populateSettingsForm();
