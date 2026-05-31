@@ -500,6 +500,19 @@
     #mobileSearchBar input { width: 100%; padding: 10px 14px 10px 36px; background: var(--ash); border: 1.5px solid var(--bd); border-radius: var(--r-pill); font-family: var(--font); font-size: 14px; color: var(--ink); outline: none; }
     #mobileSearchBar .ms-ico { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); color: var(--mist2); font-size: 13px; pointer-events: none; }
     #mobileSearchBar > div { position: relative; }
+
+    /* ===== UPGRADE PLAN ===== */
+.upgrade-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 14px; }
+.upg-card { background: var(--sf); border: 2px solid var(--bd2); border-radius: var(--r-lg); padding: 18px; cursor: pointer; transition: var(--t); position: relative; overflow: hidden; text-align: center; }
+.upg-card.sel { border-color: var(--gold); background: var(--gold-p); box-shadow: var(--sh-gold); transform: translateY(-4px); }
+.upg-card:hover:not(.sel) { border-color: var(--mist2); }
+.upg-badge { position: absolute; top: 12px; right: -28px; background: var(--gold); color: var(--ink); font-size: 10px; font-weight: 800; padding: 4px 28px; transform: rotate(45deg); letter-spacing: 1px; box-shadow: var(--sh-sm); }
+.upg-title { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.upg-price { font-size: 26px; font-weight: 800; color: var(--gold-d); margin-bottom: 4px; }
+.upg-desc { font-size: 11.5px; color: var(--mist); font-weight: 600; margin-bottom: 16px; min-height: 34px; line-height: 1.5; }
+.upg-list { list-style: none; text-align: left; margin-bottom: 20px; padding-top: 14px; border-top: 1px dashed var(--bd2); }
+.upg-list li { font-size: 12px; color: var(--ink); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; font-weight: 600; }
+.upg-list li i { color: var(--green); font-size: 14px; margin-top: 1px; }
   </style>
 </head>
 <body>
@@ -843,6 +856,71 @@
     </div>
   </div>
 
+  <div id="upgradeOv" class="modal-ov" style="z-index: 550;">
+  <div class="modal-sheet" style="max-width: 700px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="upgTitle"><i class="fas fa-crown" style="color:var(--gold);margin-right:8px"></i>Upgrade Plan Membership</span>
+      <button class="modal-x" onclick="closeUpgradeModal()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" style="flex-direction: column;">
+      
+      <div id="upgStep1">
+        <p style="text-align:center;font-size:13.5px;color:var(--mist);font-weight:600">Tingkatkan profit Anda dengan <b style="color:var(--gold-d)">Diskon Super</b> di setiap transaksi!</p>
+        <div class="upgrade-cards">
+          <div class="upg-card" onclick="selectUpg('umum')" id="uc-umum">
+            <div class="upg-title">Umum</div>
+            <div class="upg-price">Rp0</div>
+            <div class="upg-desc">Plan dasar pengguna baru.</div>
+            <ul class="upg-list">
+              <li><i class="fas fa-check" style="color:var(--mist)"></i>Harga Normal</li>
+              <li><i class="fas fa-check" style="color:var(--mist)"></i>Akses Katalog Standard</li>
+            </ul>
+          </div>
+          <div class="upg-card sel" onclick="selectUpg('reseller')" id="uc-reseller">
+            <div class="upg-title" style="color:var(--blue)">Reseller</div>
+            <div class="upg-price">30K</div>
+            <div class="upg-desc">Balik modal hanya dalam 2-3 transaksi!</div>
+            <ul class="upg-list">
+              <li><i class="fas fa-check"></i>Diskon 5% Semua Produk</li>
+              <li><i class="fas fa-check"></i>Bebas Jual Kembali</li>
+              <li><i class="fas fa-check"></i>Grup WA Reseller</li>
+            </ul>
+          </div>
+          <div class="upg-card" onclick="selectUpg('vvip')" id="uc-vvip">
+            <div class="upg-badge">BEST</div>
+            <div class="upg-title" style="color:var(--gold-d)">VVIP</div>
+            <div class="upg-price">150K</div>
+            <div class="upg-desc">Pilihan SULTAN! Margin untung maksimal.</div>
+            <ul class="upg-list">
+              <li><i class="fas fa-check"></i>Diskon 10% Semua Produk</li>
+              <li><i class="fas fa-check"></i>Grup WA VIP Prioritas</li>
+              <li><i class="fas fa-check"></i>Prioritas Bantuan CS 24/7</li>
+            </ul>
+          </div>
+        </div>
+        <button class="confirm-btn" style="margin-top:20px" onclick="nextUpgStep()"><i class="fas fa-arrow-right"></i>Lanjut Pembayaran</button>
+      </div>
+
+      <div id="upgStep2" style="display:none; align-items:center; flex-direction:column;">
+        <div class="qris-box" style="width:100%; max-width:320px; margin: 0 auto;">
+          <div class="qris-title"><i class="fas fa-qrcode"></i>QRIS Pembayaran Upgrade</div>
+          <div id="upgQrcode"></div>
+          <div class="qris-amt" id="upgQrisAmt">Rp0</div>
+          <div class="qris-lbl">Scan untuk verifikasi pembayaran</div>
+          <button class="qris-copy" onclick="copyUpgAmt()"><i class="fas fa-copy"></i>Salin Nominal</button>
+        </div>
+        <div class="total-box" style="width:100%; margin-top:16px">
+            <div class="tb-row"><span>Plan Terpilih</span><span id="upgSelPlanName" style="font-weight:800;text-transform:uppercase;color:var(--gold-d)"></span></div>
+            <div class="tb-main"><span>Total Tagihan</span><span id="upgSelPlanPrice">Rp0</span></div>
+        </div>
+        <button class="confirm-btn" onclick="confirmUpgrade()"><i class="fas fa-paper-plane"></i>Saya Sudah Transfer</button>
+        <button class="btn-close-min" style="margin-top:8px" onclick="backUpgStep()">Kembali Ganti Plan</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
   <div class="toast-wrap"><div class="toast" id="toast"></div></div>
 
   <script>
@@ -1035,6 +1113,14 @@
     const color = BADGE_COLORS[badge] || '#6B7280';
     const bg = BADGE_BG[badge] || '#F3F4F6';
     const initials = currentUser.isGuest ? '?' : (currentUser.username||'U').slice(0,2).toUpperCase();
+    
+    // --- TAMBAHAN LOGIKA UPGRADE & GRUP WA ---
+    const isUmum = badge === 'umum';
+    // Jika plan umum, munculkan tombol upgrade. Jika bukan umum (reseller/vvip), munculkan link WA.
+    const upgradeMenu = isUmum ? `<button class="ud-item" onclick="openUpgradeModal()"><i class="fas fa-crown" style="color:var(--gold)"></i>Upgrade Plan VIP</button>` : '';
+    const waGroupMenu = !isUmum ? `<a href="https://chat.whatsapp.com/LinkGrupWADisini" target="_blank" class="ud-item" style="text-decoration:none"><i class="fab fa-whatsapp" style="color:#25d366"></i>Grup WA ${badge.toUpperCase()}</a>` : '';
+    // -----------------------------------------
+
     area.innerHTML = `
       <div class="u-chip-wrap" id="uChipWrap">
         <div class="user-chip" onclick="toggleUserMenu()">
@@ -1048,22 +1134,26 @@
             <div class="ud-name">${currentUser.isGuest ? 'Mode Tamu' : currentUser.username}</div>
             <div class="ud-contact">${currentUser.contact || currentUser.ip || ''}</div>
           </div>
+          
+          ${upgradeMenu}
+          ${waGroupMenu}
           ${!currentUser.isGuest ? `<button class="ud-item" onclick="openWLDrawer()"><i class="far fa-heart"></i>Wishlist Saya</button>` : ''}
           <button class="ud-item" onclick="openCartDrawer()"><i class="fas fa-bag-shopping"></i>Keranjang</button>
           <div class="ud-divider"></div>
           <button class="ud-item danger" onclick="doLogout()"><i class="fas fa-right-from-bracket"></i>${currentUser.isGuest ? 'Keluar Mode Tamu' : 'Keluar'}</button>
         </div>
       </div>`;
-  }
-  function toggleUserMenu() { document.getElementById('uDropdown')?.classList.toggle('on'); }
-  function doLogout() {
-    clearSession(); renderUserArea(); renderWLDrawer(); renderCartDrawer(); renderProducts();
-    showToast('Berhasil keluar.');
-    document.getElementById('uDropdown')?.classList.remove('on');
-  }
-  document.addEventListener('click', e => {
-    if (!e.target.closest('#uChipWrap')) document.getElementById('uDropdown')?.classList.remove('on');
-  });
+}
+
+function toggleUserMenu() { document.getElementById('uDropdown')?.classList.toggle('on'); }
+function doLogout() {
+  clearSession(); renderUserArea(); renderWLDrawer(); renderCartDrawer(); renderProducts();
+  showToast('Berhasil keluar.');
+  document.getElementById('uDropdown')?.classList.remove('on');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#uChipWrap')) document.getElementById('uDropdown')?.classList.remove('on');
+});
 
   // =============================================================================
   // WISHLIST & CART FUNCTIONS
@@ -1787,6 +1877,88 @@ function applySettings() {
 
   function handleResize() { const m = window.innerWidth <= 640; document.getElementById('mobileSearchBtn').style.display = m ? 'flex' : 'none'; }
   window.addEventListener('resize', handleResize); handleResize();
+
+  // =============================================================================
+// UPGRADE MEMBERSHIP LOGIC
+// =============================================================================
+const UPG_PRICES = { umum: 0, reseller: 30000, vvip: 150000 };
+let curUpgPlan = 'reseller';
+let upgQrEngine = null;
+
+function openUpgradeModal() {
+  if (currentUser.isGuest) {
+      showToast('Mode Tamu tidak bisa upgrade. Silakan Login/Daftar.', 'warn');
+      openAuth();
+      return;
+  }
+  document.getElementById('uDropdown')?.classList.remove('on');
+  document.getElementById('upgradeOv').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('upgStep1').style.display = 'block';
+  document.getElementById('upgStep2').style.display = 'none';
+  selectUpg('reseller'); // Default yg direkomendasikan
+}
+
+function closeUpgradeModal() {
+  document.getElementById('upgradeOv').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+function selectUpg(plan) {
+  curUpgPlan = plan;
+  document.querySelectorAll('.upg-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('uc-' + plan).classList.add('sel');
+}
+
+function nextUpgStep() {
+  if (curUpgPlan === 'umum') {
+      showToast('Anda sudah berada di plan Umum.', 'warn');
+      return;
+  }
+  
+  const price = UPG_PRICES[curUpgPlan];
+  document.getElementById('upgSelPlanName').textContent = curUpgPlan;
+  document.getElementById('upgSelPlanPrice').textContent = fmt(price);
+  document.getElementById('upgQrisAmt').textContent = fmt(price);
+
+  // Generate QRIS Upgrade
+  if (typeof QRCode !== 'undefined') {
+      const payload = buildQRIS(price);
+      const el = document.getElementById('upgQrcode');
+      if (upgQrEngine) { upgQrEngine.clear(); upgQrEngine.makeCode(payload); }
+      else { el.innerHTML = ''; upgQrEngine = new QRCode(el, {text: payload, width: 179, height: 179, colorDark: '#0A0A0F', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M}); }
+  }
+
+  document.getElementById('upgStep1').style.display = 'none';
+  document.getElementById('upgStep2').style.display = 'flex';
+}
+
+function backUpgStep() {
+  document.getElementById('upgStep1').style.display = 'block';
+  document.getElementById('upgStep2').style.display = 'none';
+}
+
+function copyUpgAmt() {
+  const t = UPG_PRICES[curUpgPlan];
+  navigator.clipboard.writeText(t).then(() => showToast('Nominal disalin!','ok')).catch(() => showToast('Gagal menyalin'));
+}
+
+function confirmUpgrade() {
+  const price = UPG_PRICES[curUpgPlan];
+  const invoiceText = `*INVOICE UPGRADE PLAN*\n──────────────────────\n👤 *Username:* ${currentUser.username}\n📞 *Kontak:* ${currentUser.contact}\n⭐ *Upgrade Ke:* ${curUpgPlan.toUpperCase()}\n💰 *Total Transfer:* ${fmt(price)}\n──────────────────────\nHalo Admin Bot, saya sudah transfer via QRIS. Mohon segera proses upgrade akun saya. Terima kasih!`;
+  
+  closeUpgradeModal();
+  
+  // Pinjam modal Success bawaan tapi modifikasi teksnya
+  document.getElementById('successOv').classList.add('on');
+  const sModal = document.querySelector('#successOv .succ-modal');
+  sModal.querySelector('h3').textContent = 'Menunggu Konfirmasi!';
+  sModal.querySelector('p').textContent = 'Klik tombol di bawah untuk kirim bukti transfer. Akun akan otomatis diupgrade dalam waktu maksimal 24 jam setelah verifikasi.';
+  
+  const waBtn = document.getElementById('invoiceWaBtn');
+  waBtn.href = `https://wa.me/${WA_NUM}?text=${encodeURIComponent(invoiceText)}`;
+  waBtn.innerHTML = '<i class="fab fa-whatsapp" style="font-size:17px"></i>Kirim Invoice Upgrade';
+}
 
   // =============================================================================
   // DATA LOAD & INIT
