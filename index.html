@@ -1999,16 +1999,10 @@ async function loadData(){
 // INIT
 // =============================================================================
 currentUser = loadSession();
-renderUserArea(); renderFAQ(); renderTestimonials();
-updateWLBadge(); updateCartBadge();
-loadData(); // Memulai proses penarikan data keseluruhan
-// =============================================================================
-// INIT
-// =============================================================================
-currentUser = loadSession();
-renderUserArea(); renderFAQ(); renderTestimonials();
-updateWLBadge(); updateCartBadge();
-loadData();
+renderUserArea(); 
+updateWLBadge(); 
+updateCartBadge();
+loadData(); // Proses tarik data (di dalam fungsi ini slider & FAQ baru akan dirender)
 </script>
 </body>
 </html>
