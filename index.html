@@ -1442,11 +1442,41 @@
     });
   }
 
-  function applySettings() {
-    if (storeSettings.togMaintenance === true || String(storeSettings.togMaintenance).toLowerCase() === 'true') {
-      document.getElementById('maintenanceScreen').classList.add('show');
-      document.body.style.overflow = 'hidden'; return;
+function applySettings() {
+    // 1. Ambil waktu saat ini dan ubah ke format WIB (Asia/Jakarta)
+    const now = new Date();
+    const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false };
+    const currentTime = new Intl.DateTimeFormat('id-ID', options).format(now); // Contoh: "08:30"
+
+    // 2. Cek status toggle dari settings
+    const isMaintenance = storeSettings.togMaintenance === true || String(storeSettings.togMaintenance).toLowerCase() === 'true';
+    const autoClose = storeSettings.autoClose === true || String(storeSettings.autoClose).toLowerCase() === 'true';
+    
+    // 3. Logika pengecekan jam operasional
+    let isTokoTutup = false;
+    if (autoClose && storeSettings.openTime && storeSettings.closeTime) {
+      // Jika jam saat ini kurang dari jam buka ATAU lebih dari/sama dengan jam tutup
+      if (currentTime < storeSettings.openTime || currentTime >= storeSettings.closeTime) {
+        isTokoTutup = true;
+      }
     }
+
+    // 4. Tampilkan layar penutup jika maintenance atau di luar jam operasional
+    if (isMaintenance || isTokoTutup) {
+      const mScreen = document.getElementById('maintenanceScreen');
+      mScreen.classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      // Ubah teks khusus jika tutup karena jadwal operasional (bukan maintenance manual)
+      if (isTokoTutup && !isMaintenance) {
+        mScreen.querySelector('.maintenance-icon').className = "fas fa-store-slash maintenance-icon";
+        mScreen.querySelector('.maintenance-title').textContent = "Toko Sedang Tutup";
+        mScreen.querySelector('.maintenance-desc').textContent = `Jam operasional kami adalah pukul ${storeSettings.openTime} - ${storeSettings.closeTime} WIB. Pemesanan via website ditutup sementara, namun Anda tetap bisa order manual.`;
+      }
+      return; // Berhenti mengeksekusi kode di bawahnya agar toko tetap tertutup
+    }
+
+    // --- Eksekusi pengaturan lainnya jika toko buka ---
     const sName = storeSettings.storeName || 'Farid Store';
     const parts = sName.split(' ');
     const nameHTML = parts.length > 1 ? `${parts[0]}<span>${parts.slice(1).join(' ')}</span>` : `${sName}<span></span>`;
