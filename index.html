@@ -396,13 +396,29 @@
     .step-con.done { background: var(--green); }
     .fm-lbl { font-size: 11px; font-weight: 700; color: var(--mist); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; margin-top: 13px; display: flex; align-items: center; gap: 5px; }
     .fm-lbl i { font-size: 11px; color: var(--gold); }
-    .period-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
-    .period-btn { padding: 8px 5px; background: var(--sf); border: 1.5px solid var(--bd2); border-radius: var(--r-md); font-family: var(--font); font-size: 11px; font-weight: 600; color: var(--mist); line-height: 1.3; text-align: center; transition: var(--t); }
-    .period-btn.sel { background: var(--ink); border-color: var(--ink); color: var(--gold); }
-    .period-btn:hover:not(.sel) { border-color: var(--gold); color: var(--ink); }
-    .period-price { font-size: 10px; font-weight: 800; color: var(--gold); display: block; margin-top: 2px; }
-    .period-btn.sel .period-price { color: var(--gold-l); }
-    .period-btn.disc-per .period-price-orig { font-size: 9px; color: var(--mist2); text-decoration: line-through; display: block; }
+    .period-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.period-btn { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 12px 6px; /* Lebih lega */
+  background: var(--sf); 
+  border: 1.5px solid var(--bd2); 
+  border-radius: var(--r-md); 
+  font-family: var(--font); 
+  font-size: 11.5px; 
+  font-weight: 700; 
+  color: var(--mist); 
+  text-align: center; 
+  transition: var(--t);
+  gap: 3px; /* Jarak rapi antar teks */
+}
+.period-btn.sel { background: var(--ink); border-color: var(--ink); color: #fff; box-shadow: var(--sh-sm); }
+.period-btn:hover:not(.sel) { border-color: var(--gold); color: var(--ink); background: var(--gold-p); }
+.period-price { font-size: 11px; font-weight: 800; color: var(--gold-d); }
+.period-btn.sel .period-price { color: var(--gold); }
+.period-price-orig { font-size: 9px; color: var(--mist2); text-decoration: line-through; }
     .qty-row { display: flex; align-items: center; gap: 9px; }
     .qty-btn { width: 34px; height: 34px; border: 1.5px solid var(--bd2); background: var(--sf); border-radius: var(--r-md); font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: var(--t); color: var(--ink); flex-shrink: 0; }
     .qty-btn:hover { border-color: var(--gold); background: var(--gold-p); color: var(--gold-d); }
@@ -1571,14 +1587,25 @@
     const pg = document.getElementById('periodGrid'); pg.innerHTML = '';
     periods.forEach(per => {
       const dp = discRate > 0 ? Math.round(per.price * (1 - discRate)) : per.price;
-      const b = document.createElement('button'); b.className = 'period-btn' + (per.label === curPeriod.label ? ' sel' : '');
-      b.innerHTML = `${per.label}<span class="period-price">${fmt(dp)}</span>${discRate > 0 ? `<span class="period-btn disc-per period-price-orig">${fmt(per.price)}</span>` : ''}`;
+      const b = document.createElement('button'); 
+      b.className = 'period-btn' + (per.label === curPeriod.label ? ' sel' : '');
+      
+      // Ini bagian yang diperbaiki
+      b.innerHTML = `
+        <span>${per.label}</span>
+        <span class="period-price">${fmt(dp)}</span>
+        ${discRate > 0 ? `<span class="period-price-orig">${fmt(per.price)}</span>` : ''}
+      `;
+      
       b.addEventListener('click', () => {
-        curPeriod = per; pg.querySelectorAll('.period-btn').forEach(x => x.classList.remove('sel')); b.classList.add('sel');
+        curPeriod = per; 
+        pg.querySelectorAll('.period-btn').forEach(x => x.classList.remove('sel')); 
+        b.classList.add('sel');
         const newDp = discRate > 0 ? Math.round(per.price * (1 - discRate)) : per.price;
         document.getElementById('modalProdPrice').textContent = fmt(newDp);
         document.getElementById('modalProdOrig').textContent = discRate > 0 ? fmt(per.price) : '';
-        updateTotal(); updateSteps(1);
+        updateTotal(); 
+        updateSteps(1);
       });
       pg.appendChild(b);
     });
