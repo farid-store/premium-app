@@ -72,6 +72,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .si-blue{background:var(--blue-soft);color:var(--blue-text)}
 .si-green{background:var(--green-soft);color:var(--green-text)}
 .si-amber{background:var(--amber-soft);color:var(--amber-text)}
+.si-purple{background:rgba(168,85,247,.15);color:#d8b4fe}
 .stat-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px}
 .sb-up{background:var(--green-soft);color:var(--green-text)}
 .stat-val{font-size:24px;font-weight:800;color:var(--text);line-height:1}
@@ -98,12 +99,13 @@ thead th{padding:11px 14px;font-size:11px;font-weight:700;color:var(--text2);tex
 tbody td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:rgba(255,255,255,.02)}
-.cell-input{width:100%;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:var(--transition)}
-.cell-input:focus{border-color:var(--brand);background:var(--surface2)}
 .img-thumb{width:38px;height:38px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);flex-shrink:0}
 .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:10px;cursor:pointer;transition:var(--transition);border:none;font-family:inherit}
 .sp-ready{background:var(--green-soft);color:var(--green-text)}
 .sp-pending{background:var(--amber-soft);color:var(--amber-text)}
+.badge-umum{background:var(--surface3);color:var(--text2)}
+.badge-reseller{background:var(--blue-soft);color:var(--blue-text)}
+.badge-vvip{background:rgba(245,158,11,.15);color:var(--amber-text);border:1px solid rgba(245,158,11,.3)}
 .action-btns{display:flex;gap:6px;justify-content:flex-start}
 .icon-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--transition)}
 .ib-danger{background:var(--red-soft);color:var(--red-text)}
@@ -189,6 +191,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   <nav class="sidebar-nav">
     <div class="nav-label">Manajemen</div>
     <button class="nav-item active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Katalog Produk <span class="nav-badge" id="navProdCount">0</span></button>
+    <button class="nav-item" onclick="switchTab('users',this)"><i class="fas fa-users"></i> Kelola Member</button>
     <button class="nav-item" onclick="switchTab('testimonials',this)"><i class="fas fa-star"></i> Kelola Ulasan</button>
     <button class="nav-item" onclick="switchTab('faqs',this)"><i class="fas fa-circle-question"></i> Kelola FAQ</button>
     
@@ -220,12 +223,16 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 
   <div class="content">
     
+    <!-- STATS (Hanya Muncul di Tab Produk) -->
     <div class="stats-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-blue"><i class="fas fa-box"></i></div><span class="stat-badge sb-up">↑ Live</span></div><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total Produk</div></div>
-      <div class="stat-card"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div></div><div class="stat-val" id="statReady">0</div><div class="stat-lbl">Status Ready</div></div>
-      <div class="stat-card"><div class="stat-top"><div class="stat-icon si-amber"><i class="fas fa-clock"></i></div></div><div class="stat-val" id="statPending">0</div><div class="stat-lbl">Status Pending</div></div>
+      <div class="stat-card"><div class="stat-top"><div class="stat-icon si-purple"><i class="fas fa-users"></i></div></div><div class="stat-val" id="statUsers">0</div><div class="stat-lbl">Total Member</div></div>
+      <div class="stat-card"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div></div><div class="stat-val" id="statReady">0</div><div class="stat-lbl">Produk Ready</div></div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- TAB: PRODUK -->
+    <!-- ============================================== -->
     <div class="panel-section active" id="panel-products">
       <div class="panel-header">
         <div><div class="panel-title">Katalog Produk</div><div class="panel-subtitle">Kelola produk beserta periode dan harganya masing-masing</div></div>
@@ -278,6 +285,44 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- TAB: KELOLA MEMBER / PENGGUNA -->
+    <!-- ============================================== -->
+    <div class="panel-section" id="panel-users">
+      <div class="panel-header">
+        <div><div class="panel-title">Manajemen Member</div><div class="panel-subtitle">Kelola tipe akun (Umum, Reseller, VVIP) untuk diskon pelanggan</div></div>
+      </div>
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="userSearch" placeholder="Cari username..." oninput="renderUserTable()"/></div>
+          <select class="category-select" id="badgeFilter" onchange="renderUserTable()">
+            <option value="">Semua Tipe Akun</option>
+            <option value="umum">Umum</option>
+            <option value="reseller">Reseller</option>
+            <option value="vvip">VVIP</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th style="width:180px">Kontak / WA</th>
+                <th style="width:120px">Tipe Akun</th>
+                <th style="width:160px">Device / IP</th>
+                <th style="width:80px;text-align:center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-footer"><span id="userCount">0 member</span></div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAB: TESTIMONI -->
+    <!-- ============================================== -->
     <div class="panel-section" id="panel-testimonials">
       <div class="panel-header">
         <div><div class="panel-title">Ulasan Pelanggan</div><div class="panel-subtitle">Kelola testimonial yang tampil di slider halaman utama</div></div>
@@ -301,6 +346,9 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- TAB: FAQ -->
+    <!-- ============================================== -->
     <div class="panel-section" id="panel-faqs">
       <div class="panel-header">
         <div><div class="panel-title">Pertanyaan Umum (FAQ)</div><div class="panel-subtitle">Kelola daftar tanya jawab yang tampil di bagian bawah toko</div></div>
@@ -322,24 +370,29 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- TAB: SETTINGS -->
+    <!-- ============================================== -->
     <div class="panel-section" id="panel-settings">
       <div class="panel-header">
         <div><div class="panel-title">Pengaturan Toko Terintegrasi</div><div class="panel-subtitle">Konfigurasi info, tema, diskon, dan konten dinamis</div></div>
       </div>
       <div class="settings-grid">
         
+        <!-- BRANDING & TEMA -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-palette"></i> Branding & Tema</div>
           <div class="form-group"><label>Warna Utama / Gold (Hex)</label><input type="color" id="set-colorMain"/></div>
           <div class="form-group"><label>Warna Gelap / Background (Hex)</label><input type="color" id="set-colorDark"/></div>
-          <div class="form-group"><label>Teks Ticker / Running Text (Pisahkan dengan Koma)</label><textarea id="set-tickerText" rows="3" placeholder="Proses Instan, Garansi Penuh, dll..."></textarea></div>
+          <div class="form-group"><label>Teks Ticker / Running Text (Pisahkan koma)</label><textarea id="set-tickerText" rows="3"></textarea></div>
         </div>
 
+        <!-- DISKON MEMBER -->
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-tags"></i> Pengaturan Diskon Member</div>
           <div class="form-group"><label>Diskon Akun Reseller (%)</label><input type="number" id="set-discReseller" placeholder="5" min="0" max="100"/></div>
           <div class="form-group"><label>Diskon Akun VVIP (%)</label><input type="number" id="set-discVvip" placeholder="10" min="0" max="100"/></div>
-          <p style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5">Harga diskon akan otomatis dikalkulasi pada keranjang dan modal pemesanan pelanggan.</p>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5">Ubah tipe akun pelanggan di tab "Kelola Member" agar diskon aktif.</p>
         </div>
 
         <div class="settings-card">
@@ -390,6 +443,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- ================= MODAL PRODUK ================= -->
 <div class="modal-bg" id="productModal">
   <div class="modal-box">
     <div class="modal-hd"><h3 id="productModalTitle">Tambah Produk Baru</h3><button class="modal-close" onclick="closeModal('productModal')"><i class="fas fa-xmark"></i></button></div>
@@ -425,6 +479,28 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- ================= MODAL EDIT MEMBER ================= -->
+<div class="modal-bg" id="userModal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-hd"><h3 id="userModalTitle">Edit Member</h3><button class="modal-close" onclick="closeModal('userModal')"><i class="fas fa-xmark"></i></button></div>
+    <div class="modal-body-inner">
+      <div class="form-group"><label>Username (Tidak bisa diubah)</label><input type="text" id="um-name" readonly style="opacity:0.7;cursor:not-allowed"/></div>
+      <div class="form-group"><label>Kontak / WA / Telegram</label><input type="text" id="um-contact"/></div>
+      <div class="form-group"><label>Tipe Akun (Badge)</label>
+        <select id="um-badge">
+          <option value="umum">Umum (Tanpa Diskon)</option>
+          <option value="reseller">Reseller</option>
+          <option value="vvip">VVIP</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="topbar-btn tb-primary" onclick="saveUser()"><i class="fas fa-check"></i> Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL TESTIMONI ================= -->
 <div class="modal-bg" id="testiModal">
   <div class="modal-box" style="max-width:460px">
     <div class="modal-hd"><h3 id="testiModalTitle">Tambah Ulasan</h3><button class="modal-close" onclick="closeModal('testiModal')"><i class="fas fa-xmark"></i></button></div>
@@ -440,6 +516,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- ================= MODAL FAQ ================= -->
 <div class="modal-bg" id="faqModal">
   <div class="modal-box" style="max-width:460px">
     <div class="modal-hd"><h3 id="faqModalTitle">Tambah FAQ</h3><button class="modal-close" onclick="closeModal('faqModal')"><i class="fas fa-xmark"></i></button></div>
@@ -460,51 +537,35 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 // STATE KESELURUHAN & DEFAULT
 // ==========================================
 let currentProducts = [];
+let currentUsers = [];
 let currentTestimonials = [];
 let currentFaqs = [];
 let settings = {};
 
 let editingProductIdx = null;
+let editingUserIdx = null;
 let editingTestiIdx = null;
 let editingFaqIdx = null;
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
 
 const defaultSettings = {
-  // Tema & Branding
   colorMain: '#C9A84C', colorDark: '#0A0A0F',
   tickerText: 'Proses Instan 1–5 Menit, Garansi Penuh Semua Produk, Rating 4.9/5 dari 2000+ Pelanggan, CS Online 24/7',
   discReseller: 5, discVvip: 10,
-  
-  // Info Toko
-  storeName: 'Farid Store', city: 'Pekanbaru', postal: '28294',
-  desc: 'Platform terpercaya untuk aplikasi premium harga terjangkau.',
-  
-  // QRIS
+  storeName: 'Farid Store', city: 'Pekanbaru', postal: '28294', desc: 'Platform terpercaya untuk aplikasi premium harga terjangkau.',
   qrisMid: '93600915300002827902090000282790', qrisType: '12', qrisMerchant: 'Farid Store',
-  
-  // Kontak
   wa: '6281371127121', tg: '@faridstore', ig: '@faridstore',
-  
-  // Stats
   statCust: '2000+', statProd: '50+', statSat: '99%', statTime: '<5m',
-  
-  // Toggles
   togQris: true, togWa: true, togRating: true, togMaintenance: false
 };
 
-// Default Dummy jika DB kosong
-const dummyTesti = [
-  {name:'Rizky A.', rating:5, text:'"Prosesnya cepet banget, ga nyampe 5 menit!"', date:'2 hari lalu'}
-];
-const dummyFaq = [
-  {q:'Berapa lama proses aktivasi?', a:'1–5 menit setelah pembayaran dikonfirmasi.'}
-];
+const dummyTesti = [{name:'Rizky A.', rating:5, text:'"Prosesnya cepet banget, ga nyampe 5 menit!"', date:'2 hari lalu'}];
+const dummyFaq = [{q:'Berapa lama proses aktivasi?', a:'1–5 menit setelah pembayaran dikonfirmasi.'}];
 
-// ===== TOAST & UI HELPERS =====
+// ===== UI HELPERS =====
 function toast(msg, type='info'){
-  const t=document.getElementById('toast');
-  const icons={info:'fa-circle-info',success:'fa-circle-check',error:'fa-circle-xmark'};
+  const t=document.getElementById('toast'); const icons={info:'fa-circle-info',success:'fa-circle-check',error:'fa-circle-xmark'};
   t.className='toast t-'+type; t.querySelector('i').className='fas '+icons[type];
   document.getElementById('toastMsg').textContent=msg;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
@@ -516,6 +577,7 @@ function closeModal(id){const m=document.getElementById(id);m.classList.remove('
 
 const tabTitles={
   'products':'Katalog Produk <span>/ Kelola semua produk</span>',
+  'users':'Manajemen Member <span>/ Kelola tipe akun dan diskon</span>',
   'testimonials':'Ulasan Pelanggan <span>/ Kelola testimonial halaman depan</span>',
   'faqs':'Pertanyaan Umum <span>/ Kelola FAQ (Tanya Jawab)</span>',
   'settings':'Pengaturan Terintegrasi <span>/ Konfigurasi & CMS</span>'
@@ -528,7 +590,6 @@ function switchTab(tab, btn){
   if(btn) btn.classList.add('active');
   document.getElementById('topbarTitle').innerHTML=tabTitles[tab]||tab;
   
-  // Toggle Visibility Stats Panel Hero
   document.getElementById('statsGrid').style.display = (tab === 'products') ? 'grid' : 'none';
   closeSidebar();
 }
@@ -546,6 +607,9 @@ async function fetchData(){
     settings = dataObj.settings || defaultSettings;
     currentTestimonials = dataObj.testimonials || dummyTesti;
     currentFaqs = dataObj.faqs || dummyFaq;
+    
+    // Anggap data user juga disimpan di payload yang sama, jika tidak, bisa panggil fetch('/api/users')
+    currentUsers = dataObj.users || []; 
 
     currentProducts = currentProducts.map(p => {
       if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
@@ -555,14 +619,24 @@ async function fetchData(){
     toast('Data tersinkronisasi dari server', 'success');
   }catch(e){
     console.warn(e);
-    currentProducts = []; settings = defaultSettings; currentTestimonials = dummyTesti; currentFaqs = dummyFaq;
-    toast('Gagal terhubung server. Memakai data default memori.', 'error');
+    currentProducts = []; currentUsers = []; settings = defaultSettings; currentTestimonials = dummyTesti; currentFaqs = dummyFaq;
+    toast('Gagal terhubung server. Memakai data default.', 'error');
   }
+  
+  // Jika masih belum ada user (dummy)
+  if(currentUsers.length === 0) {
+    currentUsers = [
+      {id:'u_budigaming', username:'BudiGaming', contact:'08123456789', badge:'reseller', device:'Android', ts: Date.now() - 86400000},
+      {id:'u_siti_123', username:'Siti_123', contact:'siti@email.com', badge:'umum', device:'iOS', ts: Date.now()}
+    ];
+  }
+
   renderAll();
 }
 
 function renderAll() {
   renderProductTable();
+  renderUserTable();
   renderTestiTable();
   renderFaqTable();
   populateSettingsForm();
@@ -572,7 +646,7 @@ function renderAll() {
 function updateStats(){
   document.getElementById('statTotal').textContent = currentProducts.length;
   document.getElementById('statReady').textContent = currentProducts.filter(p=>p.status==='ready').length;
-  document.getElementById('statPending').textContent = currentProducts.filter(p=>p.status==='pending').length;
+  document.getElementById('statUsers').textContent = currentUsers.length;
   document.getElementById('navProdCount').textContent = currentProducts.length;
 }
 
@@ -590,8 +664,7 @@ function renderProductTable(){
   if(statF) data=data.filter(p=>p.status===statF);
   
   document.getElementById('tableCount').textContent=data.length+' produk ditampilkan';
-  const tbody=document.getElementById('productTableBody');
-  tbody.innerHTML='';
+  const tbody=document.getElementById('productTableBody'); tbody.innerHTML='';
   if(data.length===0){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text2)">Tidak ada produk.</td></tr>';return;}
   
   data.forEach((item)=>{
@@ -620,8 +693,7 @@ function renderProductTable(){
 function filterTable(){renderProductTable();}
 function toggleStatus(idx, btn){
   const s=currentProducts[idx].status==='ready'?'pending':'ready';
-  currentProducts[idx].status=s;
-  btn.className='status-pill sp-'+s; btn.textContent=s==='ready'?'✓ Ready':'⏳ Pending'; updateStats();
+  currentProducts[idx].status=s; btn.className='status-pill sp-'+s; btn.textContent=s==='ready'?'✓ Ready':'⏳ Pending'; updateStats();
 }
 function onRowCheck(){
   const checked=document.querySelectorAll('.row-check:checked');
@@ -685,6 +757,61 @@ function saveProduct(){
 function deleteProduct(idx){
   if(!confirm('Hapus produk ini?')) return;
   currentProducts.splice(idx,1); renderProductTable(); updateStats(); toast('Dihapus dari memori','info');
+}
+
+// ==========================================
+// 1.5 MANAJEMEN PENGGUNA (MEMBER)
+// ==========================================
+function renderUserTable(){
+  const search = document.getElementById('userSearch').value.toLowerCase();
+  const badgeF = document.getElementById('badgeFilter').value;
+  let data = currentUsers.filter(u => !u.isGuest); // Jangan tampilkan Guest sementara
+  
+  if(search) data = data.filter(u => (u.username||'').toLowerCase().includes(search) || (u.contact||'').toLowerCase().includes(search));
+  if(badgeF) data = data.filter(u => (u.badge||'umum') === badgeF);
+  
+  document.getElementById('userCount').textContent = data.length + ' member';
+  const tbody = document.getElementById('userTableBody'); tbody.innerHTML='';
+  if(data.length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text2)">Tidak ada member.</td></tr>';return;}
+  
+  data.forEach(u => {
+    const idx = currentUsers.findIndex(x => x.id === u.id);
+    const b = u.badge || 'umum';
+    const bLabel = b.toUpperCase();
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-weight:700;color:var(--text)">${u.username}</td>
+      <td style="color:var(--text2)">${u.contact || '-'}</td>
+      <td><span class="status-pill badge-${b}" style="font-size:10px">${bLabel}</span></td>
+      <td><div style="font-size:12px;color:var(--text2)">${u.device||'-'}</div></td>
+      <td>
+        <div class="action-btns">
+          <button class="icon-btn ib-blue" onclick="openEditUser(${idx})"><i class="fas fa-pen"></i></button>
+          <button class="icon-btn ib-danger" onclick="deleteUser(${idx})"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+function openEditUser(idx){
+  editingUserIdx = idx; const u = currentUsers[idx];
+  document.getElementById('um-name').value = u.username;
+  document.getElementById('um-contact').value = u.contact || '';
+  document.getElementById('um-badge').value = u.badge || 'umum';
+  openModal('userModal');
+}
+function saveUser(){
+  const u = currentUsers[editingUserIdx];
+  u.contact = document.getElementById('um-contact').value.trim();
+  u.badge = document.getElementById('um-badge').value;
+  closeModal('userModal'); renderUserTable(); toast('Data member diperbarui','info');
+}
+function deleteUser(idx){
+  if(confirm('Hapus member ini? Seluruh data akun terkait akan hilang.')){
+    currentUsers.splice(idx,1); renderUserTable(); updateStats(); toast('Member dihapus','info');
+  }
 }
 
 // ==========================================
@@ -834,9 +961,10 @@ async function saveAllToDatabase(){
   const btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
   
-  // Menggabungkan 4 modul: Products, Settings, Testimonials, Faqs
+  // Menggabungkan seluruh data state menjadi 1 Payload Besar
   const masterPayload = {
     products: currentProducts,
+    users: currentUsers,
     settings: settings,
     testimonials: currentTestimonials,
     faqs: currentFaqs
@@ -850,7 +978,7 @@ async function saveAllToDatabase(){
     });
     
     if(!r.ok) throw new Error('API Error');
-    toast('Berhasil! Semua konfigurasi (Tema, Produk, Ulasan) tersimpan ke DB.', 'success');
+    toast('Berhasil! Semua konfigurasi (Tema, Produk, Member, dll) tersimpan ke DB.', 'success');
   }catch(e){
     toast('Gagal mengupload. Periksa koneksi API Vercel.', 'error');
   }finally{
