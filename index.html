@@ -904,7 +904,7 @@
       <div id="upgStep2" style="display:none; align-items:center; flex-direction:column;">
         <div class="qris-box" style="width:100%; max-width:320px; margin: 0 auto;">
           <div class="qris-title"><i class="fas fa-qrcode"></i>QRIS Pembayaran Upgrade</div>
-          <div id="upgQrcode"></div>
+          <div id="upgQrcode" style="display: flex; justify-content: center; align-items: center; margin: 0 auto; padding: 10px 0;"></div>
           <div class="qris-amt" id="upgQrisAmt">Rp0</div>
           <div class="qris-lbl">Scan untuk verifikasi pembayaran</div>
           <button class="qris-copy" onclick="copyUpgAmt()"><i class="fas fa-copy"></i>Salin Nominal</button>
@@ -1195,26 +1195,38 @@ document.addEventListener('click', e => {
     });
   }
 
-  function renderWLDrawer() {
+function renderWLDrawer() {
     wishlist = loadWL();
     const body = document.getElementById('wlBody');
     if (!body) return;
+    
     if (wishlist.length === 0) {
-      body.innerHTML = '<div class="cart-empty"><i class="far fa-heart"></i><p>Wishlist masih kosong</p></div>'; return;
+      body.innerHTML = '<div class="cart-empty"><i class="far fa-heart"></i><p>Wishlist masih kosong</p></div>'; 
+      return;
     }
+    
+    // Ambil rate diskon user saat ini secara real-time
+    const discRate = getDiscRate();
     const items = allProducts.filter(p => wishlist.some(w => String(w) === String(p.id || p.name)));
+    
     body.innerHTML = items.map(p => {
-      const dp = p.variants && p.variants.length > 0 ? p.variants[0].price : p.price || 0;
+      // Hitung harga dasar lalu potong dengan diskon (jika ada)
+      const basePrice = p.variants && p.variants.length > 0 ? p.variants[0].price : p.price || 0;
+      const currentDiscPrice = Math.round(basePrice * (1 - discRate));
+      
       const pid = String(p.id || p.name);
       const safePidStr = pid.replace(/'/g, "\\'");
       return `<div class="cart-item">
         <img class="ci-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/50x50/f2f2f8/8b8ba7?text=Img'"/>
-        <div class="ci-info"><div class="ci-name">${p.name}</div><div class="ci-sub">${p.cat} · ${fmt(dp)}</div></div>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-sub">${p.cat} · ${fmt(currentDiscPrice)}</div>
+        </div>
         <button class="t-btn t-ghost" style="padding:6px 10px;font-size:12px" onclick="openModal(allProducts.find(x=>String(x.id||x.name)==='${safePidStr}'))">Beli</button>
         <button class="ci-del" onclick="toggleWL('${safePidStr}', '')"><i class="fas fa-xmark"></i></button>
       </div>`;
     }).join('');
-  }
+}
 
   function openWLDrawer() {
     renderWLDrawer();
@@ -1254,30 +1266,47 @@ document.addEventListener('click', e => {
     el.textContent = total; total > 0 ? el.classList.add('on') : el.classList.remove('on');
   }
 
-  function renderCartDrawer() {
+function renderCartDrawer() {
     cartItems = loadCart();
     const body = document.getElementById('cartBody');
     const ft = document.getElementById('cartFt');
+    
     if (cartItems.length === 0) {
       body.innerHTML = '<div class="cart-empty"><i class="fas fa-bag-shopping"></i><p>Keranjang masih kosong</p></div>';
-      ft.style.display = 'none'; return;
+      ft.style.display = 'none'; 
+      return;
     }
-    body.innerHTML = cartItems.map(item => `
+    
+    // Ambil rate diskon user saat ini secara real-time
+    const discRate = getDiscRate();
+    
+    body.innerHTML = cartItems.map(item => {
+      // Selalu kalkulasi ulang harga diskon dari harga dasar (item.price)
+      const currentDiscPrice = Math.round(item.price * (1 - discRate));
+      
+      return `
       <div class="cart-item">
         <img class="ci-img" src="${item.img}" alt="${item.name}" onerror="this.src='https://placehold.co/50x50/f2f2f8/8b8ba7?text=Img'"/>
         <div class="ci-info">
           <div class="ci-name">${item.name}</div>
           <div class="ci-sub">${item.period} × ${item.qty}</div>
         </div>
-        <span class="ci-price">${fmt((item.discPrice || item.price) * item.qty)}</span>
+        <span class="ci-price">${fmt(currentDiscPrice * item.qty)}</span>
         <button class="ci-del" onclick="removeFromCart('${item.key}')"><i class="fas fa-xmark"></i></button>
-      </div>`).join('');
-    const sub = cartItems.reduce((s,i) => s + (i.discPrice || i.price) * i.qty, 0);
+      </div>`;
+    }).join('');
+    
+    // Kalkulasi subtotal menggunakan currentDiscPrice yang baru
+    const sub = cartItems.reduce((s, i) => {
+      const currentDiscPrice = Math.round(i.price * (1 - discRate));
+      return s + (currentDiscPrice * i.qty);
+    }, 0);
+    
     document.getElementById('cartSubtotal').textContent = fmt(sub);
     document.getElementById('cartTotal').textContent = fmt(sub);
     document.getElementById('cartItemCount').textContent = cartItems.reduce((s,i) => s + i.qty, 0) + ' produk';
     ft.style.display = 'block';
-  }
+}
 
   function openCartDrawer() {
     renderCartDrawer();
