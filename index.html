@@ -1496,31 +1496,40 @@ function renderFeatured(){
 }
 
 // =============================================================================
-// RENDER TESTIMONIALS
+// RENDER TESTIMONIALS (DINAMIS DARI API)
 // =============================================================================
-const TESTIMONIALS = [
-  {name:'Rizky A.',av:'RA',color:'#4338CA',bg:'#EEF2FF',rating:5,text:'"Prosesnya cepet banget, ga nyampe 5 menit akun Netflix langsung aktif! Harga paling murah."',date:'2 hari lalu'},
-  {name:'Siti M.',av:'SM',color:'#166534',bg:'#DCFCE7',rating:5,text:'"Udah berlangganan Spotify 3 bulan, ga pernah ada masalah. CS-nya responsif banget!"',date:'1 minggu lalu'},
-  {name:'Budi S.',av:'BS',color:'#9D174D',bg:'#FCE7F3',rating:5,text:'"YouTube Premium langsung aktif setelah bayar QRIS. Worth it banget, recommended!"',date:'3 hari lalu'},
-  {name:'Dewi R.',av:'DR',color:'#0369A1',bg:'#E0F2FE',rating:4,text:'"Pelayanan oke, produk lengkap. Sempat ada kendala tapi langsung dibantu admin."',date:'5 hari lalu'},
-  {name:'Andi P.',av:'AP',color:'#92400E',bg:'#FEF3C7',rating:5,text:'"Canva Pro harganya murah banget di sini. Proses aktivasi juga gampang dan cepat."',date:'1 minggu lalu'},
-  {name:'Maya K.',av:'MK',color:'#166534',bg:'#DCFCE7',rating:5,text:'"Sudah 6 bulan pakai layanan ini, belum pernah kecewa. Admin fast respon 24 jam!"',date:'4 hari lalu'},
-];
+let allTestimonials = []; // State untuk menyimpan data dari API
+
 function renderTestimonials(){
   const track = document.getElementById('testiSlider');
+  track.innerHTML = '';
   
-  // Duplikat agar cukup untuk infinite slider
-  let items = [...TESTIMONIALS];
-  while(items.length < 10) { items = [...items, ...TESTIMONIALS]; }
+  if(!allTestimonials || allTestimonials.length === 0){
+    document.getElementById('testiSection').style.display = 'none'; // Sembunyikan jika kosong
+    return;
+  }
+  document.getElementById('testiSection').style.display = 'block';
 
-  items.forEach(t=>{
+  // Duplikat agar cukup untuk infinite slider
+  let items = [...allTestimonials];
+  while(items.length < 10 && items.length > 0) { items = [...items, ...allTestimonials]; }
+
+  // Array warna acak untuk avatar pelanggan jika tidak ada foto
+  const bgColors = ['#EEF2FF', '#DCFCE7', '#FCE7F3', '#E0F2FE', '#FEF3C7'];
+  const textColors = ['#4338CA', '#166534', '#9D174D', '#0369A1', '#92400E'];
+
+  items.forEach((t, i)=>{
     const stars = '★'.repeat(t.rating)+'☆'.repeat(5-t.rating);
+    const avTxt = t.name ? t.name.substring(0,2).toUpperCase() : 'U';
+    const bgC = bgColors[i % bgColors.length];
+    const txtC = textColors[i % textColors.length];
+
     const card = document.createElement('div'); card.className='testi-card';
     card.innerHTML=`
       <div class="testi-stars">${stars}</div>
       <div class="testi-text">${t.text}</div>
       <div class="testi-user">
-        <div class="testi-av" style="background:${t.bg};color:${t.color}">${t.av}</div>
+        <div class="testi-av" style="background:${bgC};color:${txtC}">${avTxt}</div>
         <div><div class="testi-name">${t.name}</div><div class="testi-date">${t.date}</div></div>
         <span class="testi-ok">✓ Terverifikasi</span>
       </div>`;
@@ -1531,19 +1540,21 @@ function renderTestimonials(){
 }
 
 // =============================================================================
-// FAQ
+// FAQ (DINAMIS DARI API)
 // =============================================================================
-const FAQS=[
-  {q:'Berapa lama proses aktivasi akun?',a:'1–5 menit setelah pembayaran dikonfirmasi admin.'},
-  {q:'Apakah ada garansi jika akun bermasalah?',a:'Ya! Semua produk bergaransi penuh. Akun akan diganti tanpa biaya tambahan.'},
-  {q:'Metode pembayaran apa yang tersedia?',a:'QRIS (scan QR langsung di modal), transfer bank, dan e-wallet.'},
-  {q:'Bagaimana cara order tanpa paham QRIS?',a:'Klik tombol "Chat Langsung ke Admin WA" dan admin akan memandu prosesnya.'},
-  {q:'Akun shared atau private?',a:'Tergantung produk — info tertera di deskripsi. Private = full akses.'},
-  {q:'Apa keuntungan punya akun terdaftar?',a:'Wishlist & keranjang tersimpan permanen, bisa dapat badge Reseller atau VVIP dengan diskon khusus.'},
-];
+let allFaqs = []; // State untuk menyimpan data dari API
+
 function renderFAQ(){
   const g = document.getElementById('faqGrid');
-  FAQS.forEach(f=>{
+  g.innerHTML = '';
+  
+  if(!allFaqs || allFaqs.length === 0){
+    document.getElementById('mainFaq').style.display = 'none'; // Sembunyikan jika kosong
+    return;
+  }
+  document.getElementById('mainFaq').style.display = 'block';
+
+  allFaqs.forEach(f=>{
     const d = document.createElement('div'); d.className='faq-item';
     d.innerHTML=`<div class="faq-q">${f.q}<i class="fas fa-chevron-down"></i></div><div class="faq-a">${f.a}</div>`;
     d.addEventListener('click',()=>d.classList.toggle('open')); g.appendChild(d);
@@ -1853,8 +1864,18 @@ async function loadData(){
   try{
     const r=await fetch('/api/products'); if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json(); const dataObj=d.record?d.record:d;
-    allProducts=dataObj.products||[]; storeSettings=dataObj.settings||{};
-    applySettings(); renderFeatured(); renderProducts();
+    
+    allProducts=dataObj.products||[]; 
+    storeSettings=dataObj.settings||{};
+    allTestimonials=dataObj.testimonials||[]; // Tangkap data ulasan
+    allFaqs=dataObj.faqs||[]; // Tangkap data FAQ
+    
+    applySettings(); 
+    renderFeatured(); 
+    renderProducts();
+    renderTestimonials(); // Render setelah data ditarik
+    renderFAQ(); // Render setelah data ditarik
+    
     updateWLBadge(); updateCartBadge();
   } catch(e){
     console.error(e);
@@ -1862,6 +1883,15 @@ async function loadData(){
     document.getElementById('productGrid').innerHTML=`<div class="empty-st"><div class="empty-ic" style="background:#FEE2E2;color:#DC2626"><i class="fas fa-times-circle"></i></div><h3>Koneksi Server Gagal</h3><p>Silakan refresh halaman.</p></div>`;
   }
 }
+
+// =============================================================================
+// INIT
+// =============================================================================
+currentUser = loadSession();
+renderUserArea(); 
+updateWLBadge(); 
+updateCartBadge();
+loadData(); // Memulai proses penarikan data keseluruhan
 
 // =============================================================================
 // INIT
