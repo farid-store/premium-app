@@ -971,6 +971,8 @@ const DISC_RATES = {umum:0,reseller:0.05,vvip:0.10}; // configurable via setting
 
 let allProducts = [];
 let storeSettings = {};
+let allUsers = []; // Variabel baru untuk menampung data member
+let fullDataPayload = {}; // Variabel baru untuk menyimpan struktur JSON utuh
 let curProduct = null, curQty = 1, curPeriod = null;
 let qrEngine = null;
 let cdTimer = null;
@@ -1059,47 +1061,93 @@ function switchAuthTab(tab){
   document.getElementById('tabRegister').classList.toggle('active', tab==='register');
 }
 
-// Login
+// Login Real (Cek ke Database)
 document.getElementById('loginBtn').addEventListener('click', async ()=>{
   const u = document.getElementById('loginUser').value.trim();
   const c = document.getElementById('loginContact').value.trim();
-  if(!u||!c){ showToast('Isi username dan kontak'); return; }
-  const ip = await getIP();
-  // Look up user from DB (via API) or create session by matching username+contact
-  let userData = null;
-  try{
-    const r = await fetch(`/api/users?username=${encodeURIComponent(u)}&contact=${encodeURIComponent(c)}`);
-    if(r.ok){ const d = await r.json(); if(d.found) userData = d.user; }
-  } catch(e){}
-  if(!userData){
-    // Create new or fallback local
-    userData = { id: 'u_'+u.toLowerCase().replace(/\W/g,''), username: u, contact: c, badge:'umum', isGuest:false, ip, device:getDevice(), ts:Date.now() };
+  if(!u||!c){ showToast('Isi username dan kontak', 'warn'); return; }
+  
+  // 1. Cek apakah ada kecocokan di database
+  const foundUser = allUsers.find(x => x.username.toLowerCase() === u.toLowerCase() && x.contact === c);
+  
+  if(foundUser){
+    const ip = await getIP();
+    foundUser.ip = ip; 
+    foundUser.device = getDevice(); 
+    foundUser.ts = Date.now();
+    foundUser.isGuest = false;
+    
+    currentUser = foundUser; 
+    saveSession(foundUser);
+    
+    renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
+    showToast('Selamat datang kembali, '+foundUser.username+'! 👋', 'ok');
+  } else {
+    // 2. Jika tidak ada di database, tolak akses!
+    showToast('Akun tidak ditemukan. Silakan daftar terlebih dahulu.', 'warn');
   }
-  userData.ip = ip; userData.device = getDevice(); userData.ts = Date.now();
-  currentUser = userData; saveSession(userData);
-  renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
-  showToast('Selamat datang, '+u+'! 👋', 'ok');
 });
 
-// Register
+// Register Real (Simpan ke Database)
 document.getElementById('registerBtn').addEventListener('click', async ()=>{
   const u = document.getElementById('regUser').value.trim();
   const c = document.getElementById('regContact').value.trim();
-  if(!u||!c){ showToast('Isi username dan kontak'); return; }
-  if(u.length < 3){ showToast('Username minimal 3 karakter'); return; }
+  if(!u||!c){ showToast('Isi username dan kontak', 'warn'); return; }
+  if(u.length < 3){ showToast('Username minimal 3 karakter', 'warn'); return; }
+  
+  // 1. Cegah username ganda
+  const isExist = allUsers.some(x => x.username.toLowerCase() === u.toLowerCase());
+  if(isExist){
+    showToast('Username sudah terdaftar, silakan login.', 'warn');
+    return;
+  }
+
+  const btn = document.getElementById('registerBtn');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendaftar...';
+  btn.disabled = true;
+
   const ip = await getIP();
-  const newUser = { id:'u_'+u.toLowerCase().replace(/\W/g,'')+'_'+Date.now(), username:u, contact:c, badge:'umum', isGuest:false, ip, device:getDevice(), ts:Date.now() };
-  // Try register via API
+  const newUser = { 
+    id:'u_'+u.toLowerCase().replace(/\W/g,'')+'_'+Date.now(), 
+    username:u, 
+    contact:c, 
+    badge:'umum', 
+    isGuest:false, 
+    ip, 
+    device:getDevice(), 
+    ts:Date.now() 
+  };
+  
+  // 2. Masukkan user baru ke memori dan update struktur payload JSON
+  allUsers.push(newUser);
+  fullDataPayload.users = allUsers; 
+
+  // 3. Tembak/Upload ke server Vercel (bersamaan dengan data produk)
   try{
-    const r = await fetch('/api/users', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(newUser) });
-    if(r.ok){ const d = await r.json(); if(d.user) Object.assign(newUser, d.user); }
-  } catch(e){}
-  currentUser = newUser; saveSession(newUser);
-  renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
-  showToast('Akun berhasil dibuat! Selamat datang '+u+' 🎉', 'ok');
+    const r = await fetch('/api/products', { 
+      method:'PUT', 
+      headers:{'Content-Type':'application/json'}, 
+      body:JSON.stringify(fullDataPayload) 
+    });
+    
+    if(!r.ok) throw new Error('Gagal simpan');
+    
+    currentUser = newUser; 
+    saveSession(newUser);
+    renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
+    showToast('Akun berhasil dibuat! Selamat datang '+u+' 🎉', 'ok');
+  } catch(e){
+    // Jika upload gagal, batalkan akun yang baru dibuat tadi
+    allUsers.pop(); 
+    showToast('Gagal mendaftar. Periksa koneksi Anda.', 'error');
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
 });
 
-// Guest
+// Guest (Mode Tamu Tetap Lokal)
 document.getElementById('guestBtn').addEventListener('click', async ()=>{
   const ip = await getIP();
   const gid = 'guest_'+ip.replace(/\./g,'_')+'_'+getDevice().replace(/\s/g,'');
