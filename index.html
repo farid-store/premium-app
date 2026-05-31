@@ -1018,9 +1018,12 @@ function saveCart(arr){ localStorage.setItem(cartKey(), JSON.stringify(arr)); }
 function getDiscRate(){
   if(!currentUser || currentUser.isGuest) return 0;
   const badge = currentUser.badge || 'umum';
-  const discSettings = storeSettings.discRates || {};
-  if(discSettings[badge] !== undefined) return discSettings[badge] / 100;
-  return DISC_RATES[badge] || 0;
+  
+  // Ambil persentase diskon dari setting admin, jika kosong pakai default (5% / 10%)
+  if(badge === 'reseller') return (storeSettings.discReseller !== undefined ? storeSettings.discReseller : 5) / 100;
+  if(badge === 'vvip') return (storeSettings.discVvip !== undefined ? storeSettings.discVvip : 10) / 100;
+  
+  return 0; // Akun umum tidak dapat diskon
 }
 
 // =============================================================================
@@ -1913,14 +1916,29 @@ async function loadData(){
     const r=await fetch('/api/products'); if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json(); const dataObj=d.record?d.record:d;
     
-    // Simpan struktur DB utuh untuk keperluan pendaftaran
     fullDataPayload = dataObj; 
     
     allProducts=dataObj.products||[]; 
     storeSettings=dataObj.settings||{};
     allTestimonials=dataObj.testimonials||[]; 
     allFaqs=dataObj.faqs||[]; 
-    allUsers=dataObj.users||[]; // Tangkap data user dari DB
+    allUsers=dataObj.users||[]; 
+    
+    // --- SINKRONISASI SESI LOKAL DENGAN DATABASE ---
+    if(currentUser && !currentUser.isGuest) {
+      // Cari data user terbaru dari server berdasarkan ID/Username
+      const freshUser = allUsers.find(u => u.id === currentUser.id || u.username === currentUser.username);
+      
+      if(freshUser) {
+        currentUser.badge = freshUser.badge; // Perbarui badge dari admin
+        currentUser.contact = freshUser.contact;
+        saveSession(currentUser); // Timpa memori browser yang lama
+      } else {
+        // Jika akun dihapus oleh admin, otomatis paksa logout
+        clearSession();
+      }
+    }
+    // -----------------------------------------------
     
     applySettings(); 
     renderFeatured(); 
@@ -1928,7 +1946,10 @@ async function loadData(){
     renderTestimonials(); 
     renderFAQ(); 
     
-    updateWLBadge(); updateCartBadge();
+    // Render ulang area user dengan badge yang sudah diperbarui
+    renderUserArea();
+    updateWLBadge(); 
+    updateCartBadge();
   } catch(e){
     console.error(e);
     document.getElementById('resultInfo').innerHTML='<span style="color:#DC2626;font-weight:700"><i class="fas fa-exclamation-triangle"></i> Gagal Memuat Data</span>';
