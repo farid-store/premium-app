@@ -1124,43 +1124,70 @@ document.addEventListener('click', e=>{
 // WISHLIST
 // =============================================================================
 let wishlist = [];
+// 1. UPDATE FUNGSI TOGGLE WL
 function toggleWL(pid, name){
   if(!currentUser){ openAuth(); return; }
   wishlist = loadWL();
-  if(wishlist.includes(pid)){ wishlist = wishlist.filter(x=>x!==pid); showToast('Dihapus dari wishlist'); }
-  else { wishlist.push(pid); showToast('Ditambahkan ke wishlist ❤️','ok'); }
+  
+  // Paksa ID menjadi string agar perbandingannya selalu akurat
+  const safePid = String(pid);
+  const isExist = wishlist.some(x => String(x) === safePid);
+
+  if(isExist){ 
+    // Hapus dari wishlist
+    wishlist = wishlist.filter(x => String(x) !== safePid); 
+    showToast('Dihapus dari wishlist'); 
+  } else { 
+    // Tambah ke wishlist
+    wishlist.push(safePid); 
+    showToast('Ditambahkan ke wishlist ❤️', 'ok'); 
+  }
+  
   saveWL(wishlist);
-  updateWLBadge(); updateWLBtns(); renderWLDrawer();
+  updateWLBadge(); 
+  updateWLBtns(); 
+  renderWLDrawer();
 }
-function updateWLBadge(){
-  wishlist = loadWL();
-  const cnt = wishlist.length;
-  const el = document.getElementById('wlCount');
-  el.textContent = cnt; cnt>0 ? el.classList.add('on') : el.classList.remove('on');
-}
+
+// 2. UPDATE FUNGSI UPDATE TOMBOL WL
 function updateWLBtns(){
   wishlist = loadWL();
   document.querySelectorAll('.wl-btn').forEach(btn=>{
-    const pid = btn.dataset.pid;
-    if(wishlist.includes(pid)){ btn.classList.add('on'); btn.innerHTML='<i class="fas fa-heart"></i>'; }
-    else { btn.classList.remove('on'); btn.innerHTML='<i class="far fa-heart"></i>'; }
+    const pid = String(btn.dataset.pid);
+    
+    // Pengecekan disesuaikan ke String
+    if(wishlist.some(x => String(x) === pid)){ 
+      btn.classList.add('on'); 
+      btn.innerHTML='<i class="fas fa-heart"></i>'; 
+    } else { 
+      btn.classList.remove('on'); 
+      btn.innerHTML='<i class="far fa-heart"></i>'; 
+    }
   });
 }
+
+// 3. UPDATE FUNGSI RENDER DRAWER WL
 function renderWLDrawer(){
   wishlist = loadWL();
   const body = document.getElementById('wlBody');
+  
   if(wishlist.length===0){
-    body.innerHTML='<div class="cart-empty"><i class="far fa-heart"></i><p>Wishlist masih kosong</p></div>'; return;
+    body.innerHTML='<div class="cart-empty"><i class="far fa-heart"></i><p>Wishlist masih kosong</p></div>'; 
+    return;
   }
-  const items = allProducts.filter(p=>wishlist.includes(p.id||p.name));
+  
+  // Filter disesuaikan agar cocok dengan String
+  const items = allProducts.filter(p => wishlist.some(w => String(w) === String(p.id || p.name)));
+  
   body.innerHTML = items.map(p=>{
-    const dp = p.variants&&p.variants.length>0?p.variants[0].price:p.price||0;
-    const pid = p.id||p.name;
+    const dp = p.variants && p.variants.length>0 ? p.variants[0].price : p.price||0;
+    const pid = String(p.id || p.name);
+    // Masukkan ke escape HTML agar tidak error jika ada spasi
     return `<div class="cart-item">
       <img class="ci-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/50x50/f2f2f8/8b8ba7?text=Img'"/>
       <div class="ci-info"><div class="ci-name">${p.name}</div><div class="ci-sub">${p.cat} · ${fmt(dp)}</div></div>
-      <button class="t-btn t-ghost" style="padding:6px 10px;font-size:12px" onclick="openModal(allProducts.find(x=>(x.id||x.name)==='${pid}'))">Beli</button>
-      <button class="ci-del" onclick="toggleWL('${pid}','')"><i class="fas fa-xmark"></i></button>
+      <button class="t-btn t-ghost" style="padding:6px 10px;font-size:12px" onclick="openModal(allProducts.find(x=>String(x.id||x.name)==='${pid}'))">Beli</button>
+      <button class="ci-del" onclick="toggleWL('${pid}')"><i class="fas fa-xmark"></i></button>
     </div>`;
   }).join('');
 }
