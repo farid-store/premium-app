@@ -191,6 +191,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   <nav class="sidebar-nav">
     <div class="nav-label">Manajemen</div>
     <button class="nav-item active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Katalog Produk <span class="nav-badge" id="navProdCount">0</span></button>
+    <button class="nav-item" onclick="switchTab('orders',this)"><i class="fas fa-shopping-cart"></i> Pesanan & Laporan</button>
     <button class="nav-item" onclick="switchTab('users',this)"><i class="fas fa-users"></i> Kelola Member</button>
     <button class="nav-item" onclick="switchTab('testimonials',this)"><i class="fas fa-star"></i> Kelola Ulasan</button>
     <button class="nav-item" onclick="switchTab('faqs',this)"><i class="fas fa-circle-question"></i> Kelola FAQ</button>
@@ -282,6 +283,49 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
           </table>
         </div>
         <div class="table-footer"><span id="tableCount">0 produk</span><span style="color:var(--text3);font-size:11px">Klik "Simpan Semua" untuk menerapkan ke toko</span></div>
+      </div>
+    </div>
+
+        <!-- ============================================== -->
+    <!-- TAB: KELOLA Order -->
+    <!-- ============================================== -->
+
+    <div class="panel-section" id="panel-orders">
+      <div class="panel-header">
+        <div><div class="panel-title">Pesanan & Keuangan</div><div class="panel-subtitle">Pantau transaksi masuk dan laporan penjualan toko</div></div>
+      </div>
+      
+      <div class="stats-grid" style="display:grid; margin-bottom: 20px;">
+        <div class="stat-card" style="border-top: 4px solid var(--green)"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-wallet"></i></div><span class="stat-badge sb-up">Lunas</span></div><div class="stat-val" id="reportRevenue">Rp0</div><div class="stat-lbl">Total Pendapatan Bersih</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--blue)"><div class="stat-top"><div class="stat-icon si-blue"><i class="fas fa-shopping-bag"></i></div></div><div class="stat-val" id="reportSales">0</div><div class="stat-lbl">Total Produk Terjual</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--amber)"><div class="stat-top"><div class="stat-icon si-amber"><i class="fas fa-clock"></i></div></div><div class="stat-val" id="reportPending">0</div><div class="stat-lbl">Pesanan Menunggu</div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="orderSearch" placeholder="Cari pesanan/kontak..." oninput="renderOrderTable()"/></div>
+          <select class="category-select" id="orderStatusFilter" onchange="renderOrderTable()">
+            <option value="">Semua Status</option>
+            <option value="pending">⏳ Pending</option>
+            <option value="lunas">✅ Lunas</option>
+            <option value="batal">❌ Batal</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:160px">Waktu & Tanggal</th>
+                <th style="width:150px">Pelanggan</th>
+                <th>Detail Produk</th>
+                <th style="width:140px">Total Bayar</th>
+                <th style="width:130px">Status Transaksi</th>
+                <th style="width:70px;text-align:center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="orderTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -540,6 +584,7 @@ let currentProducts = [];
 let currentUsers = [];
 let currentTestimonials = [];
 let currentFaqs = [];
+let currentOrders = []; // State baru untuk Pesanan
 let settings = {};
 
 let editingProductIdx = null;
@@ -548,6 +593,16 @@ let editingTestiIdx = null;
 let editingFaqIdx = null;
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
+
+// Update tabTitles untuk pesanan
+const tabTitles={
+  'products':'Katalog Produk <span>/ Kelola semua produk</span>',
+  'orders':'Pesanan & Laporan <span>/ Pantau transaksi masuk</span>',
+  'users':'Manajemen Member <span>/ Kelola tipe akun dan diskon</span>',
+  'testimonials':'Ulasan Pelanggan <span>/ Kelola testimonial halaman depan</span>',
+  'faqs':'Pertanyaan Umum <span>/ Kelola FAQ (Tanya Jawab)</span>',
+  'settings':'Pengaturan Terintegrasi <span>/ Konfigurasi & CMS</span>'
+};
 
 const defaultSettings = {
   colorMain: '#C9A84C', colorDark: '#0A0A0F',
@@ -607,6 +662,7 @@ async function fetchData(){
     settings = dataObj.settings || defaultSettings;
     currentTestimonials = dataObj.testimonials || [];
     currentFaqs = dataObj.faqs || [];
+    currentOrders = dataObj.orders || []; // <-- Tarik data pesanan
     
     // Tarik data users dari database utama
     currentUsers = dataObj.users || []; 
@@ -619,7 +675,7 @@ async function fetchData(){
     toast('Data tersinkronisasi dari server', 'success');
   }catch(e){
     console.warn(e);
-    currentProducts = []; currentUsers = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
+    currentProducts = []; currentUsers = []; currentOrders = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
     toast('Gagal terhubung server. Memakai data default.', 'error');
   }
 
@@ -629,6 +685,7 @@ async function fetchData(){
 function renderAll() {
   renderProductTable();
   renderUserTable();
+  renderOrderTable(); // <-- Render tabel pesanan
   renderTestiTable();
   renderFaqTable();
   populateSettingsForm();
@@ -640,6 +697,10 @@ function updateStats(){
   document.getElementById('statReady').textContent = currentProducts.filter(p=>p.status==='ready').length;
   document.getElementById('statUsers').textContent = currentUsers.length;
   document.getElementById('navProdCount').textContent = currentProducts.length;
+  
+  if (typeof calculateReports === 'function') {
+    calculateReports(); // <-- Kalkulasi total pendapatan & produk terjual
+  }
 }
 
 // ==========================================
@@ -750,7 +811,6 @@ function deleteProduct(idx){
   if(!confirm('Hapus produk ini?')) return;
   currentProducts.splice(idx,1); renderProductTable(); updateStats(); toast('Dihapus dari memori','info');
 }
-
 // ==========================================
 // 1.5 MANAJEMEN PENGGUNA (MEMBER)
 // ==========================================
@@ -957,9 +1017,10 @@ async function saveAllToDatabase(){
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
   
   // Menggabungkan seluruh data state menjadi 1 Payload Besar
-  const masterPayload = {
+const masterPayload = {
     products: currentProducts,
     users: currentUsers,
+    orders: currentOrders, // <--- Ini yang penting!
     settings: settings,
     testimonials: currentTestimonials,
     faqs: currentFaqs
