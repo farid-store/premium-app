@@ -1411,14 +1411,47 @@ document.getElementById('cartBtn').addEventListener('click', ()=>{
 });
 document.getElementById('cartDrwClose').addEventListener('click', closeDrawers);
 document.getElementById('drwOv').addEventListener('click', closeDrawers);
+// =============================================================================
+// CHECKOUT DARI KERANJANG (DIPERBAIKI)
+// =============================================================================
 document.getElementById('checkoutBtn').addEventListener('click', ()=>{
   cartItems = loadCart();
-  if(cartItems.length===0) return;
-  const item = cartItems[0];
-  const prod = allProducts.find(p=>(p.id||p.name)===item.id) || {name:item.name,img:item.img,desc:'',id:item.id,variants:[]};
-  const per = {label:item.period, price:item.price};
-  closeDrawers();
-  setTimeout(()=>openModal(prod, per, item.qty), 200);
+  if(cartItems.length === 0) return;
+  
+  // Jika keranjang hanya berisi 1 jenis item, gunakan alur normal
+  if(cartItems.length === 1) {
+    const item = cartItems[0];
+    const prod = allProducts.find(p=>(p.id||p.name)===item.id) || {name:item.name,img:item.img,desc:'',id:item.id,variants:[]};
+    const per = {label:item.period, price:item.price};
+    closeDrawers();
+    setTimeout(()=>openModal(prod, per, item.qty), 200);
+  } 
+  // Jika lebih dari 1 jenis item, gabungkan jadi "Produk Virtual" multi-checkout
+  else {
+    const totalItems = cartItems.reduce((s,i) => s + i.qty, 0);
+    
+    // Penting: Gunakan harga dasar, karena diskon member akan otomatis 
+    // dihitung ulang oleh fungsi openModal()
+    const totalBasePrice = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    
+    // Menyusun teks rincian untuk masuk ke database Admin dan WA
+    const rincianTeks = cartItems.map(i => `${i.name} [${i.period}] x${i.qty}`).join(' + ');
+    const rincianDesc = cartItems.map(i => `• ${i.name} (${i.period}) - ${i.qty}x`).join('\n');
+    
+    const virtualProd = {
+      id: 'cart_multi',
+      name: `🛒 Checkout Keranjang (${totalItems} Item)`,
+      desc: `Rincian pesanan Anda:\n${rincianDesc}\n\n*Catatan: Harga di bawah adalah total gabungan seluruh isi keranjang Anda.*`,
+      img: 'https://placehold.co/200x200/1C1C24/C9A84C?text=Keranjang',
+      variants: [{ label: rincianTeks, price: totalBasePrice }]
+    };
+    
+    const per = virtualProd.variants[0];
+    closeDrawers();
+    
+    // Buka modal dengan Qty paksa = 1 (karena harga dan item sudah dijumlahkan)
+    setTimeout(()=>openModal(virtualProd, per, 1), 200);
+  }
 });
 
 // =============================================================================
@@ -1939,6 +1972,11 @@ document.getElementById('confirmBtn').addEventListener('click', async ()=>{
 
     if(r.ok){
       updateSteps(4);
+      
+      // Tambahkan ini untuk mengosongkan keranjang setelah sukses
+      saveCart([]);
+      updateCartBadge();
+      
       document.getElementById('invoiceWaBtn').href=`https://wa.me/${WA_NUM}?text=${encodeURIComponent(invoiceText)}`;
       document.getElementById('successOv').classList.add('on');
     } else {
