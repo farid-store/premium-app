@@ -277,12 +277,50 @@ html, body {
 .prod-card:hover .prod-img-w img{transform:scale(1.05)}
 .prod-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.3) 0%,transparent 55%);opacity:0;transition:var(--t)}
 .prod-card:hover .prod-img-ov{opacity:1}
-.card-badges{position:absolute;top:9px;left:9px;display:flex;flex-direction:column;gap:4px;z-index:2}
-.c-badge{font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:var(--r-pill);letter-spacing:.3px;text-transform:uppercase}
-.cb-bs{background:#FEF3C7;color:#92400E}
-.cb-new{background:#DCFCE7;color:#166534}
-.cb-hot{background:#FEE2E2;color:#991B1B}
-.cb-promo{background:var(--gold-p);color:var(--gold-d)}
+.card-badges {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 2;
+}
+
+.c-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 3.5px 9px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: inline-flex;
+  align-items: center;
+  backdrop-filter: blur(4px);
+}
+
+/* Penamaan class diperbaiki dan diberi efek gradien premium */
+.cb-bestseller { 
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A); 
+  color: #92400E; 
+  border: 1px solid rgba(217, 119, 6, 0.3); 
+}
+.cb-new { 
+  background: linear-gradient(135deg, #DCFCE7, #BBF7D0); 
+  color: #166534; 
+  border: 1px solid rgba(21, 128, 61, 0.3); 
+}
+.cb-hot { 
+  background: linear-gradient(135deg, #FEE2E2, #FECACA); 
+  color: #991B1B; 
+  border: 1px solid rgba(220, 38, 38, 0.3); 
+}
+.cb-promo { 
+  background: linear-gradient(135deg, var(--gold-p), #fff); 
+  color: var(--gold-d); 
+  border: 1px solid var(--gold);
+}
 /* discount ribbon */
 .disc-ribbon{position:absolute;top:9px;right:9px;background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
 /* Fix wishlist icon untuk mobile (selalu tampil) & hover desktop */
