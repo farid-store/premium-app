@@ -651,54 +651,56 @@ function switchTab(tab, btn){
 
 // ===== FETCH DATA KESELURUHAN =====
 async function fetchData(){
-  try{
-    const r = await fetch('/api/products');
-    if(!r.ok) throw new Error('Server error');
-    
-    const d = await r.json();
-    const dataObj = d.record ? d.record : d;
-    
-    currentProducts = dataObj.products || [];
-    settings = dataObj.settings || defaultSettings;
-    currentTestimonials = dataObj.testimonials || [];
-    currentFaqs = dataObj.faqs || [];
-    currentOrders = dataObj.orders || [];
-    currentUsers = dataObj.users || []; 
+  try{
+    const r = await fetch('/api/products');
+    if(!r.ok) throw new Error('Server error');
+    
+    const d = await r.json();
+    const dataObj = d.record ? d.record : d;
+    
+    currentProducts = dataObj.products || [];
+    settings = dataObj.settings || defaultSettings;
+    currentTestimonials = dataObj.testimonials || [];
+    currentFaqs = dataObj.faqs || [];
+    currentOrders = dataObj.orders || []; // <-- Tarik data pesanan
+    
+    // Tarik data users dari database utama
+    currentUsers = dataObj.users || []; 
 
-    currentProducts = currentProducts.map(p => {
-      if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
-      return p;
-    });
+    currentProducts = currentProducts.map(p => {
+      if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
+      return p;
+    });
 
-    toast('Data tersinkronisasi dari server', 'success');
-  } catch(e){
-    console.warn(e);
-    currentProducts = []; currentUsers = []; currentOrders = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
-    toast('Gagal terhubung server. Memakai data default.', 'error');
-  }
+    toast('Data tersinkronisasi dari server', 'success');
+  }catch(e){
+    console.warn(e);
+    currentProducts = []; currentUsers = []; currentOrders = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
+    toast('Gagal terhubung server. Memakai data default.', 'error');
+  }
 
-  renderAll();
+  renderAll();
 }
 
 function renderAll() {
-  renderProductTable();
-  renderUserTable();
-  renderOrderTable();
-  renderTestiTable();
-  renderFaqTable();
-  populateSettingsForm();
-  updateStats();
+  renderProductTable();
+  renderUserTable();
+  renderOrderTable(); // <-- Render tabel pesanan
+  renderTestiTable();
+  renderFaqTable();
+  populateSettingsForm();
+  updateStats();
 }
 
 function updateStats(){
-  document.getElementById('statTotal').textContent = currentProducts.length;
-  document.getElementById('statReady').textContent = currentProducts.filter(p=>p.status==='ready').length;
-  document.getElementById('statUsers').textContent = currentUsers.length;
-  document.getElementById('navProdCount').textContent = currentProducts.length;
-  
-  if (typeof calculateReports === 'function') {
-    calculateReports(); // <-- Kalkulasi total pendapatan & produk terjual
-  }
+  document.getElementById('statTotal').textContent = currentProducts.length;
+  document.getElementById('statReady').textContent = currentProducts.filter(p=>p.status==='ready').length;
+  document.getElementById('statUsers').textContent = currentUsers.length;
+  document.getElementById('navProdCount').textContent = currentProducts.length;
+  
+  if (typeof calculateReports === 'function') {
+    calculateReports(); // <-- Kalkulasi total pendapatan & produk terjual
+  }
 }
 
 // ==========================================
