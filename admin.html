@@ -597,9 +597,9 @@ function switchTab(tab, btn){
 // ===== FETCH DATA KESELURUHAN =====
 async function fetchData(){
   try{
-    // 1. Tarik Katalog, Setting, Ulasan, dan FAQ dari /api/products
     const r = await fetch('/api/products');
-    if(!r.ok) throw new Error('Server error produk');
+    if(!r.ok) throw new Error('Server error');
+    
     const d = await r.json();
     const dataObj = d.record ? d.record : d;
     
@@ -607,33 +607,24 @@ async function fetchData(){
     settings = dataObj.settings || defaultSettings;
     currentTestimonials = dataObj.testimonials || [];
     currentFaqs = dataObj.faqs || [];
+    
+    // Tarik data users dari database utama
+    currentUsers = dataObj.users || []; 
 
     currentProducts = currentProducts.map(p => {
       if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
       return p;
     });
-  } catch(e){
-    console.warn('Gagal load produk', e);
-    currentProducts = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
+
+    toast('Data tersinkronisasi dari server', 'success');
+  }catch(e){
+    console.warn(e);
+    currentProducts = []; currentUsers = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
+    toast('Gagal terhubung server. Memakai data default.', 'error');
   }
 
-  try {
-    // 2. Tarik khusus data Member dari jalur aslinya (/api/users)
-    const rUsers = await fetch('/api/users');
-    if(rUsers.ok) {
-      const dUsers = await rUsers.json();
-      // Deteksi struktur array dari Vercel / database-mu
-      currentUsers = dUsers.record ? dUsers.record : (Array.isArray(dUsers) ? dUsers : (dUsers.users || []));
-    } else {
-      currentUsers = [];
-    }
-  } catch(e) {
-    console.warn('Gagal load member', e);
-    currentUsers = [];
-  }
-
-  toast('Data tersinkronisasi dari server', 'success');
-
+  renderAll();
+}
 
   renderAll();
 }
@@ -806,30 +797,14 @@ function openEditUser(idx){
   document.getElementById('um-badge').value = u.badge || 'umum';
   openModal('userModal');
 }
-async function saveUser(){
-  const btn = document.querySelector('#userModal .tb-primary');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-  
+function saveUser(){
   const u = currentUsers[editingUserIdx];
   u.contact = document.getElementById('um-contact').value.trim();
   u.badge = document.getElementById('um-badge').value;
   
-  try {
-    // Kirim data akun yang sudah di-edit kembali ke database
-    await fetch('/api/users', {
-      method: 'PUT', // Menggunakan metode update
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(u)
-    });
-    toast('Data member berhasil di-update ke server', 'success');
-  } catch(e) {
-    console.error(e);
-    toast('Gagal update ke server. Cek koneksi API.', 'error');
-  }
-  
-  btn.innerHTML = '<i class="fas fa-check"></i> Simpan Perubahan';
   closeModal('userModal'); 
   renderUserTable(); 
+  toast('Data member diubah (Klik "Simpan Semua" untuk upload)', 'info');
 }
 function deleteUser(idx){
   if(confirm('Hapus member ini? Seluruh data akun terkait akan hilang.')){
