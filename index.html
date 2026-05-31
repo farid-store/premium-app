@@ -1913,16 +1913,20 @@ async function loadData(){
     const r=await fetch('/api/products'); if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json(); const dataObj=d.record?d.record:d;
     
+    // Simpan struktur DB utuh untuk keperluan pendaftaran
+    fullDataPayload = dataObj; 
+    
     allProducts=dataObj.products||[]; 
     storeSettings=dataObj.settings||{};
-    allTestimonials=dataObj.testimonials||[]; // Tangkap data ulasan
-    allFaqs=dataObj.faqs||[]; // Tangkap data FAQ
+    allTestimonials=dataObj.testimonials||[]; 
+    allFaqs=dataObj.faqs||[]; 
+    allUsers=dataObj.users||[]; // Tangkap data user dari DB
     
     applySettings(); 
     renderFeatured(); 
     renderProducts();
-    renderTestimonials(); // Render setelah data ditarik
-    renderFAQ(); // Render setelah data ditarik
+    renderTestimonials(); 
+    renderFAQ(); 
     
     updateWLBadge(); updateCartBadge();
   } catch(e){
@@ -1936,11 +1940,9 @@ async function loadData(){
 // INIT
 // =============================================================================
 currentUser = loadSession();
-renderUserArea(); 
-updateWLBadge(); 
-updateCartBadge();
+renderUserArea(); renderFAQ(); renderTestimonials();
+updateWLBadge(); updateCartBadge();
 loadData(); // Memulai proses penarikan data keseluruhan
-
 // =============================================================================
 // INIT
 // =============================================================================
