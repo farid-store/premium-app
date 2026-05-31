@@ -204,14 +204,17 @@ html, body {
   .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .product-grid.lv{grid-template-columns:1fr}
   
-  /* FIX 1: Ubah lebar card agar tampil 1 card besar di tengah + potongan card di sampingnya */
+  /* --- FIX 1: SLIDER DI TENGAH --- */
   .feat-card, .testi-card { width: calc(100vw - 110px); }
   .slider-outer::before,.slider-outer::after{width: 30px;}
+  /* Menarik track ke kiri agar card aktif berada tepat di tengah layar */
+  .slider-track { margin-left: calc(-100vw + 149px); }
 
-  /* FIX 2: Sembunyikan elemen Topbar yang memakan banyak tempat di mobile */
-  .topbar .global-wa { display: none; } /* Tombol WA disembunyikan di header (sudah ada di hero/footer) */
-  .user-chip-name, .user-chip-badge, .user-chip > i { display: none; } /* Hanya tampilkan avatar */
-  .user-chip { padding: 0; background: transparent; border: none; }
+  /* --- FIX 2: TAMPILKAN BADGE AKUN --- */
+  .topbar .global-wa { display: none; } 
+  .user-chip-name, .user-chip > i { display: none; } /* Hanya sembunyikan nama & panah dropdown */
+  .user-chip-badge { display: inline-block !important; } /* Tampilkan jenis akun */
+  .user-chip { padding: 0; background: transparent; border: none; gap: 6px; }
   .topbar-actions { gap: 8px; }
   .logo-name { font-size: 15px; }
 
@@ -230,10 +233,6 @@ html, body {
   .t-btn{padding:8px 10px}
   .auth-box{padding:24px 18px; margin:10px;}
   .period-grid{grid-template-columns:repeat(2,1fr);} 
-}
-
-@media(max-width:360px){
-  .product-grid{grid-template-columns:1fr}
 }
 
 /* ===== FILTER ===== */
