@@ -39,6 +39,8 @@
     .maintenance-icon { font-size: 52px; color: var(--gold); margin-bottom: 24px; }
     .maintenance-title { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 12px; }
     .maintenance-desc { font-size: 15px; color: rgba(255,255,255,.55); max-width: 380px; line-height: 1.7; }
+    .maint-wa-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #25d366; color: #fff; border-radius: var(--r-pill); font-family: var(--font); font-size: 14px; font-weight: 700; margin-top: 24px; transition: var(--t); box-shadow: var(--sh-md); }
+    .maint-wa-btn:hover { background: #1ebe5d; transform: translateY(-2px); box-shadow: var(--sh-lg); color: #fff; }
 
     /* ===== TICKER ===== */
     .ticker-bar { background: var(--ink); height: 36px; overflow: hidden; display: flex; align-items: center; position: relative; flex-shrink: 0; width: 100%; }
@@ -502,10 +504,14 @@
 </head>
 <body>
 
-  <div class="maintenance-screen" id="maintenanceScreen">
+<div class="maintenance-screen" id="maintenanceScreen">
     <i class="fas fa-tools maintenance-icon"></i>
     <h2 class="maintenance-title">Toko Sedang Dalam Perbaikan</h2>
     <p class="maintenance-desc">Mohon maaf, kami sedang melakukan pembaruan sistem. Silakan kembali beberapa saat lagi.</p>
+    
+    <a href="https://wa.me/6281371127121?text=Halo%20Admin%20Farid%20Store,%20saya%20ingin%20melakukan%20pemesanan%20manual." class="maint-wa-btn" target="_blank">
+      <i class="fab fa-whatsapp"></i> Hubungi Admin (Pesan Manual)
+    </a>
   </div>
 
   <div class="ticker-bar" id="tickerBar">
