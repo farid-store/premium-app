@@ -704,6 +704,80 @@ function updateStats(){
 }
 
 // ==========================================
+// 1.2 MANAJEMEN PESANAN (LAPORAN KEUANGAN)
+// ==========================================
+function calculateReports(){
+  const lunasOrders = currentOrders.filter(o => o.status === 'lunas');
+  const pendingOrders = currentOrders.filter(o => o.status === 'pending');
+  const totalRevenue = lunasOrders.reduce((sum, o) => sum + (parseInt(o.total) || 0), 0);
+  const totalItemsSold = lunasOrders.reduce((sum, o) => sum + (parseInt(o.qty) || 1), 0);
+  
+  if(document.getElementById('reportRevenue')) document.getElementById('reportRevenue').textContent = fmt(totalRevenue);
+  if(document.getElementById('reportSales')) document.getElementById('reportSales').textContent = totalItemsSold + ' Item';
+  if(document.getElementById('reportPending')) document.getElementById('reportPending').textContent = pendingOrders.length + ' Pesanan';
+}
+
+function renderOrderTable(){
+  const search = document.getElementById('orderSearch').value.toLowerCase();
+  const statF = document.getElementById('orderStatusFilter').value;
+  let data = [...currentOrders].reverse();
+  
+  if(search) data = data.filter(o => (o.productName||'').toLowerCase().includes(search) || (o.contact||'').toLowerCase().includes(search));
+  if(statF) data = data.filter(o => (o.status||'pending') === statF);
+  
+  const tbody = document.getElementById('orderTableBody'); tbody.innerHTML='';
+  if(data.length===0){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text2)">Tidak ada pesanan.</td></tr>';return;}
+  
+  data.forEach(o => {
+    const idx = currentOrders.findIndex(x => x === o);
+    const status = o.status || 'pending';
+    let statColor = 'var(--amber-soft)'; let txtColor = 'var(--amber-text)';
+    if(status === 'lunas'){ statColor = 'var(--green-soft)'; txtColor = 'var(--green-text)'; }
+    if(status === 'batal'){ statColor = 'var(--red-soft)'; txtColor = 'var(--red-text)'; }
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div style="font-weight:700;color:var(--text)">${o.orderDate || '-'}</div></td>
+      <td>
+        <div style="font-weight:700;color:var(--text)">${o.username || 'Guest'}</div>
+        <div style="font-size:11px;color:var(--text2)">${o.contact || '-'}</div>
+      </td>
+      <td>
+        <div style="font-weight:700;color:var(--text)">${o.productName}</div>
+        <div style="font-size:11px;color:var(--text2)">Paket: ${o.period} | Qty: ${o.qty}x</div>
+      </td>
+      <td style="font-weight:800; color:var(--brand-mid)">${fmt(o.total)}</td>
+      <td>
+        <select class="category-select" style="background:${statColor}; color:${txtColor}; border:none; font-weight:700;" onchange="updateOrderStatus(${idx}, this.value)">
+          <option value="pending" ${status==='pending'?'selected':''}>⏳ Pending</option>
+          <option value="lunas" ${status==='lunas'?'selected':''}>✅ Lunas</option>
+          <option value="batal" ${status==='batal'?'selected':''}>❌ Batal</option>
+        </select>
+      </td>
+      <td>
+        <div class="action-btns">
+          <button class="icon-btn ib-danger" onclick="deleteOrder(${idx})"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateOrderStatus(idx, newStatus) {
+  currentOrders[idx].status = newStatus;
+  calculateReports(); 
+  toast('Status diperbarui di memori. Klik "Simpan Semua".', 'info');
+}
+
+function deleteOrder(idx) {
+  if(confirm('Hapus riwayat pesanan ini?')) {
+    currentOrders.splice(idx, 1);
+    renderOrderTable(); calculateReports(); toast('Pesanan dihapus', 'info');
+  }
+}
+
+// ==========================================
 // 1. MANAJEMEN PRODUK
 // ==========================================
 function renderProductTable(){
