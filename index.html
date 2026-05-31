@@ -204,11 +204,14 @@ html, body {
   .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .product-grid.lv{grid-template-columns:1fr}
   
-  /* --- FIX 1: SLIDER DI TENGAH --- */
-  .feat-card, .testi-card { width: calc(100vw - 110px); }
-  .slider-outer::before,.slider-outer::after{width: 30px;}
-  /* Menarik track ke kiri agar card aktif berada tepat di tengah layar */
-  .slider-track { margin-left: calc(-100vw + 149px); }
+  /* --- FIX 1: SLIDER DI TENGAH DENGAN EFEK KIRI-KANAN MENGINTIP --- */
+  .feat-card, .testi-card { width: calc(100vw - 160px); } /* Ukuran diperkecil agar kiri-kanan muat */
+  
+  /* Memperlebar gradien bayangan di ujung kiri-kanan agar batasnya halus/samar */
+  .slider-outer::before, .slider-outer::after { width: 45px; } 
+  
+  /* Rumus matematika presisi untuk menarik track tepat ke tengah layar */
+  .slider-track { margin-left: calc(-100vw + 224px); }
 
   /* --- FIX 2: TAMPILKAN BADGE AKUN --- */
   .topbar .global-wa { display: none; } 
