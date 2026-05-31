@@ -80,8 +80,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 /* ===== PANEL SECTIONS ===== */
 .panel-section{display:none}
 .panel-section.active{display:block}
-
-/* ===== PANEL HEADER ===== */
 .panel-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
 .panel-title{font-size:16px;font-weight:800;color:var(--text)}
 .panel-subtitle{font-size:12px;color:var(--text2);margin-top:2px;font-weight:500}
@@ -96,7 +94,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .search-box input:focus{border-color:var(--brand);background:var(--surface2)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:700px}
-thead th{padding:11px 14px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
+thead th{padding:11px 14px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap;text-align:left}
 tbody td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr:hover td{background:rgba(255,255,255,.02)}
@@ -106,14 +104,10 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:10px;cursor:pointer;transition:var(--transition);border:none;font-family:inherit}
 .sp-ready{background:var(--green-soft);color:var(--green-text)}
 .sp-pending{background:var(--amber-soft);color:var(--amber-text)}
-.sp-ready:hover{background:rgba(34,197,94,.2)}
-.sp-pending:hover{background:rgba(245,158,11,.2)}
-.action-btns{display:flex;gap:6px;justify-content:center}
+.action-btns{display:flex;gap:6px;justify-content:flex-start}
 .icon-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--transition)}
 .ib-danger{background:var(--red-soft);color:var(--red-text)}
-.ib-danger:hover{background:rgba(239,68,68,.25)}
 .ib-blue{background:var(--blue-soft);color:var(--blue-text)}
-.ib-blue:hover{background:rgba(59,130,246,.25)}
 .table-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2)}
 
 /* ===== STORE SETTINGS ===== */
@@ -124,6 +118,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
 .form-group input,.form-group textarea,.form-group select{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-md);font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:var(--transition);resize:vertical}
+.form-group input[type="color"]{height:42px;padding:4px 8px;cursor:pointer}
 .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--brand);background:var(--surface2)}
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
 .toggle-row:last-child{border-bottom:none}
@@ -145,16 +140,13 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .modal-hd{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-hd h3{font-size:16px;font-weight:800;color:var(--text)}
 .modal-close{width:30px;height:30px;border-radius:50%;border:none;background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--transition)}
-.modal-close:hover{background:var(--surface3);color:var(--text)}
 .modal-body-inner{padding:20px 22px}
 .modal-foot{padding:14px 22px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
 
 /* ===== DYNAMIC VARIANTS ===== */
 .variant-row {display:flex;gap:8px;margin-bottom:8px;align-items:center}
 .variant-row input {padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;width:100%;outline:none}
-.variant-row input:focus {border-color:var(--brand)}
 .variant-del-btn {width:34px;height:34px;flex-shrink:0;background:var(--red-soft);color:var(--red-text);border:none;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.variant-del-btn:hover {background:rgba(239,68,68,.25)}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:13px 18px;font-size:13px;font-weight:600;color:var(--text);box-shadow:var(--shadow);z-index:999;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:.4s cubic-bezier(.4,0,.2,1);max-width:320px}
@@ -182,7 +174,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 .bulk-bar.show{display:flex}
 .bulk-bar span{font-size:13px;font-weight:600;color:#a5b4fc;flex:1}
 .category-select{padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);outline:none}
-.category-select:focus{border-color:var(--brand)}
 </style>
 </head>
 <body>
@@ -192,15 +183,18 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-    <div>
-      <div class="logo-text">Farid<span>Store</span></div>
-    </div>
+    <div><div class="logo-text">Farid<span>Store</span></div></div>
     <span class="logo-badge">Admin</span>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Manajemen</div>
     <button class="nav-item active" onclick="switchTab('products',this)"><i class="fas fa-box"></i> Katalog Produk <span class="nav-badge" id="navProdCount">0</span></button>
+    <button class="nav-item" onclick="switchTab('testimonials',this)"><i class="fas fa-star"></i> Kelola Ulasan</button>
+    <button class="nav-item" onclick="switchTab('faqs',this)"><i class="fas fa-circle-question"></i> Kelola FAQ</button>
+    
+    <div class="nav-label">Sistem</div>
     <button class="nav-item" onclick="switchTab('settings',this)"><i class="fas fa-sliders-h"></i> Pengaturan Toko</button>
+    
     <div class="nav-label">Akses Cepat</div>
     <a href="/" target="_blank" class="nav-item"><i class="fas fa-store"></i> Lihat Toko</a>
     <button class="nav-item" onclick="fetchData()"><i class="fas fa-rotate-right"></i> Refresh Data</button>
@@ -225,6 +219,7 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </header>
 
   <div class="content">
+    
     <div class="stats-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-blue"><i class="fas fa-box"></i></div><span class="stat-badge sb-up">↑ Live</span></div><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">Total Produk</div></div>
       <div class="stat-card"><div class="stat-top"><div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div></div><div class="stat-val" id="statReady">0</div><div class="stat-lbl">Status Ready</div></div>
@@ -235,7 +230,6 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       <div class="panel-header">
         <div><div class="panel-title">Katalog Produk</div><div class="panel-subtitle">Kelola produk beserta periode dan harganya masing-masing</div></div>
         <div class="btn-row">
-          <button class="topbar-btn tb-outline" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
           <button class="topbar-btn tb-primary" onclick="openAddProductModal()"><i class="fas fa-plus"></i> Tambah Produk</button>
         </div>
       </div>
@@ -269,67 +263,127 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
                 <th style="width:50px">Img</th>
                 <th>Nama Produk</th>
                 <th style="width:120px">Kategori</th>
-                <th style="width:180px">URL Gambar</th>
-                <th style="width:120px">Harga (Mulai)</th>
-                <th style="width:90px">Badge</th>
-                <th style="width:90px">Status</th>
-                <th style="width:70px;text-align:center">Aksi</th>
+                <th style="width:140px">Harga (Mulai)</th>
+                <th style="width:110px">Badge</th>
+                <th style="width:100px">Status</th>
+                <th style="width:80px;text-align:center">Aksi</th>
               </tr>
             </thead>
             <tbody id="productTableBody">
-              <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text2)"><i class="fas fa-spinner fa-spin"></i> Memuat data...</td></tr>
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text2)"><i class="fas fa-spinner fa-spin"></i> Memuat data...</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="table-footer"><span id="tableCount">0 produk</span><span style="color:var(--text3);font-size:11px">Perubahan belum tersimpan hingga klik "Simpan Semua"</span></div>
+        <div class="table-footer"><span id="tableCount">0 produk</span><span style="color:var(--text3);font-size:11px">Klik "Simpan Semua" untuk menerapkan ke toko</span></div>
+      </div>
+    </div>
+
+    <div class="panel-section" id="panel-testimonials">
+      <div class="panel-header">
+        <div><div class="panel-title">Ulasan Pelanggan</div><div class="panel-subtitle">Kelola testimonial yang tampil di slider halaman utama</div></div>
+        <button class="topbar-btn tb-primary" onclick="openAddTestiModal()"><i class="fas fa-plus"></i> Tambah Ulasan</button>
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:60px">Avatar</th>
+                <th style="width:180px">Nama & Tanggal</th>
+                <th style="width:100px">Rating</th>
+                <th>Teks Ulasan</th>
+                <th style="width:80px;text-align:center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="testiTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section" id="panel-faqs">
+      <div class="panel-header">
+        <div><div class="panel-title">Pertanyaan Umum (FAQ)</div><div class="panel-subtitle">Kelola daftar tanya jawab yang tampil di bagian bawah toko</div></div>
+        <button class="topbar-btn tb-primary" onclick="openAddFaqModal()"><i class="fas fa-plus"></i> Tambah FAQ</button>
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:300px">Pertanyaan (Q)</th>
+                <th>Jawaban (A)</th>
+                <th style="width:80px;text-align:center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="faqTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div class="panel-section" id="panel-settings">
       <div class="panel-header">
-        <div><div class="panel-title">Pengaturan Toko</div><div class="panel-subtitle">Konfigurasi informasi toko, QRIS, notifikasi, dan tampilan</div></div>
+        <div><div class="panel-title">Pengaturan Toko Terintegrasi</div><div class="panel-subtitle">Konfigurasi info, tema, diskon, dan konten dinamis</div></div>
       </div>
       <div class="settings-grid">
+        
         <div class="settings-card">
-          <div class="sc-title"><i class="fas fa-store"></i> Informasi Toko</div>
+          <div class="sc-title"><i class="fas fa-palette"></i> Branding & Tema</div>
+          <div class="form-group"><label>Warna Utama / Gold (Hex)</label><input type="color" id="set-colorMain"/></div>
+          <div class="form-group"><label>Warna Gelap / Background (Hex)</label><input type="color" id="set-colorDark"/></div>
+          <div class="form-group"><label>Teks Ticker / Running Text (Pisahkan dengan Koma)</label><textarea id="set-tickerText" rows="3" placeholder="Proses Instan, Garansi Penuh, dll..."></textarea></div>
+        </div>
+
+        <div class="settings-card">
+          <div class="sc-title"><i class="fas fa-tags"></i> Pengaturan Diskon Member</div>
+          <div class="form-group"><label>Diskon Akun Reseller (%)</label><input type="number" id="set-discReseller" placeholder="5" min="0" max="100"/></div>
+          <div class="form-group"><label>Diskon Akun VVIP (%)</label><input type="number" id="set-discVvip" placeholder="10" min="0" max="100"/></div>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5">Harga diskon akan otomatis dikalkulasi pada keranjang dan modal pemesanan pelanggan.</p>
+        </div>
+
+        <div class="settings-card">
+          <div class="sc-title"><i class="fas fa-store"></i> Informasi Dasar</div>
           <div class="form-group"><label>Nama Toko</label><input type="text" id="set-storeName"/></div>
           <div class="form-group"><label>Kota</label><input type="text" id="set-city"/></div>
           <div class="form-group"><label>Kode Pos</label><input type="text" id="set-postal"/></div>
           <div class="form-group"><label>Deskripsi Singkat</label><textarea id="set-desc" rows="3"></textarea></div>
         </div>
+
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-qrcode"></i> Konfigurasi QRIS</div>
           <div class="form-group"><label>QRIS Merchant ID (Dana)</label><input type="text" id="set-qrisMid"/></div>
-          <div class="form-group"><label>Tipe QRIS</label><select id="set-qrisType"><option value="12">Dinamis (Nominal Otomatis)</option><option value="11">Statis</option></select></div>
-          <div class="form-group"><label>Label QR di Modal</label><input type="text" id="set-qrisLabel"/></div>
+          <div class="form-group"><label>Tipe QRIS</label><select id="set-qrisType"><option value="12">Dinamis (Otomatis)</option><option value="11">Statis</option></select></div>
           <div class="form-group"><label>Nama Merchant di QRIS</label><input type="text" id="set-qrisMerchant"/></div>
         </div>
+
         <div class="settings-card">
           <div class="sc-title"><i class="fas fa-headset"></i> Kontak & CS</div>
-          <div class="form-group"><label>Nomor WhatsApp Admin</label><input type="text" id="set-wa" placeholder="628xxxxxxxxxx"/></div>
-          <div class="form-group"><label>Username Telegram</label><input type="text" id="set-tg" placeholder="@username"/></div>
-          <div class="form-group"><label>Username Instagram</label><input type="text" id="set-ig" placeholder="@username"/></div>
+          <div class="form-group"><label>Nomor WA Admin (628...)</label><input type="text" id="set-wa"/></div>
+          <div class="form-group"><label>Username Telegram</label><input type="text" id="set-tg"/></div>
+          <div class="form-group"><label>Username Instagram</label><input type="text" id="set-ig"/></div>
         </div>
+
         <div class="settings-card">
-          <div class="sc-title"><i class="fas fa-toggle-on"></i> Fitur Toko</div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">QRIS Dinamis Otomatis</div><div class="tr-sub">QR berubah sesuai nominal pembayaran</div></div><label class="pc-toggle"><input type="checkbox" id="tog-qris"><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Notifikasi Pesanan (API)</div><div class="tr-sub">Kirim notif ke Telegram/WA saat ada order</div></div><label class="pc-toggle"><input type="checkbox" id="tog-notif"><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tampilkan Rating Produk</div><div class="tr-sub">Bintang rating di card produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-rating"><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label" style="color:var(--red-text)">Mode Maintenance</div><div class="tr-sub">Toko ditutup sementara untuk umum</div></div><label class="pc-toggle"><input type="checkbox" id="tog-maintenance"><span class="pc-slider"></span></label></div>
-          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Chat Langsung WA di Modal</div><div class="tr-sub">Tombol WA otomatis di modal produk</div></div><label class="pc-toggle"><input type="checkbox" id="tog-wa"><span class="pc-slider"></span></label></div>
-        </div>
-        <div class="settings-card">
-          <div class="sc-title"><i class="fas fa-chart-bar"></i> Statistik Hero</div>
+          <div class="sc-title"><i class="fas fa-chart-bar"></i> Angka Hero & Kepercayaan</div>
           <div class="form-group"><label>Jumlah Pelanggan (teks)</label><input type="text" id="set-statCust"/></div>
           <div class="form-group"><label>Jumlah Produk (teks)</label><input type="text" id="set-statProd"/></div>
-          <div class="form-group"><label>Persentase Kepuasan</label><input type="text" id="set-statSat"/></div>
-          <div class="form-group"><label>Waktu Proses</label><input type="text" id="set-statTime"/></div>
+          <div class="form-group"><label>Tingkat Kepuasan</label><input type="text" id="set-statSat"/></div>
+          <div class="form-group"><label>Waktu Proses Rata-rata</label><input type="text" id="set-statTime"/></div>
         </div>
+
+        <div class="settings-card">
+          <div class="sc-title"><i class="fas fa-toggle-on"></i> Pengendali Fitur (Toggles)</div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tampilkan QRIS di Modal</div></div><label class="pc-toggle"><input type="checkbox" id="tog-qris"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tombol WA Langsung di Modal</div></div><label class="pc-toggle"><input type="checkbox" id="tog-wa"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label">Tampilkan Rating Bintang</div></div><label class="pc-toggle"><input type="checkbox" id="tog-rating"><span class="pc-slider"></span></label></div>
+          <div class="toggle-row"><div class="tr-info"><div class="tr-label" style="color:var(--red-text)">Mode Maintenance (Tutup Toko)</div></div><label class="pc-toggle"><input type="checkbox" id="tog-maintenance"><span class="pc-slider"></span></label></div>
+        </div>
+
         <div class="settings-card" style="display:flex;flex-direction:column;justify-content:flex-end;gap:10px">
           <div class="sc-title"><i class="fas fa-save"></i> Terapkan Pengaturan</div>
-          <p style="font-size:13px;color:var(--text2);line-height:1.6">Simpan form pengaturan ke dalam memori aplikasi sebelum melakukan Upload Global.</p>
-          <button class="topbar-btn tb-primary" style="width:100%;justify-content:center;padding:11px" onclick="saveSettingsToMemory()"><i class="fas fa-check"></i> Update Memori Pengaturan</button>
-          <button class="topbar-btn tb-outline" style="width:100%;justify-content:center;padding:11px" onclick="resetSettingsForm()"><i class="fas fa-rotate-left"></i> Reset Form ke Data Server</button>
+          <p style="font-size:13px;color:var(--text2);line-height:1.6">Simpan form ini ke memori panel sebelum menekan tombol "Simpan Semua" di ujung kanan atas.</p>
+          <button class="topbar-btn tb-primary" style="width:100%;justify-content:center;padding:11px" onclick="saveSettingsToMemory()"><i class="fas fa-check"></i> Update Memori</button>
         </div>
       </div>
     </div>
@@ -343,14 +397,10 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
       <div class="form-group"><label>Nama Produk *</label><input type="text" id="pm-name" placeholder="Contoh: Netflix Premium 4K"/></div>
       <div class="form-group"><label>Kategori *</label>
         <select id="pm-cat">
-          <option value="streaming">Streaming</option>
-          <option value="musik">Musik</option>
-          <option value="produktivitas">Produktivitas</option>
-          <option value="gaming">Gaming</option>
+          <option value="streaming">Streaming</option><option value="musik">Musik</option><option value="produktivitas">Produktivitas</option><option value="gaming">Gaming</option>
         </select>
       </div>
       <div class="form-group"><label>URL Gambar (Icon)</label><input type="text" id="pm-img" placeholder="https://..." oninput="document.getElementById('pm-preview').src=this.value"/></div>
-      
       <div style="margin-bottom:14px;text-align:center"><img id="pm-preview" src="https://placehold.co/80x80/e2e8f0/94a3b8?text=Img" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--border)" onerror="this.onerror=null; this.src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Img'"/></div>
       
       <div class="form-group">
@@ -361,18 +411,10 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="form-group"><label>Rating (1.0 – 5.0)</label><input type="number" id="pm-rating" placeholder="4.9" min="1" max="5" step="0.1"/></div>
       <div class="form-group"><label>Badge</label>
-        <select id="pm-badge">
-          <option value="">Tidak ada</option>
-          <option value="bestseller">Best Seller</option>
-          <option value="new">Baru</option>
-          <option value="hot">Hot</option>
-        </select>
+        <select id="pm-badge"><option value="">Tidak ada</option><option value="bestseller">Best Seller</option><option value="new">Baru</option><option value="hot">Hot</option></select>
       </div>
       <div class="form-group"><label>Status</label>
-        <select id="pm-status">
-          <option value="ready">Ready</option>
-          <option value="pending">Pending</option>
-        </select>
+        <select id="pm-status"><option value="ready">Ready</option><option value="pending">Pending</option></select>
       </div>
       <div class="form-group"><label>Deskripsi Singkat</label><textarea id="pm-desc" rows="3" placeholder="Deskripsi singkat produk..."></textarea></div>
     </div>
@@ -383,75 +425,115 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<div class="modal-bg" id="testiModal">
+  <div class="modal-box" style="max-width:460px">
+    <div class="modal-hd"><h3 id="testiModalTitle">Tambah Ulasan</h3><button class="modal-close" onclick="closeModal('testiModal')"><i class="fas fa-xmark"></i></button></div>
+    <div class="modal-body-inner">
+      <div class="form-group"><label>Nama Pelanggan</label><input type="text" id="tm-name" placeholder="Budi S."/></div>
+      <div class="form-group"><label>Keterangan Waktu</label><input type="text" id="tm-date" placeholder="2 hari lalu"/></div>
+      <div class="form-group"><label>Rating (1-5)</label><input type="number" id="tm-rating" placeholder="5" min="1" max="5"/></div>
+      <div class="form-group"><label>Isi Ulasan</label><textarea id="tm-text" rows="4" placeholder='"Pelayanan sangat cepat..."'></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="topbar-btn tb-primary" onclick="saveTesti()"><i class="fas fa-check"></i> Simpan Ulasan</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="faqModal">
+  <div class="modal-box" style="max-width:460px">
+    <div class="modal-hd"><h3 id="faqModalTitle">Tambah FAQ</h3><button class="modal-close" onclick="closeModal('faqModal')"><i class="fas fa-xmark"></i></button></div>
+    <div class="modal-body-inner">
+      <div class="form-group"><label>Pertanyaan (Q)</label><input type="text" id="fm-q" placeholder="Berapa lama prosesnya?"/></div>
+      <div class="form-group"><label>Jawaban (A)</label><textarea id="fm-a" rows="5" placeholder="Proses biasanya memakan waktu..."></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="topbar-btn tb-primary" onclick="saveFaq()"><i class="fas fa-check"></i> Simpan FAQ</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><i class="fas fa-circle-check"></i><span id="toastMsg">Berhasil</span></div>
 
 <script>
 // ==========================================
-// STATE KESELURUHAN
+// STATE KESELURUHAN & DEFAULT
 // ==========================================
-let currentData = [];
+let currentProducts = [];
+let currentTestimonials = [];
+let currentFaqs = [];
 let settings = {};
+
 let editingProductIdx = null;
+let editingTestiIdx = null;
+let editingFaqIdx = null;
 
 const fmt = n => 'Rp' + parseInt(n).toLocaleString('id-ID');
 
-// Data Default (Jika Gagal Load / Pertama Kali)
 const defaultSettings = {
-  storeName: 'Farid Store',
-  city: 'Kota Pekanbaru',
-  postal: '28294',
-  desc: 'Toko aplikasi premium dan elektronik terpercaya.',
-  qrisMid: '93600915300002827902090000282790',
-  qrisType: '12',
-  qrisLabel: 'QRIS OTOMATIS FARID STORE',
-  qrisMerchant: 'Farid Store',
-  wa: '6281234567890',
-  tg: '@faridstore',
-  ig: '@faridstore',
-  statCust: '2.400+',
-  statProd: '50+',
-  statSat: '99%',
-  statTime: '<5 Menit',
-  togQris: true,
-  togNotif: true,
-  togRating: true,
-  togMaintenance: false,
-  togWa: true
+  // Tema & Branding
+  colorMain: '#C9A84C', colorDark: '#0A0A0F',
+  tickerText: 'Proses Instan 1–5 Menit, Garansi Penuh Semua Produk, Rating 4.9/5 dari 2000+ Pelanggan, CS Online 24/7',
+  discReseller: 5, discVvip: 10,
+  
+  // Info Toko
+  storeName: 'Farid Store', city: 'Pekanbaru', postal: '28294',
+  desc: 'Platform terpercaya untuk aplikasi premium harga terjangkau.',
+  
+  // QRIS
+  qrisMid: '93600915300002827902090000282790', qrisType: '12', qrisMerchant: 'Farid Store',
+  
+  // Kontak
+  wa: '6281371127121', tg: '@faridstore', ig: '@faridstore',
+  
+  // Stats
+  statCust: '2000+', statProd: '50+', statSat: '99%', statTime: '<5m',
+  
+  // Toggles
+  togQris: true, togWa: true, togRating: true, togMaintenance: false
 };
 
-// ===== TOAST =====
+// Default Dummy jika DB kosong
+const dummyTesti = [
+  {name:'Rizky A.', rating:5, text:'"Prosesnya cepet banget, ga nyampe 5 menit!"', date:'2 hari lalu'}
+];
+const dummyFaq = [
+  {q:'Berapa lama proses aktivasi?', a:'1–5 menit setelah pembayaran dikonfirmasi.'}
+];
+
+// ===== TOAST & UI HELPERS =====
 function toast(msg, type='info'){
   const t=document.getElementById('toast');
   const icons={info:'fa-circle-info',success:'fa-circle-check',error:'fa-circle-xmark'};
-  t.className='toast t-'+type;
-  t.querySelector('i').className='fas '+icons[type];
+  t.className='toast t-'+type; t.querySelector('i').className='fas '+icons[type];
   document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
 }
-
-// ===== UI HELPERS =====
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlayBg').classList.add('show')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlayBg').classList.remove('show')}
-const tabTitles={'products':'Katalog Produk <span>/ Kelola semua produk</span>','settings':'Pengaturan Toko <span>/ Konfigurasi toko & QRIS</span>'};
+function openModal(id){const m=document.getElementById(id);m.style.display='flex';requestAnimationFrame(()=>m.classList.add('show'))}
+function closeModal(id){const m=document.getElementById(id);m.classList.remove('show');setTimeout(()=>m.style.display='none',300)}
+
+const tabTitles={
+  'products':'Katalog Produk <span>/ Kelola semua produk</span>',
+  'testimonials':'Ulasan Pelanggan <span>/ Kelola testimonial halaman depan</span>',
+  'faqs':'Pertanyaan Umum <span>/ Kelola FAQ (Tanya Jawab)</span>',
+  'settings':'Pengaturan Terintegrasi <span>/ Konfigurasi & CMS</span>'
+};
+
 function switchTab(tab, btn){
   document.querySelectorAll('.panel-section').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+tab).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(btn) btn.classList.add('active');
   document.getElementById('topbarTitle').innerHTML=tabTitles[tab]||tab;
+  
+  // Toggle Visibility Stats Panel Hero
+  document.getElementById('statsGrid').style.display = (tab === 'products') ? 'grid' : 'none';
   closeSidebar();
 }
-function openModal(id){const m=document.getElementById(id);m.style.display='flex';requestAnimationFrame(()=>m.classList.add('show'))}
-function closeModal(id){const m=document.getElementById(id);m.classList.remove('show');setTimeout(()=>m.style.display='none',300)}
-function updateStats(){
-  document.getElementById('statTotal').textContent=currentData.length;
-  document.getElementById('statReady').textContent=currentData.filter(p=>p.status==='ready').length;
-  document.getElementById('statPending').textContent=currentData.filter(p=>p.status==='pending').length;
-  document.getElementById('navProdCount').textContent=currentData.length;
-}
 
-// ===== FETCH DATA (GET DARI VERCEL API) =====
+// ===== FETCH DATA KESELURUHAN =====
 async function fetchData(){
   try{
     const r = await fetch('/api/products');
@@ -460,35 +542,48 @@ async function fetchData(){
     const d = await r.json();
     const dataObj = d.record ? d.record : d;
     
-    currentData = dataObj.products || [];
+    currentProducts = dataObj.products || [];
     settings = dataObj.settings || defaultSettings;
-    
-    // Migrasi data lama jika masih menggunakan format harga tunggal 'price'
-    currentData = currentData.map(p => {
-      if (!p.variants || p.variants.length === 0) {
-        p.variants = [{ label: '1 Bulan (Default)', price: p.price || 0 }];
-      }
+    currentTestimonials = dataObj.testimonials || dummyTesti;
+    currentFaqs = dataObj.faqs || dummyFaq;
+
+    currentProducts = currentProducts.map(p => {
+      if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
       return p;
     });
 
-    toast('Data berhasil ditarik dari server', 'success');
+    toast('Data tersinkronisasi dari server', 'success');
   }catch(e){
     console.warn(e);
-    currentData = [];
-    settings = defaultSettings;
+    currentProducts = []; settings = defaultSettings; currentTestimonials = dummyTesti; currentFaqs = dummyFaq;
     toast('Gagal terhubung server. Memakai data default memori.', 'error');
   }
-  renderTable();
+  renderAll();
+}
+
+function renderAll() {
+  renderProductTable();
+  renderTestiTable();
+  renderFaqTable();
   populateSettingsForm();
   updateStats();
 }
 
-// ===== TAB 1: MANAJEMEN PRODUK =====
-function renderTable(list){
+function updateStats(){
+  document.getElementById('statTotal').textContent = currentProducts.length;
+  document.getElementById('statReady').textContent = currentProducts.filter(p=>p.status==='ready').length;
+  document.getElementById('statPending').textContent = currentProducts.filter(p=>p.status==='pending').length;
+  document.getElementById('navProdCount').textContent = currentProducts.length;
+}
+
+// ==========================================
+// 1. MANAJEMEN PRODUK
+// ==========================================
+function renderProductTable(){
   const search=document.getElementById('tableSearch').value.toLowerCase();
   const catF=document.getElementById('catFilter').value;
   const statF=document.getElementById('statusFilter').value;
-  let data=list||currentData;
+  let data = currentProducts;
   
   if(search) data=data.filter(p=>p.name.toLowerCase().includes(search));
   if(catF) data=data.filter(p=>p.cat===catF);
@@ -497,277 +592,279 @@ function renderTable(list){
   document.getElementById('tableCount').textContent=data.length+' produk ditampilkan';
   const tbody=document.getElementById('productTableBody');
   tbody.innerHTML='';
-  if(data.length===0){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text2)">Tidak ada produk ditemukan.</td></tr>';return;}
+  if(data.length===0){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text2)">Tidak ada produk.</td></tr>';return;}
   
   data.forEach((item)=>{
-    const idx=currentData.findIndex(x => x.id === item.id);
-    
-    // Ambil harga terendah dari varian sebagai harga display di tabel
-    let displayPrice = 0;
-    if (item.variants && item.variants.length > 0) {
-      displayPrice = item.variants[0].price;
-    }
+    const idx = currentProducts.findIndex(x => x.id === item.id);
+    let displayPrice = (item.variants && item.variants.length > 0) ? item.variants[0].price : 0;
 
     const tr=document.createElement('tr');
-    
-    // FIX INFINITE LOOP PADA GAMBAR CADANGAN DI TABEL (ditambah "this.onerror=null;")
     tr.innerHTML=`
-      <td><input type="checkbox" class="row-check" data-idx="${idx}" style="accent-color:var(--brand)" onchange="onRowCheck()"/></td>
-      <td><img src="${item.img||'https://placehold.co/40x40/e2e8f0/94a3b8?text=Img'}" class="img-thumb" id="prev-${idx}" onerror="this.onerror=null; this.src='https://placehold.co/40x40/e2e8f0/94a3b8?text=Img'"/></td>
-      <td><input type="text" class="cell-input" value="${item.name||''}" oninput="currentData[${idx}].name=this.value" placeholder="Nama Produk" style="min-width:140px"/></td>
-      <td>
-        <select class="category-select" onchange="currentData[${idx}].cat=this.value" style="width:100%">
-          ${['streaming','musik','produktivitas','gaming'].map(c=>`<option value="${c}" ${item.cat===c?'selected':''}>${c}</option>`).join('')}
-        </select>
-      </td>
-      <td><input type="text" class="cell-input" value="${item.img||''}" oninput="currentData[${idx}].img=this.value;document.getElementById('prev-${idx}').src=this.value" placeholder="https://..." style="min-width:140px"/></td>
+      <td><input type="checkbox" class="row-check" data-idx="${idx}" onchange="onRowCheck()"/></td>
+      <td><img src="${item.img||'https://placehold.co/40'}" class="img-thumb" onerror="this.onerror=null; this.src='https://placehold.co/40'"/></td>
+      <td style="font-weight:600;color:var(--text)">${item.name||''}</td>
+      <td><span style="font-size:11px;text-transform:uppercase;color:var(--text2);font-weight:700">${item.cat}</span></td>
       <td style="font-weight:700; color:var(--text)">${fmt(displayPrice)}</td>
-      <td>
-        <select class="category-select" onchange="currentData[${idx}].badge=this.value" style="width:100%">
-          ${[['','—'],['bestseller','Best Seller'],['new','Baru'],['hot','Hot']].map(([v,l])=>`<option value="${v}" ${item.badge===v?'selected':''}>${l}</option>`).join('')}
-        </select>
-      </td>
+      <td>${item.badge ? `<span style="background:var(--amber-soft);color:var(--amber-text);padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700">${item.badge}</span>` : '—'}</td>
       <td><button class="status-pill sp-${item.status}" onclick="toggleStatus(${idx},this)">${item.status==='ready'?'✓ Ready':'⏳ Pending'}</button></td>
       <td>
         <div class="action-btns">
-          <button class="icon-btn ib-blue" title="Edit Detail" onclick="openEditProduct(${idx})"><i class="fas fa-pen"></i></button>
-          <button class="icon-btn ib-danger" title="Hapus" onclick="deleteProduct(${idx})"><i class="fas fa-trash"></i></button>
+          <button class="icon-btn ib-blue" onclick="openEditProduct(${idx})"><i class="fas fa-pen"></i></button>
+          <button class="icon-btn ib-danger" onclick="deleteProduct(${idx})"><i class="fas fa-trash"></i></button>
         </div>
       </td>
     `;
     tbody.appendChild(tr);
   });
 }
-function filterTable(){renderTable();}
+function filterTable(){renderProductTable();}
 function toggleStatus(idx, btn){
-  const s=currentData[idx].status==='ready'?'pending':'ready';
-  currentData[idx].status=s;
-  btn.className='status-pill sp-'+s;
-  btn.textContent=s==='ready'?'✓ Ready':'⏳ Pending';
-  updateStats();
+  const s=currentProducts[idx].status==='ready'?'pending':'ready';
+  currentProducts[idx].status=s;
+  btn.className='status-pill sp-'+s; btn.textContent=s==='ready'?'✓ Ready':'⏳ Pending'; updateStats();
 }
 function onRowCheck(){
   const checked=document.querySelectorAll('.row-check:checked');
   const bar=document.getElementById('bulkBar');
-  if(checked.length>0){bar.classList.add('show');document.getElementById('bulkCount').textContent=checked.length+' produk dipilih';}
+  if(checked.length>0){bar.classList.add('show');document.getElementById('bulkCount').textContent=checked.length+' dipilih';}
   else bar.classList.remove('show');
 }
 function toggleCheckAll(cb){document.querySelectorAll('.row-check').forEach(c=>{c.checked=cb.checked;});onRowCheck();}
 function bulkDelete(){
   const idxs=[...document.querySelectorAll('.row-check:checked')].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
-  if(!confirm(`Hapus ${idxs.length} produk yang dipilih?`)) return;
-  idxs.forEach(i=>currentData.splice(i,1));
-  document.getElementById('bulkBar').classList.remove('show');
-  renderTable();updateStats();toast(`${idxs.length} produk dihapus`,'success');
+  if(!confirm(`Hapus ${idxs.length} produk?`)) return;
+  idxs.forEach(i=>currentProducts.splice(i,1));
+  document.getElementById('bulkBar').classList.remove('show'); renderProductTable(); updateStats(); toast('Terhapus','success');
 }
 function bulkSetStatus(s){
   const idxs=[...document.querySelectorAll('.row-check:checked')].map(c=>parseInt(c.dataset.idx));
-  idxs.forEach(i=>currentData[i].status=s);
-  renderTable();updateStats();toast(`Status diubah ke ${s}`,'success');
+  idxs.forEach(i=>currentProducts[i].status=s); renderProductTable(); updateStats(); toast('Status diubah','success');
 }
-
-// ==== FUNGSI VARIANT DINAMIS ====
-function addVariantRow(label = '', price = '') {
+function addVariantRow(label='', price='') {
   const container = document.getElementById('pm-variants-container');
-  const div = document.createElement('div');
-  div.className = 'variant-row';
-  div.innerHTML = `
-    <input type="text" class="var-label" placeholder="Cth: 1 Bulan / Private" value="${label}">
-    <input type="number" class="var-price" placeholder="Harga (Rp)" value="${price}">
-    <button type="button" class="variant-del-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
-  `;
+  const div = document.createElement('div'); div.className = 'variant-row';
+  div.innerHTML = `<input type="text" class="var-label" placeholder="Cth: 1 Bulan" value="${label}"><input type="number" class="var-price" placeholder="Harga" value="${price}"><button type="button" class="variant-del-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>`;
   container.appendChild(div);
 }
-
 function openAddProductModal(){
-  editingProductIdx=null;
-  document.getElementById('productModalTitle').textContent='Tambah Produk Baru';
+  editingProductIdx=null; document.getElementById('productModalTitle').textContent='Tambah Produk';
   ['name','img','rating','desc'].forEach(f=>document.getElementById('pm-'+f).value='');
-  document.getElementById('pm-badge').value='';
-  document.getElementById('pm-status').value='ready';
-  document.getElementById('pm-cat').value='streaming';
-  document.getElementById('pm-preview').src='https://placehold.co/80x80/e2e8f0/94a3b8?text=Img';
-  
-  // Kosongkan dan tambah 1 baris varian default
-  document.getElementById('pm-variants-container').innerHTML = '';
-  addVariantRow('1 Bulan', '');
-
+  document.getElementById('pm-badge').value=''; document.getElementById('pm-status').value='ready'; document.getElementById('pm-cat').value='streaming';
+  document.getElementById('pm-preview').src='https://placehold.co/80';
+  document.getElementById('pm-variants-container').innerHTML = ''; addVariantRow('1 Bulan', '');
   openModal('productModal');
 }
-
 function openEditProduct(idx){
-  editingProductIdx=idx;
-  const p=currentData[idx];
+  editingProductIdx=idx; const p=currentProducts[idx];
   document.getElementById('productModalTitle').textContent='Edit Produk';
-  document.getElementById('pm-name').value=p.name||'';
-  document.getElementById('pm-cat').value=p.cat||'streaming';
-  document.getElementById('pm-img').value=p.img||'';
-  document.getElementById('pm-preview').src=p.img||'https://placehold.co/80x80/e2e8f0/94a3b8?text=Img';
-  document.getElementById('pm-rating').value=p.rating||4.5;
-  document.getElementById('pm-badge').value=p.badge||'';
-  document.getElementById('pm-status').value=p.status||'ready';
-  document.getElementById('pm-desc').value=p.desc||'';
-  
-  // Render varian produk tersebut
-  const container = document.getElementById('pm-variants-container');
-  container.innerHTML = '';
-  if(p.variants && p.variants.length > 0) {
-    p.variants.forEach(v => addVariantRow(v.label, v.price));
-  } else {
-    addVariantRow('1 Bulan', p.price || 0); // fallback
-  }
-
+  document.getElementById('pm-name').value=p.name||''; document.getElementById('pm-cat').value=p.cat||'streaming';
+  document.getElementById('pm-img').value=p.img||''; document.getElementById('pm-preview').src=p.img||'https://placehold.co/80';
+  document.getElementById('pm-rating').value=p.rating||4.5; document.getElementById('pm-badge').value=p.badge||'';
+  document.getElementById('pm-status').value=p.status||'ready'; document.getElementById('pm-desc').value=p.desc||'';
+  const container = document.getElementById('pm-variants-container'); container.innerHTML = '';
+  if(p.variants && p.variants.length > 0) p.variants.forEach(v => addVariantRow(v.label, v.price)); else addVariantRow('1 Bulan', p.price || 0);
   openModal('productModal');
 }
-
 function saveProduct(){
-  const name=document.getElementById('pm-name').value.trim();
-  if(!name){toast('Nama produk wajib diisi!','error');return;}
-  
-  // Ambil data varian dari DOM
-  const variantNodes = document.querySelectorAll('#pm-variants-container .variant-row');
+  const name=document.getElementById('pm-name').value.trim(); if(!name){toast('Nama wajib diisi!','error');return;}
   const variants = [];
-  variantNodes.forEach(row => {
-    const l = row.querySelector('.var-label').value.trim();
-    const p = parseInt(row.querySelector('.var-price').value) || 0;
+  document.querySelectorAll('#pm-variants-container .variant-row').forEach(row => {
+    const l = row.querySelector('.var-label').value.trim(); const p = parseInt(row.querySelector('.var-price').value) || 0;
     if(l) variants.push({ label: l, price: p });
   });
-
-  if(variants.length === 0) {
-    toast('Minimal 1 pilihan periode & harga wajib diisi!','error');
-    return;
-  }
-
+  if(variants.length === 0) {toast('Minimal 1 varian!','error'); return;}
   const p={
-    id: editingProductIdx!==null ? currentData[editingProductIdx].id : Date.now(),
-    name, cat:document.getElementById('pm-cat').value,
-    img:document.getElementById('pm-img').value.trim(),
-    variants: variants,
-    price: variants[0].price, // Pertahankan field price untuk backward compatibility (sorting)
-    rating:parseFloat(document.getElementById('pm-rating').value)||4.5,
-    badge:document.getElementById('pm-badge').value,
-    status:document.getElementById('pm-status').value,
-    desc:document.getElementById('pm-desc').value.trim()
+    id: editingProductIdx!==null ? currentProducts[editingProductIdx].id : Date.now(),
+    name, cat:document.getElementById('pm-cat').value, img:document.getElementById('pm-img').value.trim(),
+    variants: variants, price: variants[0].price, rating:parseFloat(document.getElementById('pm-rating').value)||4.5,
+    badge:document.getElementById('pm-badge').value, status:document.getElementById('pm-status').value, desc:document.getElementById('pm-desc').value.trim()
   };
-  
-  if(editingProductIdx!==null) currentData[editingProductIdx]=p;
-  else currentData.unshift(p); // Tambah di atas
-  
-  closeModal('productModal'); renderTable(); updateStats();
-  toast('Produk tersimpan di memori. Klik "Simpan Semua" untuk upload!','info');
+  if(editingProductIdx!==null) currentProducts[editingProductIdx]=p; else currentProducts.unshift(p);
+  closeModal('productModal'); renderProductTable(); updateStats(); toast('Tersimpan di memori','info');
 }
-
 function deleteProduct(idx){
-  if(!confirm(`Hapus produk "${currentData[idx].name}"?`)) return;
-  currentData.splice(idx,1);
-  renderTable();updateStats();
-  toast('Dihapus dari memori. Jangan lupa Simpan Semua.','info');
+  if(!confirm('Hapus produk ini?')) return;
+  currentProducts.splice(idx,1); renderProductTable(); updateStats(); toast('Dihapus dari memori','info');
 }
 
-function exportCSV(){
-  const headers=['ID','Nama','Kategori','Harga (Mulai)','Status','Badge','Rating','Deskripsi','URL Gambar'];
-  const rows=currentData.map(p=>[p.id, p.name, p.cat, p.variants[0].price, p.status, p.badge||'', p.rating||'', p.desc||'', p.img]);
-  const csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='faridstore-products.csv';a.click();
-  toast('CSV berhasil diexport','success');
+// ==========================================
+// 2. MANAJEMEN TESTIMONI
+// ==========================================
+function renderTestiTable(){
+  const tbody=document.getElementById('testiTableBody'); tbody.innerHTML='';
+  if(currentTestimonials.length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text2)">Belum ada ulasan.</td></tr>';return;}
+  currentTestimonials.forEach((t, idx)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div style="width:34px;height:34px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px">${t.name.substring(0,2).toUpperCase()}</div></td>
+      <td><div style="font-weight:700;color:var(--text)">${t.name}</div><div style="font-size:11px;color:var(--text2)">${t.date}</div></td>
+      <td style="color:var(--amber-text);font-size:11px">${'★'.repeat(t.rating)}</td>
+      <td style="color:var(--text2);font-style:italic">"${t.text}"</td>
+      <td><div class="action-btns"><button class="icon-btn ib-blue" onclick="openEditTesti(${idx})"><i class="fas fa-pen"></i></button><button class="icon-btn ib-danger" onclick="deleteTesti(${idx})"><i class="fas fa-trash"></i></button></div></td>
+    `; tbody.appendChild(tr);
+  });
 }
+function openAddTestiModal(){
+  editingTestiIdx = null; document.getElementById('testiModalTitle').textContent='Tambah Ulasan';
+  document.getElementById('tm-name').value=''; document.getElementById('tm-date').value='';
+  document.getElementById('tm-rating').value='5'; document.getElementById('tm-text').value='';
+  openModal('testiModal');
+}
+function openEditTesti(idx){
+  editingTestiIdx = idx; const t = currentTestimonials[idx]; document.getElementById('testiModalTitle').textContent='Edit Ulasan';
+  document.getElementById('tm-name').value=t.name; document.getElementById('tm-date').value=t.date;
+  document.getElementById('tm-rating').value=t.rating; document.getElementById('tm-text').value=t.text.replace(/"/g,'');
+  openModal('testiModal');
+}
+function saveTesti(){
+  const name=document.getElementById('tm-name').value.trim(); const text=document.getElementById('tm-text').value.trim();
+  if(!name||!text){toast('Nama & Isi wajib!','error');return;}
+  const t = { name, date:document.getElementById('tm-date').value||'Baru saja', rating:parseInt(document.getElementById('tm-rating').value)||5, text: text };
+  if(editingTestiIdx!==null) currentTestimonials[editingTestiIdx]=t; else currentTestimonials.unshift(t);
+  closeModal('testiModal'); renderTestiTable(); toast('Ulasan tersimpan di memori','info');
+}
+function deleteTesti(idx){ if(confirm('Hapus ulasan ini?')) { currentTestimonials.splice(idx,1); renderTestiTable(); } }
 
-// ===== TAB 3: PENGATURAN TOKO =====
+// ==========================================
+// 3. MANAJEMEN FAQ
+// ==========================================
+function renderFaqTable(){
+  const tbody=document.getElementById('faqTableBody'); tbody.innerHTML='';
+  if(currentFaqs.length===0){tbody.innerHTML='<tr><td colspan="3" style="text-align:center;padding:20px;color:var(--text2)">Belum ada FAQ.</td></tr>';return;}
+  currentFaqs.forEach((f, idx)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td style="font-weight:700;color:var(--text)">${f.q}</td>
+      <td style="color:var(--text2);line-height:1.5">${f.a}</td>
+      <td><div class="action-btns"><button class="icon-btn ib-blue" onclick="openEditFaq(${idx})"><i class="fas fa-pen"></i></button><button class="icon-btn ib-danger" onclick="deleteFaq(${idx})"><i class="fas fa-trash"></i></button></div></td>
+    `; tbody.appendChild(tr);
+  });
+}
+function openAddFaqModal(){
+  editingFaqIdx = null; document.getElementById('faqModalTitle').textContent='Tambah FAQ';
+  document.getElementById('fm-q').value=''; document.getElementById('fm-a').value='';
+  openModal('faqModal');
+}
+function openEditFaq(idx){
+  editingFaqIdx = idx; const f = currentFaqs[idx]; document.getElementById('faqModalTitle').textContent='Edit FAQ';
+  document.getElementById('fm-q').value=f.q; document.getElementById('fm-a').value=f.a;
+  openModal('faqModal');
+}
+function saveFaq(){
+  const q=document.getElementById('fm-q').value.trim(); const a=document.getElementById('fm-a').value.trim();
+  if(!q||!a){toast('Q & A wajib diisi!','error');return;}
+  const f = { q, a };
+  if(editingFaqIdx!==null) currentFaqs[editingFaqIdx]=f; else currentFaqs.push(f);
+  closeModal('faqModal'); renderFaqTable(); toast('FAQ tersimpan di memori','info');
+}
+function deleteFaq(idx){ if(confirm('Hapus FAQ ini?')) { currentFaqs.splice(idx,1); renderFaqTable(); } }
+
+// ==========================================
+// 4. PENGATURAN TERINTEGRASI (SETTINGS)
+// ==========================================
 function populateSettingsForm(){
+  document.getElementById('set-colorMain').value = settings.colorMain || '#C9A84C';
+  document.getElementById('set-colorDark').value = settings.colorDark || '#0A0A0F';
+  document.getElementById('set-tickerText').value = settings.tickerText || '';
+  document.getElementById('set-discReseller').value = settings.discReseller || 5;
+  document.getElementById('set-discVvip').value = settings.discVvip || 10;
+  
   document.getElementById('set-storeName').value = settings.storeName || '';
   document.getElementById('set-city').value = settings.city || '';
   document.getElementById('set-postal').value = settings.postal || '';
   document.getElementById('set-desc').value = settings.desc || '';
+  
   document.getElementById('set-qrisMid').value = settings.qrisMid || '';
   document.getElementById('set-qrisType').value = settings.qrisType || '12';
-  document.getElementById('set-qrisLabel').value = settings.qrisLabel || '';
   document.getElementById('set-qrisMerchant').value = settings.qrisMerchant || '';
+  
   document.getElementById('set-wa').value = settings.wa || '';
   document.getElementById('set-tg').value = settings.tg || '';
   document.getElementById('set-ig').value = settings.ig || '';
+  
   document.getElementById('set-statCust').value = settings.statCust || '';
   document.getElementById('set-statProd').value = settings.statProd || '';
   document.getElementById('set-statSat').value = settings.statSat || '';
   document.getElementById('set-statTime').value = settings.statTime || '';
   
   document.getElementById('tog-qris').checked = settings.togQris ?? true;
-  document.getElementById('tog-notif').checked = settings.togNotif ?? true;
+  document.getElementById('tog-wa').checked = settings.togWa ?? true;
   document.getElementById('tog-rating').checked = settings.togRating ?? true;
   document.getElementById('tog-maintenance').checked = settings.togMaintenance ?? false;
-  document.getElementById('tog-wa').checked = settings.togWa ?? true;
 }
 
 function saveSettingsToMemory(){
   settings = {
+    colorMain: document.getElementById('set-colorMain').value,
+    colorDark: document.getElementById('set-colorDark').value,
+    tickerText: document.getElementById('set-tickerText').value,
+    discReseller: parseInt(document.getElementById('set-discReseller').value) || 0,
+    discVvip: parseInt(document.getElementById('set-discVvip').value) || 0,
+
     storeName: document.getElementById('set-storeName').value,
     city: document.getElementById('set-city').value,
     postal: document.getElementById('set-postal').value,
     desc: document.getElementById('set-desc').value,
+
     qrisMid: document.getElementById('set-qrisMid').value,
     qrisType: document.getElementById('set-qrisType').value,
-    qrisLabel: document.getElementById('set-qrisLabel').value,
     qrisMerchant: document.getElementById('set-qrisMerchant').value,
+
     wa: document.getElementById('set-wa').value,
     tg: document.getElementById('set-tg').value,
     ig: document.getElementById('set-ig').value,
+
     statCust: document.getElementById('set-statCust').value,
     statProd: document.getElementById('set-statProd').value,
     statSat: document.getElementById('set-statSat').value,
     statTime: document.getElementById('set-statTime').value,
+
     togQris: document.getElementById('tog-qris').checked,
-    togNotif: document.getElementById('tog-notif').checked,
+    togWa: document.getElementById('tog-wa').checked,
     togRating: document.getElementById('tog-rating').checked,
     togMaintenance: document.getElementById('tog-maintenance').checked,
-    togWa: document.getElementById('tog-wa').checked,
   };
-  toast('Masuk ke memori. Klik "Simpan Semua" di topbar untuk Upload.', 'success');
+  toast('Tersimpan di memori. Klik "Simpan Semua" di topbar untuk Upload.', 'success');
 }
 
-function resetSettingsForm(){
-  if(!confirm('Kembalikan isian form ini ke data server terakhir?')) return;
-  populateSettingsForm();
-  toast('Form dikembalikan ke data server.', 'info');
-}
-
-// ===== MASTER SAVE: PUSH KE SERVER API VERCEL =====
+// ==========================================
+// MASTER PUSH KE VERCEL API
+// ==========================================
 async function saveAllToDatabase(){
   const btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
   
+  // Menggabungkan 4 modul: Products, Settings, Testimonials, Faqs
   const masterPayload = {
-    products: currentData,
-    settings: settings
-  }; // Array periods sudah tidak dikirim
+    products: currentProducts,
+    settings: settings,
+    testimonials: currentTestimonials,
+    faqs: currentFaqs
+  };
 
   try{
     const r = await fetch('/api/products', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(masterPayload)
     });
     
     if(!r.ok) throw new Error('API Error');
-    toast('Berhasil! Semua data tersimpan di server global.', 'success');
+    toast('Berhasil! Semua konfigurasi (Tema, Produk, Ulasan) tersimpan ke DB.', 'success');
   }catch(e){
-    toast('Gagal mengupload. Periksa koneksi atau log Vercel.', 'error');
+    toast('Gagal mengupload. Periksa koneksi API Vercel.', 'error');
   }finally{
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Simpan Semua';
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Simpan Semua';
   }
 }
 
-// Tutup modal jika user klik background
+// Modal Listener
 document.querySelectorAll('.modal-bg').forEach(m=>{
   m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)});
 });
 
 // INIT
-document.addEventListener('DOMContentLoaded', () => {
-  fetchData();
-});
+document.addEventListener('DOMContentLoaded', () => { fetchData(); });
 </script>
 </body>
 </html>
