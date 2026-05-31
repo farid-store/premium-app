@@ -235,7 +235,11 @@ html, body {
   .t-btn span{display:none}
   .t-btn{padding:8px 10px}
   .auth-box{padding:24px 18px; margin:10px;}
-  .period-grid{grid-template-columns:repeat(2,1fr);} 
+  /* Ubah yang sebelumnya repeat(2,1fr) jadi seperti ini */
+  .period-grid {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 9px;
+  }
 }
 
 /* ===== FILTER ===== */
@@ -507,13 +511,60 @@ html, body {
 .step-con.done{background:var(--green)}
 .fm-lbl{font-size:11px;font-weight:700;color:var(--mist);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:13px;display:flex;align-items:center;gap:5px}
 .fm-lbl i{font-size:11px;color:var(--gold)}
-.period-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.period-btn{padding:8px 5px;background:var(--sf);border:1.5px solid var(--bd2);border-radius:var(--r-md);font-family:var(--font);font-size:11px;font-weight:600;color:var(--mist);line-height:1.3;text-align:center;transition:var(--t)}
-.period-btn.sel{background:var(--ink);border-color:var(--ink);color:var(--gold)}
-.period-btn:hover:not(.sel){border-color:var(--gold);color:var(--ink)}
-.period-price{font-size:10px;font-weight:800;color:var(--gold);display:block;margin-top:2px}
-.period-btn.sel .period-price{color:var(--gold-l)}
-.period-btn.disc-per .period-price-orig{font-size:9px;color:var(--mist2);text-decoration:line-through;display:block}
+
+/* ===== PERBAIKAN TOMBOL PERIODE ===== */
+.period-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
+  gap: 10px;
+}
+.period-btn {
+  padding: 12px 10px; /* Ruang napas yang lebih lega */
+  background: var(--sf);
+  border: 1.5px solid var(--bd2);
+  border-radius: var(--r-md);
+  font-family: var(--font);
+  font-size: 11.5px; 
+  font-weight: 600;
+  color: var(--mist);
+  line-height: 1.4;
+  text-align: center;
+  transition: var(--t);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.period-btn:hover:not(.sel) {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--sf2);
+}
+.period-btn.sel {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--sf); /* Teks label jadi putih biar kontras */
+  box-shadow: 0 4px 12px rgba(10, 10, 15, 0.15); /* Efek pop-up */
+}
+.period-price {
+  font-size: 13px; /* Harga lebih besar dari label */
+  font-weight: 800;
+  color: var(--ink); /* Gelap saat tidak dipilih agar mudah dibaca */
+  display: block;
+  margin-top: 5px;
+}
+.period-btn.sel .period-price {
+  color: var(--gold-l); /* Menyala gold saat dipilih */
+}
+.period-btn.disc-per .period-price-orig {
+  font-size: 10px;
+  color: var(--mist2);
+  text-decoration: line-through;
+  display: block;
+  margin-top: 2px;
+}
+  
 .qty-row{display:flex;align-items:center;gap:9px}
 .qty-btn{width:34px;height:34px;border:1.5px solid var(--bd2);background:var(--sf);border-radius:var(--r-md);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:var(--t);color:var(--ink);flex-shrink:0}
 .qty-btn:hover{border-color:var(--gold);background:var(--gold-p);color:var(--gold-d)}
