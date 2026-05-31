@@ -221,7 +221,7 @@ html, body {
   /* Modal adjustments for small screens */
   .modal-body{flex-direction:column;padding:14px;gap:14px;}
   .modal-left{flex:none;align-self:center;width:100%;max-width:280px}
-  .modal-prod-img{width:120px;height:120px;margin:0 auto 12px}
+  
   
   .faq-grid{grid-template-columns:1fr}
   .footer-top{gap:22px; flex-direction:column;} 
@@ -392,6 +392,34 @@ html, body {
 .u-chip-wrap{position:relative;flex-shrink:0}
 
 /* ===== PRODUCT MODAL ===== */
+
+/* CSS BARU UNTUK HEADER PRODUK DI MODAL */
+.pm-header-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.modal-prod-img-small {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  border: 1px solid var(--bd);
+  background: var(--ash);
+  flex-shrink: 0;
+}
+.pm-header-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+.pm-header-info .pm-name {
+  margin-bottom: 2px; 
+  line-height: 1.25;
+}
+  
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:500;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .3s}
 .modal-ov.on{display:flex;opacity:1}
 @media(min-width:641px){.modal-ov{align-items:center}}
@@ -840,9 +868,9 @@ html, body {
       <span class="modal-title" id="modalTitle">Detail Produk</span>
       <button class="modal-x" id="closeModalBtn"><i class="fas fa-xmark"></i></button>
     </div>
-    <div class="modal-body">
+      <div class="modal-body">
       <div class="modal-left">
-        <img id="modalImg" class="modal-prod-img" src="" alt="Produk"/>
+        <!-- Gambar sudah dipindah dari sini -->
         <div class="qris-box" id="modalQrisBox">
           <div class="qris-title"><i class="fas fa-qrcode"></i>QRIS Pembayaran</div>
           <div id="qrcode"></div>
@@ -852,17 +880,27 @@ html, body {
           <button class="qris-copy" id="copyAmtBtn"><i class="fas fa-copy"></i>Salin Nominal</button>
         </div>
       </div>
+      
       <div class="modal-right">
         <div class="modal-disc-info" id="modalDiscInfo"><i class="fas fa-tag"></i><span id="modalDiscText"></span></div>
-        <div class="pm-name" id="modalProdName"></div>
-        <div style="display:flex;align-items:baseline;gap:0;margin-bottom:4px">
-          <span class="pm-price" id="modalProdPrice"></span>
-          <span class="pm-price-orig" id="modalProdOrig"></span>
+        
+        <!-- BUNGKUSAN BARU UNTUK GAMBAR & INFO HEADER -->
+        <div class="pm-header-wrap">
+          <img id="modalImg" class="modal-prod-img-small" src="" alt="Produk"/>
+          <div class="pm-header-info">
+            <div class="pm-name" id="modalProdName"></div>
+            <div style="display:flex;align-items:baseline;gap:0;margin-bottom:2px">
+              <span class="pm-price" id="modalProdPrice"></span>
+              <span class="pm-price-orig" id="modalProdOrig"></span>
+            </div>
+            <div class="pm-rating" style="margin-bottom:0">
+              <span class="pm-stars" id="modalStars">★★★★★</span>
+              <span class="pm-rtxt" id="modalRatingTxt">4.9 (120 ulasan)</span>
+            </div>
+          </div>
         </div>
-        <div class="pm-rating">
-          <span class="pm-stars" id="modalStars">★★★★★</span>
-          <span class="pm-rtxt" id="modalRatingTxt">4.9 (120 ulasan)</span>
-        </div>
+        <!-- AKHIR BUNGKUSAN BARU -->
+
         <div class="pm-desc" id="modalProdDesc"></div>
         <div class="steps-row">
           <div class="step-item"><div class="step-dot done" id="s1">1</div><div class="step-lbl">Pilih<br>Paket</div></div>
