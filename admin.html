@@ -597,39 +597,43 @@ function switchTab(tab, btn){
 // ===== FETCH DATA KESELURUHAN =====
 async function fetchData(){
   try{
+    // 1. Tarik Katalog, Setting, Ulasan, dan FAQ dari /api/products
     const r = await fetch('/api/products');
-    if(!r.ok) throw new Error('Server error');
-    
+    if(!r.ok) throw new Error('Server error produk');
     const d = await r.json();
     const dataObj = d.record ? d.record : d;
     
     currentProducts = dataObj.products || [];
     settings = dataObj.settings || defaultSettings;
-    currentTestimonials = dataObj.testimonials || dummyTesti;
-    currentFaqs = dataObj.faqs || dummyFaq;
-    
-    // Anggap data user juga disimpan di payload yang sama, jika tidak, bisa panggil fetch('/api/users')
-    currentUsers = dataObj.users || []; 
+    currentTestimonials = dataObj.testimonials || [];
+    currentFaqs = dataObj.faqs || [];
 
     currentProducts = currentProducts.map(p => {
       if (!p.variants || p.variants.length === 0) p.variants = [{ label: '1 Bulan', price: p.price || 0 }];
       return p;
     });
+  } catch(e){
+    console.warn('Gagal load produk', e);
+    currentProducts = []; settings = defaultSettings; currentTestimonials = []; currentFaqs = [];
+  }
 
-    toast('Data tersinkronisasi dari server', 'success');
-  }catch(e){
-    console.warn(e);
-    currentProducts = []; currentUsers = []; settings = defaultSettings; currentTestimonials = dummyTesti; currentFaqs = dummyFaq;
-    toast('Gagal terhubung server. Memakai data default.', 'error');
+  try {
+    // 2. Tarik khusus data Member dari jalur aslinya (/api/users)
+    const rUsers = await fetch('/api/users');
+    if(rUsers.ok) {
+      const dUsers = await rUsers.json();
+      // Deteksi struktur array dari Vercel / database-mu
+      currentUsers = dUsers.record ? dUsers.record : (Array.isArray(dUsers) ? dUsers : (dUsers.users || []));
+    } else {
+      currentUsers = [];
+    }
+  } catch(e) {
+    console.warn('Gagal load member', e);
+    currentUsers = [];
   }
-  
-  // Jika masih belum ada user (dummy)
-  if(currentUsers.length === 0) {
-    currentUsers = [
-      {id:'u_budigaming', username:'BudiGaming', contact:'08123456789', badge:'reseller', device:'Android', ts: Date.now() - 86400000},
-      {id:'u_siti_123', username:'Siti_123', contact:'siti@email.com', badge:'umum', device:'iOS', ts: Date.now()}
-    ];
-  }
+
+  toast('Data tersinkronisasi dari server', 'success');
+
 
   renderAll();
 }
@@ -802,11 +806,30 @@ function openEditUser(idx){
   document.getElementById('um-badge').value = u.badge || 'umum';
   openModal('userModal');
 }
-function saveUser(){
+async function saveUser(){
+  const btn = document.querySelector('#userModal .tb-primary');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+  
   const u = currentUsers[editingUserIdx];
   u.contact = document.getElementById('um-contact').value.trim();
   u.badge = document.getElementById('um-badge').value;
-  closeModal('userModal'); renderUserTable(); toast('Data member diperbarui','info');
+  
+  try {
+    // Kirim data akun yang sudah di-edit kembali ke database
+    await fetch('/api/users', {
+      method: 'PUT', // Menggunakan metode update
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(u)
+    });
+    toast('Data member berhasil di-update ke server', 'success');
+  } catch(e) {
+    console.error(e);
+    toast('Gagal update ke server. Cek koneksi API.', 'error');
+  }
+  
+  btn.innerHTML = '<i class="fas fa-check"></i> Simpan Perubahan';
+  closeModal('userModal'); 
+  renderUserTable(); 
 }
 function deleteUser(idx){
   if(confirm('Hapus member ini? Seluruh data akun terkait akan hilang.')){
