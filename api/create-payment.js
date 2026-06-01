@@ -1,4 +1,4 @@
-// api/create-payment.js  ← taruh di folder /api/ di repo GitHub kamu
+// api/create-payment.js 
 // Endpoint: POST /api/create-payment
 // Dokumentasi resmi: https://docs.duitku.com/api/en
 
@@ -10,12 +10,13 @@ const API_KEY       = process.env.DUITKU_API_KEY;          // API key dari proje
 const IS_SANDBOX    = process.env.DUITKU_SANDBOX !== 'false'; // default: true (sandbox)
 const STORE_URL     = process.env.STORE_BASE_URL || 'https://premium-app-mu.vercel.app';
 
-// ─── URL endpoint Duitku yang BENAR ────────────────────────────────────────
+// ─── URL endpoint Duitku yang BENAR (Pop UI / Invoice) ─────────────────────
 // Sandbox   : https://sandbox.duitku.com/webapi/api/merchant/createInvoice
 // Production: https://passport.duitku.com/webapi/api/merchant/createInvoice
 const DUITKU_URL = IS_SANDBOX
-  ? 'https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry'
-  : 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry';
+  ? 'https://sandbox.duitku.com/webapi/api/merchant/createInvoice'
+  : 'https://passport.duitku.com/webapi/api/merchant/createInvoice';
+
 export default async function handler(req, res) {
   // CORS headers (opsional, tapi aman)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -74,23 +75,24 @@ export default async function handler(req, res) {
       url: DUITKU_URL,
     });
 
-    // ─── Nama pelanggan (max 20 karakter untuk customerVaName) ──────────────
+    // ─── Sanitasi Data Pelanggan ────────────────────────────────────────────
     const rawName   = username || contact.split('@')[0] || 'Pelanggan';
     const vaName    = rawName.substring(0, 20);
 
-    // ─── Email fallback (Duitku sebaiknya dapat email valid) ────────────────
     const customerEmail = email && email.includes('@')
       ? email
       : `${contact.replace(/\D/g, '').substring(0, 10) || 'pelanggan'}@faridstore.id`;
 
-    // ─── Phone: hanya angka, max 15 digit ───────────────────────────────────
     const phoneNumber = contact.replace(/\D/g, '').substring(0, 15);
+
+    // ─── Pembersihan URL (Menghindari Double Slash) ─────────────────────────
+    const cleanStoreUrl = STORE_URL.replace(/\/$/, '');
 
     // ─── Build payload ke Duitku ─────────────────────────────────────────────
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
-      paymentMethod:   '',             // kosong = tampilkan semua metode pembayaran
+      // Parameter paymentMethod DIHAPUS karena menggunakan createInvoice
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${parseInt(qty) || 1}`.substring(0, 255),
       additionalParam: note ? note.substring(0, 255) : '',
@@ -100,9 +102,9 @@ export default async function handler(req, res) {
       phoneNumber:     phoneNumber || '',
       itemDetails: [
         {
-          name:     `${productName} (${period || '1 Bulan'})`.substring(0, 255),
-          price:    Math.round(paymentAmount / (parseInt(qty) || 1)),
-          quantity: parseInt(qty) || 1,
+          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
+          price:    paymentAmount, // Dikunci ke total akhir untuk hindari error rounding
+          quantity: 1,             // Dikunci 1 agar perhitungan (price * qty == paymentAmount) selalu valid
         },
       ],
       customerDetail: {
@@ -111,8 +113,8 @@ export default async function handler(req, res) {
         email:       customerEmail,
         phoneNumber: phoneNumber || '',
       },
-      callbackUrl:  `${STORE_URL}/api/payment-callback`,
-      returnUrl:    `${STORE_URL}/?payment=success&orderId=${merchantOrderId}`,
+      callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
+      returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
       expiryPeriod: 60, // expire dalam 60 menit
     };
@@ -127,11 +129,9 @@ export default async function handler(req, res) {
     });
 
     const duitkuData = await duitkuRes.json();
-
     console.log('[create-payment] Duitku response:', duitkuData);
 
     // ─── Cek apakah Duitku berhasil ──────────────────────────────────────────
-    // statusCode '00' = SUCCESS
     if (duitkuData.statusCode !== '00') {
       console.error('[Duitku] Error:', duitkuData);
       return res.status(502).json({
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
 
     // ─── Simpan order pending ke database kamu ───────────────────────────────
     try {
-      const dbRes  = await fetch(`${STORE_URL}/api/products`);
+      const dbRes  = await fetch(`${cleanStoreUrl}/api/products`);
       const dbData = await dbRes.json();
       const payload = dbData.record ? dbData.record : dbData;
 
@@ -163,7 +163,7 @@ export default async function handler(req, res) {
         paymentMethod:   'Duitku',
       });
 
-      await fetch(`${STORE_URL}/api/products`, {
+      await fetch(`${cleanStoreUrl}/api/products`, {
         method:  'PUT',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload),
@@ -171,7 +171,6 @@ export default async function handler(req, res) {
 
       console.log('[create-payment] Order saved to DB:', merchantOrderId);
     } catch (dbErr) {
-      // DB error TIDAK membatalkan pembayaran — hanya log
       console.warn('[create-payment] DB save failed (non-fatal):', dbErr.message);
     }
 
