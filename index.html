@@ -13,7 +13,7 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import { getFirestore, collection, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-        const firebaseConfig = {
+    const firebaseConfig = {
       apiKey: "AIzaSyDMSeJ9eCBih5sjjt0Tpw1ZyNMWNqV0aqc",
       authDomain: "premium-app-mu.firebaseapp.com",
       projectId: "premium-app-mu",
@@ -22,7 +22,6 @@
       appId: "1:932475484181:web:3448be2e74b0c96942761c",
       measurementId: "G-P5EQ9EMYF4"
     };
-
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
