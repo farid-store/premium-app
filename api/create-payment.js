@@ -14,9 +14,8 @@ const STORE_URL     = process.env.STORE_BASE_URL || 'https://premium-app-mu.verc
 // Sandbox   : https://sandbox.duitku.com/webapi/api/merchant/createInvoice
 // Production: https://passport.duitku.com/webapi/api/merchant/createInvoice
 const DUITKU_URL = IS_SANDBOX
-  ? 'https://sandbox.duitku.com/webapi/api/merchant/createInvoice'
-  : 'https://passport.duitku.com/webapi/api/merchant/createInvoice';
-
+  ? 'https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry'
+  : 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry';
 export default async function handler(req, res) {
   // CORS headers (opsional, tapi aman)
   res.setHeader('Access-Control-Allow-Origin', '*');
