@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   parseInt(total),
-      paymentMethod:   '',               // Kosong = tampilkan semua metode
+                 // Kosong = tampilkan semua metode
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${qty || 1}`,
       additionalParam: note || '',
