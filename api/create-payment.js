@@ -76,8 +76,8 @@ export default async function handler(req, res) {
       expiryPeriod:  60, // expire dalam 60 menit
     };
 
-    // Kirim request ke Duitku
-    const duitkuRes = await fetch(`${BASE_URL}/api/merchant/v2/inquiry`, {
+// Kirim request ke endpoint Duitku Pop (createInvoice)
+    const duitkuRes = await fetch(`${BASE_URL}/api/merchant/createInvoice`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(duitkuPayload),
