@@ -1825,68 +1825,69 @@ function applySettings() {
     addToCart(curProduct, curPeriod, curQty);
   });
 
-  document.getElementById('confirmBtn').addEventListener('click', async () => {
+ document.getElementById('confirmBtn').addEventListener('click', async () => {
     const contact = document.getElementById('contactInput').value.trim();
     const note = document.getElementById('noteInput').value.trim();
-    if (!contact) { showToast('Mohon isi kontak Anda'); document.getElementById('contactInput').focus(); return; }
+    
+    if (!contact) { 
+      showToast('Mohon isi kontak Anda'); 
+      document.getElementById('contactInput').focus(); 
+      return; 
+    }
     localStorage.setItem('fs_contact', contact);
     
     const btn = document.getElementById('confirmBtn');
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Mengirim...';
+    btn.disabled = true; 
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses Pembayaran...';
     
     const discRate = getDiscRate();
     const finalTotal = Math.round(curPeriod.price * (1 - discRate)) * curQty;
     
-    let userIP = 'N/A';
-    try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch(e){}
-    
-    const orderDate = new Date().toLocaleString('id-ID',{timeZone:'Asia/Jakarta', day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) + ' WIB';
-    const userInfo = currentUser ? `👤 *Akun:* ${currentUser.isGuest ? 'Tamu' : currentUser.username} [${(currentUser.badge||'umum').toUpperCase()}]\n` : '';
-    const discInfo2 = discRate > 0 ? `🏷️ *Diskon:* ${Math.round(discRate * 100)}% (${(currentUser?.badge||'umum').toUpperCase()})\n` : '';
-    const invoiceText = `*INVOICE — FARID STORE*\n──────────────────────\n🗓️ *Waktu:* ${orderDate}\n\n📦 *Produk:* ${curProduct.name}\n⏳ *Paket:* ${curPeriod.label}\n🔢 *Jumlah:* ${curQty}x\n${discInfo2}💰 *Total:* ${fmt(finalTotal)}\n📞 *Kontak:* ${contact}\n${note ? '📝 *Catatan:* ' + note + '\n' : ''}\n${userInfo}🌐 *IP:* ${userIP}\n📱 *Perangkat:* ${getDevice()}\n──────────────────────\nHalo Admin, mohon segera diproses. Terima kasih!`;
-    
     try {
-      const newOrder = {
-        orderDate: orderDate,
-        username: currentUser && !currentUser.isGuest ? currentUser.username : 'Guest',
-        contact: contact,
-        productName: curProduct.name,
-        period: curPeriod.label,
-        qty: curQty,
-        total: finalTotal,
-        status: 'pending',
-        note: note,
-        userIP: userIP,
-        device: getDevice()
-      };
-
-      if (!fullDataPayload.orders) fullDataPayload.orders = [];
-      fullDataPayload.orders.push(newOrder);
-
-      const r = await fetch('/api/products', {
-        method: 'PUT',
+      // Mengirim data ke endpoint Duitku (api/create-payment)
+      const response = await fetch('/api/create-payment', {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fullDataPayload)
+        body:    JSON.stringify({
+          productName: curProduct.name,
+          period:      curPeriod.label,
+          qty:         curQty,
+          total:       finalTotal,
+          contact:     contact,
+          email:       '', // Dikosongkan karena tidak ada input email terpisah
+          note:        note,
+          username:    currentUser && !currentUser.isGuest ? currentUser.username : 'Guest',
+        }),
       });
 
-      if (r.ok) {
-        updateSteps(4);
-        saveCart([]);
-        updateCartBadge();
-        document.getElementById('invoiceWaBtn').href = `https://wa.me/${WA_NUM}?text=${encodeURIComponent(invoiceText)}`;
-        document.getElementById('successOv').classList.add('on');
-      } else {
-        throw new Error('Gagal menyimpan pesanan ke database');
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Gagal terhubung ke gateway pembayaran');
       }
-    } catch(e) {
-      const sm = document.getElementById('stMsg'); sm.className = 'st-msg err';
-      sm.innerHTML = '<i class="fas fa-circle-xmark"></i> Server sibuk. Gunakan tombol Chat WhatsApp.';
-      console.error(e);
+
+      // Bersihkan keranjang jika checkout berhasil diproses
+      saveCart([]);
+      updateCartBadge();
+
+      // Simpan last order ke localstorage untuk verifikasi halaman sukses
+      localStorage.setItem('fs_last_order', data.merchantOrderId);
+
+      // Redirect pembeli langsung ke halaman Duitku
+      window.location.href = data.paymentUrl;
+
+    } catch (err) {
+      const sm = document.getElementById('stMsg'); 
+      sm.className = 'st-msg err';
+      sm.innerHTML = `<i class="fas fa-circle-xmark"></i> ${err.message || 'Gagal. Coba lagi atau hubungi admin.'}`;
+      sm.style.display = 'block';
+      console.error("Payment Error:", err);
     } finally {
-      btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i>Konfirmasi & Kirim Pesanan';
+      btn.disabled = false; 
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i>Konfirmasi & Kirim Pesanan';
     }
   });
-
+    
   document.getElementById('closeModalBtn').addEventListener('click', closeModal);
   document.getElementById('modalOv').addEventListener('click', e => { if (e.target === document.getElementById('modalOv')) closeModal(); });
 
@@ -2039,6 +2040,32 @@ function confirmUpgrade() {
   updateWLBadge(); 
   updateCartBadge();
   loadData();
+    // Deteksi redirect balik dari Duitku setelah bayar
+  (function checkPaymentReturn() {
+    const params   = new URLSearchParams(window.location.search);
+    const payment  = params.get('payment');
+    const orderId  = params.get('orderId');
+
+    if (payment === 'success' && orderId) {
+      // Bersihkan URL agar parameter tidak terus menempel saat web di-refresh
+      window.history.replaceState({}, '', '/');
+
+      // Tampilkan modal sukses bawaan web Anda
+      document.getElementById('successOv').classList.add('on');
+
+      // Buat format pesan WA untuk konfirmasi ke admin
+      const orderMsg = encodeURIComponent(
+        `*KONFIRMASI PEMBAYARAN*\n` +
+        `──────────────────────\n` +
+        `✅ Pembayaran berhasil!\n` +
+        `🔖 Order ID: ${orderId}\n` +
+        `\nHalo Admin, mohon segera proses pesanan saya. Terima kasih!`
+      );
+      
+      // Masukkan pesan ke tombol WA di dalam pop-up sukses
+      document.getElementById('invoiceWaBtn').href = `https://wa.me/${WA_NUM}?text=${orderMsg}`;
+    }
+  })();
 </script>
 </body>
 </html>
