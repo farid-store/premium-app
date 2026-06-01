@@ -1,6 +1,5 @@
 // api/create-payment.js 
 // Endpoint: POST /api/create-payment
-// Dokumentasi resmi: https://docs.duitku.com/api/en
 
 const crypto = require('crypto');
 
@@ -10,10 +9,11 @@ const API_KEY       = process.env.DUITKU_API_KEY;
 const IS_SANDBOX    = process.env.DUITKU_SANDBOX !== 'false';
 const STORE_URL     = process.env.STORE_BASE_URL || 'https://premium-app-mu.vercel.app';
 
-// ─── URL endpoint Duitku Pop / Invoice ─────────────────────
+// ─── URL ENDPOINT DUITKU (POP UI / PAYMENT LINK) ───────────────────────────
+// Menggunakan subdomain "api-sandbox" dan "api-prod", BUKAN "sandbox.../webapi"
 const DUITKU_URL = IS_SANDBOX
-  ? 'https://sandbox.duitku.com/webapi/api/merchant/createInvoice'
-  : 'https://passport.duitku.com/webapi/api/merchant/createInvoice';
+  ? 'https://api-sandbox.duitku.com/api/merchant/createInvoice'
+  : 'https://api-prod.duitku.com/api/merchant/createInvoice';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,30 +45,21 @@ export default async function handler(req, res) {
     const rawSignature = `${MERCHANT_CODE}${merchantOrderId}${paymentAmount}${API_KEY}`;
     const signature = crypto.createHash('md5').update(rawSignature).digest('hex');
 
-    // ─── SANITASI DATA EKSTREM (Mencegah Duitku Crash) ──────────────────────
-    
-    // 1. Bersihkan Nama (Hapus simbol, maksimal 20 karakter)
+    // ─── Sanitasi Data ───────────────────────────────────────────────────────
     let rawName = username || contact.split('@')[0] || 'Pelanggan';
     let vaName  = rawName.replace(/[^a-zA-Z0-9 ]/g, '').trim().substring(0, 20);
-    if (!vaName) vaName = 'Pelanggan'; // Jaga-jaga jika hasilnya kosong
+    if (!vaName) vaName = 'Pelanggan'; 
 
-    // 2. Bersihkan Email
     let customerEmail = email && email.includes('@')
       ? email
       : `${vaName.replace(/\s/g, '').toLowerCase()}@guest.faridstore.id`;
 
-    // 3. Bersihkan Nomor HP (WAJIB ADA ANGKA, minimal 8 digit)
     let phoneNumber = contact.replace(/\D/g, '').substring(0, 15);
-    if (phoneNumber.length < 8) {
-      phoneNumber = '081111111111'; // Fallback aman untuk Duitku
-    }
+    if (phoneNumber.length < 8) phoneNumber = '081111111111'; 
 
     const cleanStoreUrl = STORE_URL.replace(/\/$/, '');
 
-    // ─── Build payload ke Duitku ─────────────────────────────────────────────
-// ─── Build payload ke Duitku (Mode Bare Minimum Pop UI) ─────────────────
-// ─── Build payload ke Duitku (FORMAT CREATE INVOICE VALID) ─────────────────
-// ─── Build payload ke Duitku (FORMAT MURNI CREATE INVOICE) ─────────────────
+    // ─── Build Payload (Format Lengkap) ──────────────────────────────────────
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
@@ -79,14 +70,26 @@ export default async function handler(req, res) {
       customerVaName:  vaName,
       email:           customerEmail,
       phoneNumber:     phoneNumber,
-      // ⚠️ itemDetails, customerDetail, dan paymentMethod DIHAPUS TOTAL!
+      itemDetails: [
+        {
+          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
+          price:    paymentAmount, 
+          quantity: 1, 
+        }
+      ],
+      customerDetail: {
+        firstName:   vaName,
+        lastName:    'Customer',
+        email:       customerEmail,
+        phoneNumber: phoneNumber,
+      },
       callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
       returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
-      expiryPeriod: 60 // expire dalam 60 menit
+      expiryPeriod: 60,
     };
 
-    console.log('[create-payment] Sending to Duitku:', duitkuPayload);
+    console.log('[create-payment] Sending to Duitku:', DUITKU_URL);
 
     const duitkuRes = await fetch(DUITKU_URL, {
       method:  'POST',
@@ -123,7 +126,7 @@ export default async function handler(req, res) {
         total:           paymentAmount,
         status:          'pending',
         note:            note || '',
-        paymentMethod:   'Duitku',
+        paymentMethod:   'Duitku Pop',
       });
 
       await fetch(`${cleanStoreUrl}/api/products`, {
