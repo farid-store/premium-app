@@ -44,31 +44,36 @@ export default async function handler(req, res) {
 
     // Nama pelanggan dari kontak (fallback)
     const customerName = username || contact.split('@')[0] || 'Pelanggan';
+    
+    // Fallback AMAN untuk mencegah error "An error has occurred" dari Duitku
+    const safeEmail = email || 'guest@faridstore.id';
+    const safePhone = contact.replace(/\D/g, '').substring(0, 15) || '081111111111';
 
     // Body request ke Duitku
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   parseInt(total),
-                 // Kosong = tampilkan semua metode
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${qty || 1}`,
       additionalParam: note || '',
-      merchantUserInfo: username || '',
+      merchantUserInfo: username || 'Guest',
       customerVaName:  customerName.substring(0, 20),
-      email:           email || `${contact.replace(/\D/g,'')}@guest.faridstore.id`,
-      phoneNumber:     contact.replace(/\D/g, '').substring(0, 15) || '',
+      email:           safeEmail,
+      phoneNumber:     safePhone,
       itemDetails: [
         {
-          name:     `${productName} (${period || '1 Bulan'})`,
-          price:    Math.round(parseInt(total) / (parseInt(qty) || 1)),
-          quantity: parseInt(qty) || 1,
+          // Trik: Satukan qty ke dalam nama, lalu hitung sebagai 1 item besar
+          // Ini mencegah error matematis pembagian desimal oleh sistem Duitku
+          name:     `${productName} (${period || '1 Bulan'} x${qty || 1})`,
+          price:    parseInt(total),
+          quantity: 1, 
         }
       ],
       customerDetail: {
-        firstName:   customerName,
-        lastName:    '',
-        email:       email || `${contact.replace(/\D/g,'')}@guest.faridstore.id`,
-        phoneNumber: contact.replace(/\D/g, '').substring(0, 15) || '',
+        firstName:   customerName.substring(0, 50),
+        lastName:    'User', // Duitku sangat rewel kalau ini dikosongkan ('')
+        email:       safeEmail,
+        phoneNumber: safePhone,
       },
       callbackUrl:   `${STORE_URL}/api/payment-callback`,
       returnUrl:     `${STORE_URL}/?payment=success&orderId=${merchantOrderId}`,
@@ -76,7 +81,7 @@ export default async function handler(req, res) {
       expiryPeriod:  60, // expire dalam 60 menit
     };
 
-// Kirim request ke endpoint Duitku Pop (createInvoice)
+    // Kirim request ke endpoint Duitku Pop (createInvoice)
     const duitkuRes = await fetch(`${BASE_URL}/api/merchant/createInvoice`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
