@@ -10,10 +10,9 @@ const IS_SANDBOX    = process.env.DUITKU_SANDBOX !== 'false';
 const STORE_URL     = process.env.STORE_BASE_URL || 'https://premium-app-mu.vercel.app';
 
 // ─── URL ENDPOINT DUITKU (POP UI / PAYMENT LINK) ───────────────────────────
-// Menggunakan subdomain "api-sandbox" dan "api-prod", BUKAN "sandbox.../webapi"
 const DUITKU_URL = IS_SANDBOX
-  ? 'https://api-sandbox.duitku.com/api/merchant/createInvoice'
-  : 'https://api-prod.duitku.com/api/merchant/createInvoice';
+  ? 'https://sandbox.duitku.com/webapi/api/merchant/createInvoice'
+  : 'https://passport.duitku.com/webapi/api/merchant/createInvoice';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -59,30 +58,24 @@ export default async function handler(req, res) {
 
     const cleanStoreUrl = STORE_URL.replace(/\/$/, '');
 
-    // ─── Build Payload (Format Lengkap) ──────────────────────────────────────
+    // ─── Build Payload (Super Minimalis Anti-Crash) ──────────────────────────
+    // Kita hapus properti opsional (seperti customerDetail & merchantUserInfo)
+    // yang sering membuat backend C# milik Duitku kebingungan.
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${parseInt(qty) || 1}`.substring(0, 255),
-      additionalParam: note ? note.substring(0, 255) : '',
-      merchantUserInfo: (username || 'Guest').substring(0, 255),
       customerVaName:  vaName,
       email:           customerEmail,
       phoneNumber:     phoneNumber,
       itemDetails: [
         {
-          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
+          name:     `${productName}`.substring(0, 255),
           price:    paymentAmount, 
           quantity: 1, 
         }
       ],
-      customerDetail: {
-        firstName:   vaName,
-        lastName:    'Customer',
-        email:       customerEmail,
-        phoneNumber: phoneNumber,
-      },
       callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
       returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
@@ -97,7 +90,20 @@ export default async function handler(req, res) {
       body:    JSON.stringify(duitkuPayload),
     });
 
-    const duitkuData = await duitkuRes.json();
+    // ─── PENANGANAN RESPONSE AMAN (ANTI INTERNAL SERVER ERROR) ───────────────
+    // Kita baca sebagai teks dulu, jangan langsung di-JSON-kan
+    const rawResponse = await duitkuRes.text();
+    let duitkuData;
+    
+    try {
+      duitkuData = JSON.parse(rawResponse);
+    } catch (parseError) {
+      console.error('[Duitku] Non-JSON Response:', rawResponse);
+      return res.status(502).json({
+        error: 'Duitku Gateway Error',
+        detail: rawResponse // Akan menampilkan "Unauthorized" atau error HTML lain tanpa membuat web crash
+      });
+    }
 
     if (duitkuData.statusCode !== '00') {
       console.error('[Duitku] Error:', duitkuData);
