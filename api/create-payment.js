@@ -66,9 +66,11 @@ export default async function handler(req, res) {
     const cleanStoreUrl = STORE_URL.replace(/\/$/, '');
 
     // ─── Build payload ke Duitku ─────────────────────────────────────────────
+// ─── Build payload ke Duitku (Mode Bare Minimum Pop UI) ─────────────────
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
+      paymentMethod:   "", // Kirim string kosong agar server Duitku tidak crash karena null
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${parseInt(qty) || 1}`.substring(0, 255),
       additionalParam: note ? note.substring(0, 255) : '',
@@ -76,23 +78,11 @@ export default async function handler(req, res) {
       customerVaName:  vaName,
       email:           customerEmail,
       phoneNumber:     phoneNumber,
-      itemDetails: [
-        {
-          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
-          price:    paymentAmount, 
-          quantity: 1, 
-        },
-      ],
-      customerDetail: {
-        firstName:   vaName,
-        lastName:    'Customer', // Force string, mencegah Duitku menolak string kosong
-        email:       customerEmail,
-        phoneNumber: phoneNumber,
-      },
+      // ⚠️ itemDetails dan customerDetail DIHAPUS SEPENUHNYA agar Duitku tidak cerewet
       callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
       returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
-      expiryPeriod: 60,
+      expiryPeriod: 60, // expire dalam 60 menit
     };
 
     console.log('[create-payment] Sending to Duitku:', duitkuPayload);
