@@ -67,10 +67,11 @@ export default async function handler(req, res) {
 
     // ─── Build payload ke Duitku ─────────────────────────────────────────────
 // ─── Build payload ke Duitku (Mode Bare Minimum Pop UI) ─────────────────
+// ─── Build payload ke Duitku (FORMAT CREATE INVOICE VALID) ─────────────────
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
-      paymentMethod:   "", // Kirim string kosong agar server Duitku tidak crash karena null
+      // ⚠️ JANGAN ADA parameter paymentMethod di sini sama sekali!
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${parseInt(qty) || 1}`.substring(0, 255),
       additionalParam: note ? note.substring(0, 255) : '',
@@ -78,7 +79,13 @@ export default async function handler(req, res) {
       customerVaName:  vaName,
       email:           customerEmail,
       phoneNumber:     phoneNumber,
-      // ⚠️ itemDetails dan customerDetail DIHAPUS SEPENUHNYA agar Duitku tidak cerewet
+      itemDetails: [
+        {
+          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
+          price:    paymentAmount, // Pastikan ini integer angka total
+          quantity: 1,             // Pastikan ini integer 1
+        }
+      ],
       callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
       returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
