@@ -765,6 +765,10 @@
         <p class="auth-notice">Dengan mendaftar, Anda menyetujui <b>Syarat & Ketentuan</b> kami.</p>
       </div>
       <div class="auth-divider">atau</div>
+
+      <button class="auth-submit" id="googleLoginBtn" style="background: #ffffff; color: #0A0A0F; border: 1.5px solid var(--bd2); margin-bottom: 12px;">
+  <i class="fab fa-google" style="color: #DB4437; font-size: 16px;"></i> Masuk dengan Google
+</button>
       <button class="guest-btn" id="guestBtn"><i class="fas fa-user-secret"></i>Lanjut sebagai Tamu</button>
       <p class="auth-notice" style="margin-top:10px">Mode tamu: wishlist & keranjang disimpan <b>24 jam</b> berdasarkan perangkat.</p>
     </div>
@@ -923,7 +927,7 @@
 
   <div class="toast-wrap"><div class="toast" id="toast"></div></div>
 
-  <script>
+<script type="module">
   // =============================================================================
   // CONSTANTS & STATE
   // =============================================================================
@@ -1019,86 +1023,9 @@
     document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
   }
 
-  document.getElementById('loginBtn').addEventListener('click', async () => {
-    const u = document.getElementById('loginUser').value.trim();
-    const c = document.getElementById('loginContact').value.trim();
-    if (!u || !c) { showToast('Isi username dan kontak', 'warn'); return; }
-    
-    const foundUser = allUsers.find(x => x.username.toLowerCase() === u.toLowerCase() && x.contact === c);
-    
-    if (foundUser) {
-      const ip = await getIP();
-      foundUser.ip = ip; 
-      foundUser.device = getDevice(); 
-      foundUser.ts = Date.now();
-      foundUser.isGuest = false;
-      
-      currentUser = foundUser; 
-      saveSession(foundUser);
-      
-      renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
-      showToast('Selamat datang kembali, ' + foundUser.username + '! 👋', 'ok');
-    } else {
-      showToast('Akun tidak ditemukan. Silakan daftar terlebih dahulu.', 'warn');
-    }
-  });
 
-  document.getElementById('registerBtn').addEventListener('click', async () => {
-    const u = document.getElementById('regUser').value.trim();
-    const c = document.getElementById('regContact').value.trim();
-    if (!u || !c) { showToast('Isi username dan kontak', 'warn'); return; }
-    if (u.length < 3) { showToast('Username minimal 3 karakter', 'warn'); return; }
-    
-    const isExist = allUsers.some(x => x.username.toLowerCase() === u.toLowerCase());
-    if (isExist) { showToast('Username sudah terdaftar, silakan login.', 'warn'); return; }
 
-    const btn = document.getElementById('registerBtn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendaftar...';
-    btn.disabled = true;
 
-    const ip = await getIP();
-    const newUser = { 
-      id: 'u_' + u.toLowerCase().replace(/\W/g,'') + '_' + Date.now(), 
-      username: u, contact: c, badge: 'umum', isGuest: false, 
-      ip, device: getDevice(), ts: Date.now() 
-    };
-    
-    allUsers.push(newUser);
-    fullDataPayload.users = allUsers; 
-
-    try {
-      const r = await fetch('/api/products', { 
-        method: 'PUT', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify(fullDataPayload) 
-      });
-      if (!r.ok) throw new Error('Gagal simpan');
-      
-      currentUser = newUser; 
-      saveSession(newUser);
-      renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
-      showToast('Akun berhasil dibuat! Selamat datang ' + u + ' 🎉', 'ok');
-    } catch(e) {
-      allUsers.pop(); 
-      showToast('Gagal mendaftar. Periksa koneksi Anda.', 'error');
-    } finally {
-      btn.innerHTML = originalText; btn.disabled = false;
-    }
-  });
-
-  document.getElementById('guestBtn').addEventListener('click', async () => {
-    const ip = await getIP();
-    const gid = 'guest_' + ip.replace(/\./g,'_') + '_' + getDevice().replace(/\s/g,'');
-    const guestUser = { id: gid, username: 'Tamu', contact: '', badge: 'umum', isGuest: true, ip, device: getDevice(), ts: Date.now() };
-    currentUser = guestUser; saveSession(guestUser);
-    renderUserArea(); closeAuth(); renderProducts(); renderWLDrawer(); renderCartDrawer();
-    showToast('Melanjutkan sebagai Tamu. Data disimpan 24 jam.');
-  });
-
-  document.getElementById('authOverlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('authOverlay')) closeAuth();
-  });
 
   // =============================================================================
   // USER AREA
@@ -1146,11 +1073,7 @@
 }
 
 function toggleUserMenu() { document.getElementById('uDropdown')?.classList.toggle('on'); }
-function doLogout() {
-  clearSession(); renderUserArea(); renderWLDrawer(); renderCartDrawer(); renderProducts();
-  showToast('Berhasil keluar.');
-  document.getElementById('uDropdown')?.classList.remove('on');
-}
+
 document.addEventListener('click', e => {
   if (!e.target.closest('#uChipWrap')) document.getElementById('uDropdown')?.classList.remove('on');
 });
@@ -1989,56 +1912,125 @@ function confirmUpgrade() {
   waBtn.innerHTML = '<i class="fab fa-whatsapp" style="font-size:17px"></i>Kirim Invoice Upgrade';
 }
 
-  // =============================================================================
-  // DATA LOAD & INIT
-  // =============================================================================
-  async function loadData() {
-    try {
-      const r = await fetch('/api/products'); if (!r.ok) throw new Error('HTTP ' + r.status);
-      const d = await r.json(); const dataObj = d.record ? d.record : d;
-      
-      fullDataPayload = dataObj; 
-      allProducts = dataObj.products || []; 
-      storeSettings = dataObj.settings || {};
-      allTestimonials = dataObj.testimonials || []; 
-      allFaqs = dataObj.faqs || []; 
-      allUsers = dataObj.users || []; 
-      
-      if (currentUser && !currentUser.isGuest) {
-        const freshUser = allUsers.find(u => u.id === currentUser.id || u.username === currentUser.username);
-        if (freshUser) {
-          currentUser.badge = freshUser.badge; 
-          currentUser.contact = freshUser.contact;
-          saveSession(currentUser); 
-        } else {
-          clearSession();
-        }
-      }
-      
-      applySettings(); 
-      renderFeatured(); 
-      renderProducts();
-      renderTestimonials(); 
-      renderFAQ(); 
-      
-      renderUserArea();
-      updateWLBadge(); 
-      updateCartBadge();
-    } catch(e) {
-      console.error(e);
-      document.getElementById('resultInfo').innerHTML = '<span style="color:#DC2626;font-weight:700"><i class="fas fa-exclamation-triangle"></i> Gagal Memuat Data</span>';
-      document.getElementById('productGrid').innerHTML = `<div class="empty-st"><div class="empty-ic" style="background:#FEE2E2;color:#DC2626"><i class="fas fa-times-circle"></i></div><h3>Koneksi Server Gagal</h3><p>Silakan refresh halaman.</p></div>`;
-    }
-  }
 
-  // =============================================================================
-  // INIT
-  // =============================================================================
-  currentUser = loadSession();
-  renderUserArea(); 
-  updateWLBadge(); 
-  updateCartBadge();
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { 
+    getAuth, 
+    signInAnonymously, 
+    onAuthStateChanged, 
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup 
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+  import { 
+    getFirestore, 
+    collection, 
+    getDocs 
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  // Konfigurasi Firebase milikmu
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMSeJ9eCBih5sjjt0Tpw1ZyNMWNqV0aqc",
+    authDomain: "premium-app-mu.firebaseapp.com",
+    projectId: "premium-app-mu",
+    storageBucket: "premium-app-mu.firebasestorage.app",
+    messagingSenderId: "932475484181",
+    appId: "1:932475484181:web:3448be2e74b0c96942761c",
+    measurementId: "G-P5EQ9EMYF4"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  // 1. Logika Masuk dengan Google
+  document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      showToast(`Selamat datang, ${result.user.displayName}! 👋`, 'ok');
+      document.getElementById('authOverlay').classList.remove('on'); // Tutup modal
+    } catch (error) {
+      console.error(error);
+      showToast('Gagal masuk dengan Google.', 'warn');
+    }
+  });
+
+  // 2. Logika Masuk sebagai Tamu
+  document.getElementById('guestBtn').addEventListener('click', async () => {
+    try {
+      await signInAnonymously(auth);
+      showToast('Melanjutkan sebagai Tamu.', 'ok');
+      document.getElementById('authOverlay').classList.remove('on');
+    } catch (error) {
+      showToast('Gagal masuk mode tamu.', 'err');
+    }
+  });
+
+  // 3. Fungsi Logout Firebase (Menggantikan fungsi lama)
+  window.doLogout = async function() {
+    await signOut(auth);
+    localStorage.removeItem('fs_session'); // Bersihkan sisa sesi
+    currentUser = null;
+    if(typeof renderUserArea === 'function') renderUserArea(); 
+    if(typeof renderWLDrawer === 'function') renderWLDrawer(); 
+    if(typeof renderCartDrawer === 'function') renderCartDrawer(); 
+    showToast('Berhasil keluar.');
+    document.getElementById('uDropdown')?.classList.remove('on');
+  };
+
+  // 4. Pantau Status Sesi Pengguna secara Real-Time
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      let displayUsername = user.isAnonymous ? "Tamu" : (user.displayName || "User");
+      
+      // Set currentUser ke global variabel script lamamu
+      window.currentUser = {
+        id: user.uid,
+        username: displayUsername,
+        isGuest: user.isAnonymous,
+        badge: "umum" 
+      };
+      
+      localStorage.setItem('fs_session', JSON.stringify(window.currentUser));
+      if(typeof renderUserArea === 'function') renderUserArea();
+    } else {
+      window.currentUser = null;
+      if(typeof renderUserArea === 'function') renderUserArea();
+    }
+  });
+
+  // 5. Ubah sumber data Katalog ke Firestore
+  window.loadData = async function() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      window.allProducts = []; 
+      
+      querySnapshot.forEach((doc) => {
+        window.allProducts.push({ id: doc.id, ...doc.data() });
+      });
+
+      if(typeof renderProducts === 'function') renderProducts();
+      if(typeof renderFeatured === 'function') renderFeatured();
+      
+      document.getElementById('resultInfo').innerHTML = `Menampilkan <b>${window.allProducts.length}</b> produk`;
+      
+      // Init keranjang & wishlist setelah data di-load
+      if(typeof updateWLBadge === 'function') updateWLBadge(); 
+      if(typeof updateCartBadge === 'function') updateCartBadge();
+      
+    } catch (error) {
+      console.error("Firestore error:", error);
+      document.getElementById('resultInfo').innerHTML = '<span style="color:#DC2626;font-weight:700">Aplikasi gagal memuat database...</span>';
+    }
+  };
+  
+  // Eksekusi tarikan data saat web dibuka
   loadData();
+
+
+  
 </script>
 </body>
 </html>
