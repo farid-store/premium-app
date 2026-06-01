@@ -68,10 +68,10 @@ export default async function handler(req, res) {
     // ─── Build payload ke Duitku ─────────────────────────────────────────────
 // ─── Build payload ke Duitku (Mode Bare Minimum Pop UI) ─────────────────
 // ─── Build payload ke Duitku (FORMAT CREATE INVOICE VALID) ─────────────────
+// ─── Build payload ke Duitku (FORMAT MURNI CREATE INVOICE) ─────────────────
     const duitkuPayload = {
       merchantCode:    MERCHANT_CODE,
       paymentAmount:   paymentAmount,
-      // ⚠️ JANGAN ADA parameter paymentMethod di sini sama sekali!
       merchantOrderId: merchantOrderId,
       productDetails:  `${productName} - ${period || '1 Bulan'} x${parseInt(qty) || 1}`.substring(0, 255),
       additionalParam: note ? note.substring(0, 255) : '',
@@ -79,17 +79,11 @@ export default async function handler(req, res) {
       customerVaName:  vaName,
       email:           customerEmail,
       phoneNumber:     phoneNumber,
-      itemDetails: [
-        {
-          name:     `${productName} (${period || '1 Bulan'}) x${parseInt(qty) || 1}`.substring(0, 255),
-          price:    paymentAmount, // Pastikan ini integer angka total
-          quantity: 1,             // Pastikan ini integer 1
-        }
-      ],
+      // ⚠️ itemDetails, customerDetail, dan paymentMethod DIHAPUS TOTAL!
       callbackUrl:  `${cleanStoreUrl}/api/payment-callback`,
       returnUrl:    `${cleanStoreUrl}/?payment=success&orderId=${merchantOrderId}`,
       signature:    signature,
-      expiryPeriod: 60, // expire dalam 60 menit
+      expiryPeriod: 60 // expire dalam 60 menit
     };
 
     console.log('[create-payment] Sending to Duitku:', duitkuPayload);
